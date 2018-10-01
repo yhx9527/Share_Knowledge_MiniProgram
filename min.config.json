@@ -1,0 +1,29 @@
+{
+  "compilers": {
+    "babel": {
+      "sourceMaps": "inline",
+      "presets": [
+        "env"
+      ],
+      "plugins": [
+        "syntax-export-extensions",
+        "transform-class-properties",
+        "transform-decorators-legacy",
+        "transform-export-extensions"
+      ]
+    }
+  },
+  "npm": {
+    "dest": "dist/packages"
+  },
+  "style": {
+    "brandColor": "#00b894",
+    "controlColor": "#55efc4",
+    "mainHeadingColor": "#333333",
+    "subHeadingColor": "#666666",
+    "darkPromptColor": "#999999",
+    "splitLineColor": "#ECECEC",
+    "backgroundColour": "#EFEFEF"
+  }
+
+}

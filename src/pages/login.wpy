@@ -1,0 +1,62 @@
+<style lang="css">
+  page{
+    background-image: linear-gradient(to bottom,#55efc4 0%,#55efc4 35%,#f6f8f9 35%,#f6f8f9 100%);
+  }
+  .button-wrap {
+    margin:0 0 10rpx 35rpx;
+    float: left;
+  }
+  .button-large-wrap {
+    text-align:center;
+    margin-top:31vh;
+
+
+  }
+  .copyright{
+    color:#55efc4;
+    bottom:0;
+    position:fixed;
+    left:50vw;
+    transform:translateX(-50%);
+    white-space:nowrap;
+    font-size:12px;
+  }
+</style>
+<template>
+  <view class="button-large-wrap">
+    <wxc-button bindgetuserinfo="getuserinfo" plain="{{true}}" size="large" type="success"  value="进入微言" btn-style="background-color:#f6f8f9;width:60vw;border:1px solid #55efc4;color:#55efc4;box-shadow:0px 0px 3px #55efc4;" open-type="getUserInfo"></wxc-button>
+  </view>
+  <view class="copyright">Copyright @2018 知识分享平台</view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import apis from '../apis/api'
+
+  export default class Index extends wepy.page {
+    config={
+      usingComponents: {
+        'wxc-button': '../packages/@minui/wxc-button/dist/index',
+        'wxc-icon': '../packages/@minui/wxc-icon/dist/index'
+      }
+    }
+    methods={
+      getuserinfo (e) {
+        let userInfo = e.detail.userInfo
+        if (userInfo) {
+          this.$parent.globalData.userInfo = userInfo
+            wx.login({
+              success: function (res) {
+                if (res.code) {
+                  apis.postcode(res.code, userInfo)
+                  .then(data => {
+                    wepy.redirectTo({url: './main'})
+                    console.log(data)
+                  })
+                }
+              }
+            })
+        }
+      }
+    }
+  }
+</script>
