@@ -4,7 +4,8 @@ const METHOD = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
+  PATCH: 'PATCH'
 }
 class Request {
   errorhandle(data) {
@@ -46,7 +47,7 @@ class Request {
     }).then(data => {
       return new Promise((resolve, reject) => {
         if ((data.statusCode === 200 && data.statusCode < 300) || data.statusCode === 304) {
-          resolve(data)
+          resolve(data.data)
         } else {
           reject(data)
           this.errorhandle(data)
@@ -65,6 +66,9 @@ class Request {
   }
   delete(url, data, header = this._header) {
     return this.request({ url, method: METHOD.DELETE, header, data })
+  }
+  patch(url, data, header = this._header) {
+    return this.request({ url, method: METHOD.patch, header, data })
   }
   set header(header) {
     this._header = header
