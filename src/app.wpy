@@ -19,6 +19,7 @@ import 'wepy-async-function'
 import { setStore } from 'wepy-redux'
 import configStore from './store'
 import apis from './apis/api'
+import Dodata from './utils/doData'
 
 const store = configStore()
 setStore(store)
@@ -73,6 +74,7 @@ export default class extends wepy.app {
     }
   }
   apis = apis
+  doData = new Dodata()
 
   constructor () {
     super()

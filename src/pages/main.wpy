@@ -24,25 +24,29 @@
     margin-right:22rpx;
 
   }
-  .search-icon {
-    width: 44rpx;
-    height: 90rpx;
-    line-height: 90rpx;
-    margin-right: 22rpx;
+  .fabuicon {
+    width: 66rpx;
+    display: flex;
+    flex-direction: column;
   }
   .content {
     padding: 30rpx;
+  }
+  .subjects{
+    height: auto;
   }
 </style>
 <template>
   <view class="search-wrap">
     <wxc-avatar class="search-location" src="{{userInfo['avatarUrl']}}"></wxc-avatar>
     <wxc-search class="search" radius="30" mode="static" placeholder="Search"></wxc-search>
-    <!--wxc-icon class="search-icon" type="message" size="44" color="#fff"></wxc-icon-->
+    <view class="fabuicon"><i class="iconfont icon-add" style="font-size:20px;"></i><text style="font-size: 10px;">发布</text></view>
   </view>
-  <repeat for="{{subjects}}" key="index" index="index" item="item">
-    <minCard :item="item"></minCard>
-  </repeat>
+  <view class="subjects">
+    <repeat for="{{subjects}}" key="index" index="index" item="item">
+      <minCard :item="item"></minCard>
+    </repeat>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
@@ -58,7 +62,8 @@
         'wxc-panel': '../packages/@minui/wxc-panel/dist/index',
         'example': '../packages/@minui/wxc-example/dist/index',
         'example-demo': '../packages/@minui/wxc-example-demo/dist/index',
-        'example-md': '../packages/@minui/wxc-example-md/dist/index'
+        'example-md': '../packages/@minui/wxc-example-md/dist/index',
+        'wxc-flex': '../packages/@minui/wxc-flex/dist/index'
       }
     }
     components = {
@@ -68,15 +73,31 @@
     methods = {
       onClick(event) {
         console.log(event)
+      },
+      test() {
+        console.log(this)
       }
     }
     data = {
       userInfo: null,
-      subjects: [{id: 1, name: 'me'}, {id: 2, name: 'you'}]
+      subjects: [{id: 1, name: 'me'}, {id: 2, name: 'you'}],
+      apis: null
     }
     onLoad() {
       this.userInfo = this.$parent.globalData.userInfo
+      this.fresh(1)
+      // this.apis = this.$parent.apis
+      // this.$parent.apis.getsubject(1)
+      // this.methods.fresh()
       console.log(this.$parent.globalData.userInfo)
+    }
+    fresh(page = 1) {
+      let doData = this.$parent.doData
+      var that = this
+      this.$parent.apis.getsubject(page)
+        .then(data => {
+          that.subjects = doData.subject(data.list)
+        })
     }
   }
 </script>

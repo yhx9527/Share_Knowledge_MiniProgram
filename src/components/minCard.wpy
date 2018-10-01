@@ -2,8 +2,8 @@
 
 </style>
 <template>
-  <example-demo title="{{item.id}}" desc="{{item.name}}">
-    <wxc-panel title="标题" bind:click="onClick">
+  <example-demo title="摘要" desc="{{}}">
+    <wxc-panel title="{{item.ksTitle}}" bind:click="onClick">
       <view class="content">内容</view>
     </wxc-panel>
   </example-demo>
