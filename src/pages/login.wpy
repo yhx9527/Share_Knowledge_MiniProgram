@@ -30,9 +30,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-  import apis from '../apis/api'
-
-  export default class Index extends wepy.page {
+  export default class Login extends wepy.page {
     config={
       usingComponents: {
         'wxc-button': '../packages/@minui/wxc-button/dist/index',
@@ -42,14 +40,15 @@
     methods={
       getuserinfo (e) {
         let userInfo = e.detail.userInfo
+        var that = this
         if (userInfo) {
           this.$parent.globalData.userInfo = userInfo
             wx.login({
               success: function (res) {
                 if (res.code) {
-                  apis.postcode(res.code, userInfo)
+                  that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
-                    wepy.redirectTo({url: './main'})
+                    wepy.switchTab({url: './main'})
                     console.log(data)
                   })
                 }
@@ -58,5 +57,6 @@
         }
       }
     }
+    onLoad() {}
   }
 </script>

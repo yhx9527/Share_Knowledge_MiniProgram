@@ -19,6 +19,11 @@
   "dependencies": {
     "@minui/wxc-avatar": "^1.0.5",
     "@minui/wxc-button": "^1.0.2",
+    "@minui/wxc-example": "^1.0.0",
+    "@minui/wxc-example-demo": "^1.0.1",
+    "@minui/wxc-example-md": "^1.0.1",
+    "@minui/wxc-panel": "^1.0.1",
+    "@minui/wxc-search": "^1.0.1",
     "@minui/wxc-toast": "^1.0.9",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

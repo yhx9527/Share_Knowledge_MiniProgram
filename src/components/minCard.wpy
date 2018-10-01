@@ -1,0 +1,17 @@
+<style lang="less">
+
+</style>
+<template>
+  <example-demo title="{{item.id}}" desc="{{item.name}}">
+    <wxc-panel title="标题" bind:click="onClick">
+      <view class="content">内容</view>
+    </wxc-panel>
+  </example-demo>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class MinCard extends wepy.component {
+
+  }
+</script>

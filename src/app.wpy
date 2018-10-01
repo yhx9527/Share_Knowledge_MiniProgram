@@ -1,7 +1,6 @@
 <style lang="less" >
   @import "./static/iconfont.less";
   @import "./static/button.less";
-  @minifont:12px;
 .container {
   height: 100%;
   display: flex;
@@ -19,6 +18,7 @@ import 'wepy-async-function'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
+import apis from './apis/api'
 
 const store = configStore()
 setStore(store)
@@ -27,19 +27,52 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/login',
-      'pages/main'
+      'pages/main',
+      'pages/message',
+      'pages/self'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '微言',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#2d3436',
+      selectedColor: '#55efc4',
+      backgroundColor: '#f6fefc',
+      borderStyle: 'white',
+      list: [{
+        pagePath: 'pages/main',
+        text: '场次',
+        iconPath: 'static/images/flag.png',
+        selectedIconPath: 'static/images/flag1.png'
+      }, {
+        pagePath: 'pages/message',
+        text: '消息',
+        iconPath: 'static/images/message.png',
+        selectedIconPath: 'static/images/message1.png'
+      }, {
+        pagePath: 'pages/self',
+        text: '个人中心',
+        iconPath: 'static/images/user.png',
+        selectedIconPath: 'static/images/user1.png'
+      }]
+    },
+    networkTimeout: {
+      'request': 10000
     }
   };
-
   globalData = {
-    userInfo: null
+    userInfo: null,
+    color: {
+      mainC: '#55efc4',
+      mainCs: '#e4fcf6',
+      main: '#f6f8f9',
+      tabBottom: '#2d3436'
+    }
   }
+  apis = apis
 
   constructor () {
     super()
