@@ -10,6 +10,7 @@
   export default class Self extends wepy.page {
     config={
       usingComponents: {
+        'wxc-list': '../packages/@minui/wxc-list/dist/index',
         'wxc-button': '../packages/@minui/wxc-button/dist/index',
         'wxc-icon': '../packages/@minui/wxc-icon/dist/index',
         'wxc-search': '../packages/@minui/wxc-search/dist/index'

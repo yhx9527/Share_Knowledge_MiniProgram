@@ -35,22 +35,36 @@
   .subjects{
     height: auto;
   }
+  .spincontainer{
+    position: relative;
+    height: 90vh;
+    background-color:#f8f8f9;
+  }
 </style>
 <template>
+  <i-message id="message" />
   <view class="search-wrap">
     <wxc-avatar class="search-location" src="{{userInfo['avatarUrl']}}"></wxc-avatar>
     <wxc-search class="search" radius="30" mode="static" placeholder="Search"></wxc-search>
     <view class="fabuicon"><i class="iconfont icon-add" style="font-size:20px;"></i><text style="font-size: 10px;">发布</text></view>
   </view>
+  <view class="spincontainer" wx:if="{{ ifspin }}">
+    <i-spin fix size='large'></i-spin>
+  </view>
   <view class="subjects">
     <repeat for="{{subjects}}" key="index" index="index" item="item">
       <minCard :item="item"></minCard>
     </repeat>
+    <wxc-loadmore wx:if="{{ ifload }}"></wxc-loadmore>
+    <wxc-loadmore wx:if="{{ loadend }}" is-end="{{ true }}" text="没有了哦"></wxc-loadmore>
   </view>
+
 </template>
 <script>
   import wepy from 'wepy'
   import MinCard from '../components/minCard'
+  // import { $Message } from '../utils/base'
+  const { $Message } = require('../utils/base')
 
   export default class Main extends wepy.page {
     config={
@@ -63,8 +77,13 @@
         'example': '../packages/@minui/wxc-example/dist/index',
         'example-demo': '../packages/@minui/wxc-example-demo/dist/index',
         'example-md': '../packages/@minui/wxc-example-md/dist/index',
-        'wxc-flex': '../packages/@minui/wxc-flex/dist/index'
-      }
+        'wxc-flex': '../packages/@minui/wxc-flex/dist/index',
+        'wxc-loadmore': '../packages/@minui/wxc-loadmore/dist/index',
+        'i-message': '../packages/other/message/index',
+        'i-spin': '../packages/other/spin/index'
+      },
+      enablePullDownRefresh: true,
+      onReachBottomDistance: 100
     }
     components = {
       // 声明页面中要使用到的Child组件的ID为child
@@ -80,24 +99,62 @@
     }
     data = {
       userInfo: null,
-      subjects: [{id: 1, name: 'me'}, {id: 2, name: 'you'}],
-      apis: null
+      subjects: [],
+      apis: null,
+      page: 1,
+      loadend: false,
+      ifspin: true,
+      ifload: false
     }
     onLoad() {
+      var that = this
       this.userInfo = this.$parent.globalData.userInfo
       this.fresh(1)
+        .then(data => {
+          that.ifspin = false
+          // that.$apply()
+        })
       // this.apis = this.$parent.apis
       // this.$parent.apis.getsubject(1)
       // this.methods.fresh()
       console.log(this.$parent.globalData.userInfo)
     }
-    fresh(page = 1) {
+    async fresh(page = 1) {
       let doData = this.$parent.doData
       var that = this
+      if (page > 1) {
+        this.ifload = true
+        this.$apply()
+      }
       this.$parent.apis.getsubject(page)
         .then(data => {
-          that.subjects = doData.subject(data.list)
+          wx.stopPullDownRefresh()
+          if (page === 1) {
+            $Message({
+              content: '加载成功',
+              type: 'success'
+            })
+            that.page = 1
+            that.subjects = doData.subject(data.list)
+          } else {
+            that.ifload = false
+            if (data.list === null) { that.loadend = true }
+            that.subjects = that.subjects.concat(doData.subject(data.list))
+          }
+          that.$apply()
         })
+        .catch(data => {
+          $Message({
+            content: '加载失败',
+            type: 'error'
+          })
+        })
+    }
+    onPullDownRefresh() {
+      this.fresh(1)
+    }
+    onReachBottom() {
+      this.fresh(++this.page)
     }
   }
 </script>

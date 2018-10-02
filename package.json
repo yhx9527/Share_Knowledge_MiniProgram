@@ -23,6 +23,8 @@
     "@minui/wxc-example-demo": "^1.0.1",
     "@minui/wxc-example-md": "^1.0.1",
     "@minui/wxc-flex": "^1.0.6",
+    "@minui/wxc-list": "^1.0.1",
+    "@minui/wxc-loadmore": "^1.0.5",
     "@minui/wxc-panel": "^1.0.1",
     "@minui/wxc-search": "^1.0.1",
     "@minui/wxc-toast": "^1.0.9",
