@@ -29,6 +29,7 @@ export default class extends wepy.app {
     pages: [
       'pages/login',
       'pages/main',
+      'pages/funs',
       'pages/message',
       'pages/self'
     ],
@@ -49,13 +50,18 @@ export default class extends wepy.app {
         iconPath: 'static/images/flag.png',
         selectedIconPath: 'static/images/flag1.png'
       }, {
+        pagePath: 'pages/funs',
+        text: '周围',
+        iconPath: 'static/images/function.png',
+        selectedIconPath: 'static/images/function1.png'
+      }, {
         pagePath: 'pages/message',
         text: '消息',
         iconPath: 'static/images/message.png',
         selectedIconPath: 'static/images/message1.png'
       }, {
         pagePath: 'pages/self',
-        text: '个人中心',
+        text: '我的',
         iconPath: 'static/images/user.png',
         selectedIconPath: 'static/images/user1.png'
       }]
