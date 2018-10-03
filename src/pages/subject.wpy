@@ -1,21 +1,116 @@
 <style lang="css">
   page{
-    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 100%);
+    background-color: #f6f8f9;
+  }
+  .input-wrap {
+    position:fixed;
+    height:auto;
+    background-color:white;
+    bottom:0;
+    width:100%;
+    box-shadow: 0px 3px 3px -3px #55efc4 inset;
+  }
+  .content{
+    padding: 10px;
+    font-size:14px;
+    color: #2d3436;
   }
 </style>
 <template>
-
+  <i-message id="message" />
+  <addFun></addFun>
+    <subjectTitle :ST.sync="subject"></subjectTitle>
+  <i-panel title="摘要" >
+    <view  class="content">{{subject.ksAbstract}}</view>
+  </i-panel>
+  <i-panel title="主讲内容">
+    <view class="content">{{subject.ksContent}}</view>
+  </i-panel>
+  <i-panel title="时间地点">
+    <view class="content">
+      <view>地点：{{subject.ksBusiness.kbName}}</view>
+      <view>开始时间：{{subject.ksStartTime}}</view>
+      <view>结束时间：{{subject.ksEndTime}}</view>
+    </view>
+  </i-panel>
+  <i-panel title="更多">
+    <view class="content">
+      <view style="color:#ff7675">最少{{subject.ksEnrollMinLimit}}人报名方可开讲！</view>
+      <view>当前报名人数：{{subject.ksEnrollNum}}/{{subject.ksEnrollLimit}}</view>
+      <view>当前参讲人数：{{subject.ksPartNum}}/{{subject.ksPartLimit}}</view>
+    </view>
+  </i-panel>
+  <i-panel title="参讲者">
+    <view style="padding: 15px;"></view>
+  </i-panel>
+  <i-panel title="已报名">
+    <view style="padding: 15px;"></view>
+  </i-panel>
+  <commentArea  :comments.sync = "comments" :ksId="ksId"></commentArea>
+  <view class="input-wrap">
+    <wxc-input type="text"
+               icon="message"
+               placeholder="我也来说一句">
+    </wxc-input>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
+  import Subjecttitle from '../components/subjectTitle'
+  import CommentArea from '../components/commentArea'
+  import AddFun from '../components/addFun'
+  const { $Message } = require('../utils/base/index')
 
   export default class Subject extends wepy.page {
     config={
       usingComponents: {
         'wxc-button': '../packages/@minui/wxc-button/dist/index',
-        'wxc-icon': '../packages/@minui/wxc-icon/dist/index'
-      }
+        'wxc-icon': '../packages/@minui/wxc-icon/dist/index',
+        'i-panel': '../packages/other/panel/index',
+        'wxc-avatar': '../packages/@minui/wxc-avatar/dist/index',
+        'wxc-panel': '../packages/@minui/wxc-panel/dist/index',
+        'wxc-elip': '../packages/@minui/wxc-elip/dist/index',
+        'wxc-input': '../packages/@minui/wxc-input/dist/index',
+        'wxc-label': '../packages/@minui/wxc-label/dist/index',
+        'i-message': '../utils/message/index'
+      },
+      enablePullDownRefresh: true
+    }
+    components= {
+      subjectTitle: Subjecttitle,
+      commentArea: CommentArea,
+      addFun: AddFun
+    }
+    data= {
+      comments: [1, 2],
+      subject: {}
     }
     methods = {}
+    onLoad(params, data) {
+      this.subject = JSON.parse(params.item)
+      this.ksId = this.subject.ksId
+    }
+    onUnload () {
+    }
+    async fresh(ksId) {
+      this.$parent.apis.getsubjectmore(ksId)
+        .then(data => {
+          wx.stopPullDownRefresh()
+          $Message({
+            content: '加载成功',
+            type: 'success'
+          })
+        })
+        .catch(data => {
+          wx.stopPullDownRefresh()
+          $Message({
+            content: '加载失败',
+            type: 'error'
+          })
+        })
+    }
+    onPullDownRefresh() {
+      this.fresh(this.subject.ksId)
+    }
   }
 </script>

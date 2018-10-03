@@ -11,15 +11,35 @@ class Request {
   errorhandle(data) {
     switch (data.statusCode) {
       case 401:
+        wx.showToast({
+          title: '未授权',
+          icon: 'none'
+        })
         break
       case 403:
+        wx.showToast({
+          title: '无权访问',
+          icon: 'none'
+        })
         break
       case 404:
+        wx.showToast({
+          title: '无效请求',
+          icon: 'none'
+        })
         console.log(404)
         break
       case 500:
+        wx.showToast({
+          title: '服务器错误',
+          icon: 'none'
+        })
         break
       case 502:
+        wx.showToast({
+          title: '服务器升级中...',
+          icon: 'none'
+        })
         break
     }
   }

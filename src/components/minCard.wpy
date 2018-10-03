@@ -2,8 +2,8 @@
 
 </style>
 <template>
-  <example-demo title="摘要" desc="{{}}">
-    <wxc-panel title="{{item.ksTitle}}" bind:click='onClick' data-item="{{item}}">
+  <example-demo title="摘要" desc="{{}}" bind:click='onClick'>
+    <wxc-panel title="{{item.ksTitle}}"  >
       <view class="content">内容</view>
     </wxc-panel>
   </example-demo>
@@ -12,9 +12,16 @@
   import wepy from 'wepy'
 
   export default class MinCard extends wepy.component {
+    props= {
+      item: {
+        type: Object,
+        default: {},
+        twoWay: true
+      }
+    }
     methods= {
       onClick(e) {
-        wepy.navigateTo({url: './subject?item=' + JSON.stringify(e.currentTarget.dataset.item)})
+        this.$root.$navigate('./subject', {item: JSON.stringify(this.item)})
       }
     }
   }

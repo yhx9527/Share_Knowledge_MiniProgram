@@ -1,0 +1,96 @@
+<style lang="less">
+  /** less **/
+.avatar1{
+  display: inline-block;
+  width: 80rpx;
+  height: 80rpx;
+  margin-left: 10px;
+  margin-right: 10px;
+  min-width: 80rpx;
+}
+  .nick{
+    font-size:12px;
+    color: #2f3542;
+    margin-left: -5px;
+  }
+  .comment-content{
+
+    font-size:16px;
+  }
+  .comment-title{
+    color:#747d8c;
+    text-align:right;
+    border-bottom:1rpx solid #dfe4ea;
+    margin-right:10px;
+    font-size:18px;
+    padding:10px;
+  }
+  .commentarea{
+    background-color: white;
+    margin-top: 30px;
+  }
+  .comment-item{
+    margin: 10px;
+    border-bottom: 1rpx solid #f1f2f6;
+    padding-bottom: 10px;
+  }
+  .blank{
+    height: 50px;
+  }
+  .more{
+   text-align: center;
+    color: #74b9ff;
+    margin-bottom: 10px;
+  }
+</style>
+<template>
+  <view class="commentarea">
+    <view class="comment-title">
+      <i class="iconfont icon-comment" style="margin-right:5rpx;"></i>评论区
+    </view>
+    <repeat for="{{comments}}" item="item">
+      <view class="flex-row comment-item">
+        <wxc-avatar class="avatar1" src="https://s11.mogucdn.com/p2/170413/upload_86dkh4e886991g9lji7a6g5c530ji_400x400.jpg"></wxc-avatar>
+        <view class="flex-column comment-content">
+          <text class="nick">昵称</text>
+          <wxc-elip line="3">评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容</wxc-elip>
+        </view>
+      </view>
+    </repeat>
+    <view class="more {{ifLc ? 'animated infinite flip' : ''}}" @tap="loadComment"><i class="iconfont icon-more" style="font-size:22px;"></i></view>
+    <view class="blank"></view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class CommentArea extends wepy.component {
+    components = {};
+    props = {
+      comments: {
+        type: Array,
+        default: [1, 2, 3]
+      },
+      ksId: String
+    }
+    data = {
+      ifLc: false
+    };
+    methods = {
+      loadComment() {
+        var that = this
+        this.ifLc = true
+        this.$parent.$parent.apis.getcomments(this.ksId)
+          .then(data => {
+            that.ifLc = false
+          })
+          .catch(data => {
+            that.ifLc = false
+            that.$apply()
+          })
+      }
+    };
+
+    events = {};
+    // Other properties
+  }
+</script>

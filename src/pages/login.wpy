@@ -21,11 +21,20 @@
     white-space:nowrap;
     font-size:12px;
   }
+  .gif{
+    height: 150px;
+    width: 150px;
+    display: block;
+    margin: auto;
+  }
 </style>
 <template>
-  <view class="button-large-wrap">
-    <wxc-button bindgetuserinfo="getuserinfo" plain="{{true}}" size="large" type="success"  value="进入微言" btn-style="background-color:#f6f8f9;width:60vw;border:1px solid #55efc4;color:#55efc4;box-shadow:0px 0px 3px #55efc4;" open-type="getUserInfo"></wxc-button>
+  <view class="button-large-wrap" hover-class="animated infinite bounceOut">
+    <wxc-button bindgetuserinfo="getuserinfo" plain="{{true}}" size="large" type="success" value="进入微言"
+                btn-style="background-color:#f6f8f9;width:60vw;border:1px solid #55efc4;color:#55efc4;box-shadow:0px 0px 3px #55efc4;"
+                open-type="getUserInfo"></wxc-button>
   </view>
+  <image src="https://static.dongtu.com/netpic/20180402161620ZTB5F8DIEOD8S9G2.gif" class="gif"></image>
   <view class="copyright">Copyright @2018 知识分享平台</view>
 </template>
 <script>
@@ -43,17 +52,18 @@
         var that = this
         if (userInfo) {
           this.$parent.globalData.userInfo = userInfo
-            wx.login({
-              success: function (res) {
-                if (res.code) {
-                  that.$parent.apis.postcode(res.code, userInfo)
+          wx.setStorageSync('userInfo',userInfo)
+          wx.login({
+            success: function (res) {
+              if (res.code) {
+                wepy.switchTab({url: './main'})
+                that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
-                    wepy.switchTab({url: './main'})
                     console.log(data)
                   })
-                }
               }
-            })
+            }
+          })
         }
       }
     }

@@ -1,6 +1,8 @@
 <style lang="less" >
   @import "./static/iconfont.less";
   @import "./static/button.less";
+  @import "static/animate";
+
 .container {
   height: 100%;
   display: flex;
@@ -13,6 +15,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .flex-column{
+    display: flex;
+    flex-direction: column;
+  }
+  .flex-row{
+    display: flex;
+    flex-direction: row;
   }
 
 </style>
@@ -37,7 +47,8 @@ export default class extends wepy.app {
       'pages/funs',
       'pages/message',
       'pages/self',
-      'pages/subject'
+      'pages/subject',
+      'pages/forms/info'
     ],
     window: {
       backgroundTextStyle: 'light',

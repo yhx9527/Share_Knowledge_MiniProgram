@@ -76,7 +76,7 @@ class Apis {
    * comment-controller
    */
   // 获取评论
-  getcomments(ksId, page = 1, pageSize = 20) {
+  getcomments(ksId, page = 1, pageSize = 10) {
     return this._request.get('subjects/' + ksId + '/comments', {page: page, pageSize: pageSize})
   }
   // 发布评论内容

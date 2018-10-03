@@ -1,0 +1,52 @@
+<style lang="less">
+  /** less **/
+  .add-bar{
+    position:fixed;
+    right:0;
+    z-index:100;
+    height:40vh;
+    margin-right: 10px;
+    justify-content:space-around;
+    font-size:14px;
+    color: #636e72;
+    top: 20vh;
+  }
+  .add-item{
+
+  }
+  .bar-icon{
+    font-size:28px;
+    color:#00cec9;
+  }
+  .bar-icon-after{
+    color: #00b894;
+  }
+</style>
+<template>
+  <view class="flex-column add-bar">
+    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after">
+      <i class="iconfont icon-join bar-icon" ></i>
+      报名
+    </view>
+    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after">
+      <i class="iconfont icon-join1 bar-icon"></i>
+      参讲
+    </view>
+    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after">
+      <i class="iconfont icon-share bar-icon"></i>
+      分享
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class AddFun extends wepy.component {
+    components = {};
+
+    data = {};
+    methods = {};
+
+    events = {};
+    // Other properties
+  }
+</script>

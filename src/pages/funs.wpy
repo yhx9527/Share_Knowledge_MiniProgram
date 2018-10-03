@@ -1,6 +1,6 @@
 <style lang="css">
   page{
-    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 100%);
+    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 150%);
   }
   .wrap {
     display:block;
@@ -54,7 +54,7 @@
     <wxc-flex class="wrap" wrap="wrap">
       <view class="item">
         <view class="flex-column-inline">
-          <i class="iconfont icon-shop" style="font-size: 30px;color: #81ecec;"></i><text class="fun-icon-info">新商家</text>
+          <i class="iconfont icon-shop" style="font-size: 30px;color: #81ecec;"></i><text class="fun-icon-info">商家</text>
         </view>
       </view>
       <view class="item">
@@ -68,7 +68,20 @@
         </view>
       </view>
     </wxc-flex>
-  </example>
+  </example><example title="更多" desc="...">
+  <wxc-flex class="wrap" wrap="wrap">
+    <view class="item">
+      <view class="flex-column-inline">
+        <i class="iconfont icon-join2" style="font-size: 30px;color: #fd79a8;"></i><text class="fun-icon-info">商家入驻</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="flex-column-inline">
+        <i class="iconfont icon-BusinessInsight-ico" style="font-size: 30px;color: #fdcb6e;"></i><text class="fun-icon-info">邀请有奖</text>
+      </view>
+    </view>
+  </wxc-flex>
+</example>
 </template>
 <script>
   import wepy from 'wepy'

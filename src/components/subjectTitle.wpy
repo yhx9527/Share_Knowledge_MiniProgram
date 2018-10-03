@@ -1,0 +1,63 @@
+<style lang="less">
+  /** less **/
+  .avatar {
+    display: inline-block;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+  }
+  .avatar__1 {
+    width: 90rpx;
+    height: 90rpx;
+  }
+  .title{
+    font-size:24px;
+    color:white;
+    margin:0px 20px;
+    padding-top:10px;
+
+  }
+  .author{
+    font-size:14px;
+    color:#f1f2f6;
+    display:flex;
+    margin-left:10vw;
+    align-items:flex-end;
+
+  }
+  .STcontainer{
+    background-color: #55efc4;
+    height: 20vh;
+  }
+  .label{
+    margin-right: 20rpx;
+    align-items: center;
+    display: flex;
+  }
+</style>
+<template>
+  <view class="STcontainer">
+    <view class="flex-row">
+      <view class='title'>{{ ST.ksTitle }}</view>
+      <wxc-label class="label" text="{{ST.ksTypeData.kddDataName}}" type-color="white"></wxc-label>
+    </view>
+  <view class="author">By {{ ST.ksUser.kuName }}
+    <wxc-avatar class="avatar avatar__1" src="{{ ST.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+    <slot></slot>
+  </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Subjecttitle extends wepy.component {
+    components = {};
+    data = {};
+    methods = {};
+    events = {};
+    props = {
+      ST: Object,
+      default: {}
+    }
+    // Other properties
+  }
+</script>

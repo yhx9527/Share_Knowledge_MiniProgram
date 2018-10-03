@@ -53,7 +53,7 @@
   </view>
   <view class="subjects">
     <repeat for="{{subjects}}" key="index" index="index" item="item">
-      <minCard :item="item"></minCard>
+      <minCard :item.sync="item"></minCard>
     </repeat>
     <wxc-loadmore wx:if="{{ ifload }}"></wxc-loadmore>
     <wxc-loadmore wx:if="{{ loadend }}" is-end="{{ true }}" text="没有了哦"></wxc-loadmore>
@@ -64,7 +64,7 @@
   import wepy from 'wepy'
   import MinCard from '../components/minCard'
   // import { $Message } from '../utils/base'
-  const { $Message } = require('../utils/base')
+  const { $Message } = require('../utils/base/index')
 
   export default class Main extends wepy.page {
     config={
@@ -79,7 +79,7 @@
         'example-md': '../packages/@minui/wxc-example-md/dist/index',
         'wxc-flex': '../packages/@minui/wxc-flex/dist/index',
         'wxc-loadmore': '../packages/@minui/wxc-loadmore/dist/index',
-        'i-message': '../packages/other/message/index',
+        'i-message': '../utils/message/index',
         'i-spin': '../packages/other/spin/index'
       },
       enablePullDownRefresh: true,
@@ -144,10 +144,12 @@
           that.$apply()
         })
         .catch(data => {
+          /*
           $Message({
             content: '加载失败',
             type: 'error'
           })
+          */
         })
     }
     onPullDownRefresh() {
