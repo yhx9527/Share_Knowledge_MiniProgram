@@ -1,8 +1,125 @@
 <style lang="css">
+  .list-wrap {
+    width: 100%;
+    background: #f4f6f7;
+    padding-bottom: 30rpx;
+    padding-top: 30rpx;
+  }
+  .list-item {
+    background: #fff;
+    margin-bottom: 30rpx;
+  }
+  .list-item:last-child {
+    margin: 0;
+  }
+  .item {
+    flex: 1;
+  }
+  .desc-highlight {
+    font-size: 24rpx;
+    height: 38rpx;
+    padding: 0 22rpx;
+    border: 1px solid #f5342f;
+    border-radius: 20rpx;
+    color: #f5342f;
+    line-height: 38rpx;
+  }
+  .list-check {
+    display: flex;
+    align-items: center
+  }
+  .list-check-fun{
+    display: flex;
+    justify-content: space-around;
+    margin-top:10px;
+  }
+  .list-image {
+    width: 102rpx;
+    height: 102rpx;
+    margin-right: 30rpx;
+    border-radius: 6px;
+    margin-left:10rpx;
+  }
+  .head-fun{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+  }
+  .fun-title{
+    color: #b2bec3;
+    font-size: 14px;
+  }
+  .fun-num{
+    color:#2d3436;
+    font-size:16px;
+    font-weight:bold;
 
+  }
 </style>
 <template>
-
+  <view class="list-item" style="margin-bottom: 15rpx;">
+    <view class="list-check">
+      <wxc-list class="item" title="昵称" detail="描述" arrow="{{false}}"></wxc-list>
+      <image class="list-image" mode="aspectFill" src="http://s2.mogucdn.com/new1/v1/bdefaultavatar/04.jpg"></image>
+    </view>
+    <view class="list-check-fun">
+      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">主讲</text></view>
+      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">参讲</text></view>
+      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">听讲</text></view>
+    </view>
+  </view>
+  <view class="list-wrap">
+    <view class="list-item">
+      <wxc-list
+        class="item"
+        icon="home"
+        icon-color="#55efc4"
+        desc="评价,收藏,钱包...都在这里哦"
+        title="个人中心"></wxc-list>
+      <wxc-list
+        class="item"
+        icon="footprint"
+        icon-color="#55efc4"
+        desc="听讲,参讲,主讲记录在这里哦"
+        title="主题参与"></wxc-list>
+      <wxc-list
+        class="item"
+        icon="edit"
+        icon-color="#55efc4"
+        title="修改资料"></wxc-list>
+    </view>
+    <view class="list-item">
+      <wxc-list
+        class="item"
+        icon="help"
+        icon-color="#69A0DD"
+        title="使用帮助"></wxc-list>
+      <wxc-list
+        class="item"
+        icon="feedback"
+        icon-color="#69A0DD"
+        title="意见反馈"></wxc-list>
+      <wxc-list
+        class="item"
+        icon="group"
+        icon-color="#69A0DD"
+        title="关于我们"></wxc-list>
+    </view>
+    <view class="list-item">
+      <wxc-list
+        class="item"
+        icon="search-square"
+        icon-color="#a29bfe"
+        title="检查更新"></wxc-list>
+    </view>
+    <view class="list-item">
+      <wxc-list
+        class="item"
+        icon="warning"
+        icon-color="#fdcb6e"
+        title="清除缓存并重开"></wxc-list>
+    </view>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'

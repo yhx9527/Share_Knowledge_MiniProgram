@@ -1,8 +1,74 @@
 <style lang="css">
+  page{
+    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 100%);
+  }
+  .wrap {
+    display:block;
+    padding:30rpx;
+    background:#fffffe;
+    margin:10px;
+    border-radius:8px;
 
+  }
+  .item {
+    min-width: 33%;
+    min-height: 100rpx;
+    font-size: 22rpx;
+    text-align: center;
+  }
+  .fun-icon-info{
+    font-size: 14px;
+    color: #2d3436;
+  }
+  /*
+  .item:nth-of-type(odd) {
+    line-height: 30rpx;
+    background: #afdde3
+  }
+  .item:nth-of-type(2n) {
+    line-height: 50rpx;
+    background: #f397b2
+  }*/
 </style>
 <template>
-
+  <example title="资源" desc="讲座相关">
+  <wxc-flex class="wrap" wrap="wrap">
+    <view class="item">
+      <view class="flex-column-inline">
+        <i class="iconfont icon-wodehuiyuan" style="font-size: 30px;color: #ff7675;"></i><text class="fun-icon-info">积分中心</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="flex-column-inline">
+        <i class="iconfont icon-wendazhuanqu" style="font-size: 30px;color: #55efc4;"></i><text class="fun-icon-info">讲座群</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="flex-column-inline">
+        <i class="iconfont icon-diyicimaigu" style="font-size: 30px;color: #a29bfe;"></i><text class="fun-icon-info">资源</text>
+      </view>
+    </view>
+  </wxc-flex>
+</example>
+  <example title="商家" desc="周围地点">
+    <wxc-flex class="wrap" wrap="wrap">
+      <view class="item">
+        <view class="flex-column-inline">
+          <i class="iconfont icon-shop" style="font-size: 30px;color: #81ecec;"></i><text class="fun-icon-info">新商家</text>
+        </view>
+      </view>
+      <view class="item">
+        <view class="flex-column-inline">
+          <i class="iconfont icon-schoolnews_sel" style="font-size: 30px;color: #78e08f;"></i><text class="fun-icon-info">校园</text>
+        </view>
+      </view>
+      <view class="item">
+        <view class="flex-column-inline">
+          <i class="iconfont icon-Coffee" style="font-size: 30px;color: #ffeaa7;"></i><text class="fun-icon-info">咖啡厅</text>
+        </view>
+      </view>
+    </wxc-flex>
+  </example>
 </template>
 <script>
   import wepy from 'wepy'
@@ -11,7 +77,9 @@
     config={
       usingComponents: {
         'wxc-button': '../packages/@minui/wxc-button/dist/index',
-        'wxc-icon': '../packages/@minui/wxc-icon/dist/index'
+        'wxc-icon': '../packages/@minui/wxc-icon/dist/index',
+        'wxc-flex': '../packages/@minui/wxc-flex/dist/index',
+        'example': '../packages/@minui/wxc-example/dist/index'
       }
     }
     methods = {}

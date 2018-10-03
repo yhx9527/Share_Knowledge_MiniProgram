@@ -9,6 +9,11 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
+  .flex-column-inline{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
 </style>
 
@@ -31,7 +36,8 @@ export default class extends wepy.app {
       'pages/main',
       'pages/funs',
       'pages/message',
-      'pages/self'
+      'pages/self',
+      'pages/subject'
     ],
     window: {
       backgroundTextStyle: 'light',

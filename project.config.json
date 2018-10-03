@@ -4,12 +4,51 @@
 		"urlCheck": false,
 		"es6": false,
 		"postcss": false,
-		"minified": false,
-		"newFeature": true
+		"minified": true,
+		"newFeature": true,
+		"nodeModules": true
 	},
 	"compileType": "miniprogram",
 	"appid": "wx5899a00bc0df64a8",
 	"projectname": "share_knows",
 	"miniprogramRoot": "./dist",
-	"condition": {}
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 2,
+			"list": [
+				{
+					"id": -1,
+					"name": "self",
+					"pathName": "pages/self",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "funs",
+					"pathName": "pages/funs",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "subject",
+					"pathName": "pages/subject"
+				}
+			]
+		}
+	}
 }

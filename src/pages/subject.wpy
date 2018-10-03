@@ -1,0 +1,21 @@
+<style lang="css">
+  page{
+    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 100%);
+  }
+</style>
+<template>
+
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Subject extends wepy.page {
+    config={
+      usingComponents: {
+        'wxc-button': '../packages/@minui/wxc-button/dist/index',
+        'wxc-icon': '../packages/@minui/wxc-icon/dist/index'
+      }
+    }
+    methods = {}
+  }
+</script>
