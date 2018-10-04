@@ -1,0 +1,38 @@
+<style lang="less">
+  /** less **/
+  .btContainer{
+    width:100vw;
+    height:30px;
+    background-image:linear-gradient(to right, #f6f8f9 0%, white 100%);
+    display:flex;
+    align-items:center;
+    font-size:18px;
+    color:#2d3436;
+    padding-left:10px;
+
+  }
+</style>
+<template>
+  <view class="btContainer">
+    {{title}}<i class="iconfont {{icontype}}" style="font-size:20px;margin-left:3px;"></i>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class BigTitle extends wepy.component {
+    components = {};
+    data = {};
+    props= {
+      title: String,
+      icontype: {
+        type: String,
+        default: 'icon-info'
+      }
+    }
+    methods = {};
+
+    events = {};
+    // Other properties
+  }
+</script>

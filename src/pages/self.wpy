@@ -1,4 +1,7 @@
-<style lang="css">
+<style lang="less">
+  page{
+
+  }
   .list-wrap {
     width: 100%;
     background: #f4f6f7;
@@ -91,7 +94,7 @@
         class="item"
         icon="edit"
         icon-color="#55efc4"
-        title="修改资料"></wxc-list>
+        title="修改资料" bind:click="reviseInfo"></wxc-list>
     </view>
     <view class="list-item">
       <wxc-list
@@ -151,6 +154,9 @@
             }
           }
         })
+      },
+      reviseInfo() {
+        this.$navigate('./forms/info')
       }
     }
     onShow() {

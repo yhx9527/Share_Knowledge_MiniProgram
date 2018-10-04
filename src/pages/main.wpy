@@ -53,7 +53,9 @@
   </view>
   <view class="subjects">
     <repeat for="{{subjects}}" key="index" index="index" item="item">
+      <view hover-class="animated zoomOut">
       <minCard :item.sync="item"></minCard>
+      </view>
     </repeat>
     <wxc-loadmore wx:if="{{ ifload }}"></wxc-loadmore>
     <wxc-loadmore wx:if="{{ loadend }}" is-end="{{ true }}" text="没有了哦"></wxc-loadmore>

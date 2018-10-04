@@ -55,8 +55,11 @@
     methods = {};
     events = {};
     props = {
-      ST: Object,
-      default: {}
+      ST: {
+        type: Object,
+        default: {},
+        twoWay: true
+      }
     }
     // Other properties
   }
