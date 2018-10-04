@@ -51,7 +51,7 @@
 </style>
 <template>
   <i-message id="message" />
-  <addFun></addFun>
+  <addFun :ksId.sync="ksId"></addFun>
     <!--subjectTitle :ST.sync="subject"></subjectTitle-->
 
   <view class="STcontainer">
@@ -90,7 +90,7 @@
   <i-panel title="已报名">
     <view style="padding: 15px;"></view>
   </i-panel>
-  <commentArea  :comments.sync = "comments" :ksId="ksId"></commentArea>
+  <commentArea  :comments.sync = "comments" :ksId.sync = "ksId"></commentArea>
   <view class="input-wrap">
     <wxc-input type="text"
                icon="message"
@@ -125,8 +125,9 @@
       addFun: AddFun
     }
     data= {
-      comments: [1, 2],
-      subject: {}
+      comments: [],
+      subject: {},
+      ksId: ''
     }
     methods = {}
     onLoad(params, data) {
@@ -134,10 +135,14 @@
       this.ksId = this.subject.ksId
     }
     onUnload () {
+      this.$com.commentArea.page = 1
     }
     async fresh(ksId) {
+      var that = this
       this.$parent.apis.getsubjectmore(ksId)
         .then(data => {
+          that.subject = data
+          that.$apply()
           wx.stopPullDownRefresh()
           $Message({
             content: '加载成功',
@@ -154,6 +159,9 @@
     }
     onPullDownRefresh() {
       this.fresh(this.subject.ksId)
+    }
+    onReady() {
+      this.$invoke('commentArea', 'loadComment')
     }
   }
 </script>

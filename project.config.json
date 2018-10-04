@@ -9,8 +9,8 @@
 		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"appid": "wx5899a00bc0df64a8",
-	"projectname": "share_knows",
+	"appid": "wx771af2db0a66463d",
+	"projectname": "knowledge_share",
 	"miniprogramRoot": "dist/",
 	"condition": {
 		"search": {
@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 4,
 			"list": [
 				{
 					"id": -1,
@@ -52,7 +52,13 @@
 				{
 					"id": -1,
 					"name": "info",
-					"pathName": "pages/forms/info"
+					"pathName": "pages/forms/info",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "index",
+					"pathName": "pages/index"
 				}
 			]
 		}

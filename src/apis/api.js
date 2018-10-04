@@ -5,6 +5,12 @@ class Apis {
     this._request = request
     this._header = request.header
   }
+  set header(header) {
+    request.header = header
+  }
+  get header() {
+    return request.header
+  }
   /**
    * uesr-controller
    */
@@ -25,15 +31,15 @@ class Apis {
   }
   // 获取主题详情
   getsubjectmore (ksId) {
-    return this._request.get('subjects' + ksId)
+    return this._request.get('subjects/' + ksId)
   }
   // 修改主题详情
   putsubjectmore (ksId, ksSubject) {
-    return this._request.put('subjects' + ksId, ksSubject)
+    return this._request.put('subjects/' + ksId, ksSubject)
   }
   // 删除主题
   deletesubject (ksId) {
-    return this._request.delete('subjects' + ksId)
+    return this._request.delete('subjects/' + ksId)
   }
   // 结束主题(开展完毕)
   patchsubject (ksId) {

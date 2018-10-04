@@ -52,13 +52,14 @@
         var that = this
         if (userInfo) {
           this.$parent.globalData.userInfo = userInfo
-          wx.setStorageSync('userInfo',userInfo)
+          wx.setStorageSync('userInfo', userInfo)
           wx.login({
             success: function (res) {
               if (res.code) {
                 wepy.switchTab({url: './main'})
                 that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
+                    that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
                     console.log(data)
                   })
               }

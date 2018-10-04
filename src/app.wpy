@@ -48,7 +48,8 @@ export default class extends wepy.app {
       'pages/message',
       'pages/self',
       'pages/subject',
-      'pages/forms/info'
+      'pages/forms/info',
+      'pages/index'
     ],
     window: {
       backgroundTextStyle: 'light',
