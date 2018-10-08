@@ -88,9 +88,11 @@
               that.ifLc = false
               console.log(that)
               that.comments = that.comments.concat(that.$parent.$parent.doData.comments(data.list))
-              wx.showToast({
-                title: '评论已加载'
-              })
+              if(this.page > 2) {
+                wx.showToast({
+                  title: '评论已加载'
+                })
+              }
               that.$apply()
             })
           .catch(data => {
@@ -99,7 +101,6 @@
           })
       }
     };
-
     events = {};
     // Other properties
   }

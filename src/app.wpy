@@ -95,7 +95,8 @@ export default class extends wepy.app {
       mainCs: '#e4fcf6',
       main: '#f6f8f9',
       tabBottom: '#2d3436'
-    }
+    },
+    ksUser: {}
   }
   apis = apis
   doData = new Dodata()

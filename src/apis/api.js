@@ -69,7 +69,7 @@ class Apis {
   getsign(page, pageSize) {
     return this._request.get('enrollments/', {page: page, pageSize: pageSize})
   }
-  // 听众报名主题
+  // 报名
   postsign(ksId) {
     return this._request.post('subjects/' + ksId + '/enrollments')
   }

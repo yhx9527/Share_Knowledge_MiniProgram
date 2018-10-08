@@ -60,6 +60,7 @@
                 that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
                     that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
+                    that.$parent.globalData.ksUser = data.data.ksUser
                     console.log(data)
                   })
               }

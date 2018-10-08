@@ -21,7 +21,7 @@
     }
     methods= {
       onClick(e) {
-        this.$root.$navigate('./subject', {item: JSON.stringify(this.item)})
+        this.$root.$navigate('./subject?ksId=' + this.item.ksId)
       }
     }
   }

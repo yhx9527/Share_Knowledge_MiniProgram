@@ -51,7 +51,7 @@
 </style>
 <template>
   <i-message id="message" />
-  <addFun :ksId.sync="ksId"></addFun>
+  <addFun  @tell.user="tellwhich" :enroll.sync="enroll" :park.sync="park"></addFun>
     <!--subjectTitle :ST.sync="subject"></subjectTitle-->
 
   <view class="STcontainer">
@@ -127,12 +127,87 @@
     data= {
       comments: [],
       subject: {},
-      ksId: ''
+      ksId: '',
+      enroll: 0,
+      park: 0
     }
-    methods = {}
+    methods = {
+      tellwhich(type) {
+        var that = this
+        switch (type) {
+          case 'enroll':
+            wx.showModal({
+              title: '提示',
+              content: '报名倾听该主题演讲',
+              success: function (res) {
+                if (res.confirm) {
+                  that.$parent.apis.postsign(that.ksId)
+                    .then(data => {
+                      if (data.success === true) {
+                        that.enroll = 2
+                        that.$apply()
+                        wx.showToast({
+                          title: '报名成功'
+                        })
+                      } else {
+                        wx.showToast({
+                          title: '报名失败'
+                        })
+                      }
+                    })
+                    .catch(data => {
+                      if (data.statusCode === 400) {
+                        wx.showToast({
+                          title: '您已报名了',
+                          icon: 'none'
+                        })
+                      }
+                    })
+                }
+              }
+            })
+            break
+          case 'join':
+            wx.showModal({
+              title: '提示',
+              content: '参与该主题的演讲，报名后需经主讲人审核',
+              success: function (res) {
+                if (res.confirm) {
+                  that.$parent.apis.postparty(that.ksId)
+                    .then(data => {
+                      if (data.success === true) {
+                        that.park = 1
+                        that.$apply()
+                        wx.showToast({
+                          title: '申请中'
+                        })
+                      } else {
+                        wx.showToast({
+                          title: '申请失败'
+                        })
+                      }
+                    })
+                    .catch(data => {
+                      if (data.statusCode === 400) {
+                        wx.showToast({
+                          title: '您已在申请中了',
+                          icon: 'none'
+                        })
+                      }
+                    })
+                }
+              }
+            })
+            break
+          case 'share':
+
+            break
+        }
+      }
+    }
     onLoad(params, data) {
-      this.subject = JSON.parse(params.item)
-      this.ksId = this.subject.ksId
+      this.ksId = params.ksId
+      this.fresh(params.ksId)
     }
     onUnload () {
       this.$com.commentArea.page = 1
@@ -141,7 +216,9 @@
       var that = this
       this.$parent.apis.getsubjectmore(ksId)
         .then(data => {
-          that.subject = data
+          that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
+          that.enroll = that.subject.enroll
+          that.park = that.subject.park
           that.$apply()
           wx.stopPullDownRefresh()
           $Message({

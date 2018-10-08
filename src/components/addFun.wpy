@@ -21,18 +21,24 @@
   .bar-icon-after{
     color: #00b894;
   }
+  .active1{
+    color: #fab1a0;
+  }
+  .active2{
+    color: #00b894;
+  }
 </style>
 <template>
-  <view class="flex-column add-bar" @tap="clickFuns" >
-    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-id="enroll">
+  <view class="flex-column add-bar">
+    <view class="flex-column-inline add-item {{ enroll == 0 ? '' : (enroll ==2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="enroll" @tap="cmpTell">
       <i class="iconfont icon-join bar-icon" ></i>
-      报名
+      {{ enroll == 0 ? '报名' : (enroll ==2 ? '已报名' : '审核中') }}
     </view>
-    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-id="join">
+    <view class="flex-column-inline add-item {{ park <= 0 ? '' : (park >=2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="join" @tap="cmpTell">
       <i class="iconfont icon-join1 bar-icon"></i>
-      参讲
+      {{ park == 0 ? '参讲' : (park ==2 ? '已参讲' : '审核中') }}
     </view>
-    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-id="share">
+    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="share" @tap="cmpTell">
       <i class="iconfont icon-share bar-icon"></i>
       分享
     </view>
@@ -43,15 +49,23 @@
   export default class AddFun extends wepy.component {
     components = {};
     props = {
-      ksId: {
-        type: String,
-        default: ''
+      enroll: {
+        type: Number,
+        default: 0
+      },
+      park: {
+        type: Number,
+        default: 0
       }
     }
-    data = {};
+    data = {}
     methods = {
       clickFuns(e) {
         console.log(e)
+      },
+      cmpTell(e) {
+        console.log(this.enroll + '' + this.park)
+        this.$emit('tell', e.currentTarget.dataset.type)
       }
     };
 

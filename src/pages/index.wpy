@@ -182,7 +182,9 @@
         }
       ]
     }
-
+    /**
+     * 计算属性，里面为函数，将函数名直接当作data来使用，例如this.now,当组件中任何数据发生该改变，其也跟着改变
+     */
     computed = {
       now () {
         return +new Date()
@@ -197,12 +199,14 @@
       plus () {
         this.mynum++
       },
+      /**
+       * this.$invoke('组件名或组件路径','组件中的方法','方法需要的参数') =>返回的为一个promise
+       */
       toast () {
         let promise = this.$invoke('toast', 'show', {
           title: '自定义标题',
           img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
         })
-
         promise.then((d) => {
           console.log('toast done')
         })

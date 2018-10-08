@@ -31,4 +31,21 @@ export default class {
     }
     return list.sort(this.desc)
   }
+  subInfo(subject, kuId) {
+    subject.enroll = 0
+    subject.park = 0
+    subject.ksEndTime = subject.ksEndTime.split('T').join(' ')
+    subject.ksStartTime = subject.ksStartTime.split('T').join(' ')
+    subject.ksEnrollList.forEach(item => {
+      if (item.kuId === kuId) {
+        subject.enroll = item.keStatus ? 2 : 1
+      }
+    })
+    subject.ksPartakeList.forEach(item => {
+      if (item.kuId === kuId) {
+        subject.park = item.kpStatus ? 2 : 1
+      }
+    })
+    return subject
+  }
 }

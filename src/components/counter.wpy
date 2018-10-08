@@ -64,7 +64,10 @@
         console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
-
+    /**
+     * watch监视属性变化，接受一个函数（函数名必须与属性相同）(旧值，新值)，可像data一样调用
+     * @type {{num: (function(*, *))}}
+     */
     watch = {
       num (curVal, oldVal) {
         console.log(`旧值：${oldVal}，新值：${curVal}`)
