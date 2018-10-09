@@ -51,7 +51,7 @@
 </style>
 <template>
   <i-message id="message" />
-  <addFun  @tell.user="tellwhich" :enroll.sync="enroll" :park.sync="park"></addFun>
+  <addFun  @tell.user="tellwhich" :enroll.sync="enroll" :park.sync="park" :ksId.sync="ksId"></addFun>
     <!--subjectTitle :ST.sync="subject"></subjectTitle-->
 
   <view class="STcontainer">
@@ -239,6 +239,26 @@
     }
     onReady() {
       this.$invoke('commentArea', 'loadComment')
+    }
+    onShareAppMessage(res) {
+      if (res.from === 'button') {
+        return {
+          title: '这个主题极好',
+          path: '/pages/subject?ksId=' + this.ksId,
+          success: function () {
+            console.log('btn转发成功')
+          }
+        }
+      } else if (res.from === 'menu') {
+        return {
+          title: '这个小程序真好',
+          path: '/pages/login',
+          success: function () {
+            console.log('menu转发成功')
+          }
+        }
+      }
+      console.log('转发' + JSON.stringify(res))
     }
   }
 </script>

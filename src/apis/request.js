@@ -11,9 +11,14 @@ class Request {
   errorhandle(data) {
     switch (data.statusCode) {
       case 401:
-        wx.showToast({
-          title: '未授权',
-          icon: 'none'
+        wx.showModal({
+          title: '提示',
+          content: '目前账号未进行注册，是否前往授权注册？',
+          success: function (res) {
+            if (res.confirm) {
+              wx.reLaunch({url: '/pages/login'})
+            }
+          }
         })
         break
       case 403:

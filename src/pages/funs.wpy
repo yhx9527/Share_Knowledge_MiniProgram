@@ -96,5 +96,16 @@
       }
     }
     methods = {}
+    onShareAppMessage(res) {
+      if (res.from === 'menu') {
+        return {
+          title: '这个小程序真好',
+          path: '/pages/login',
+          success: function () {
+            console.log('menu转发成功')
+          }
+        }
+      }
+    }
   }
 </script>

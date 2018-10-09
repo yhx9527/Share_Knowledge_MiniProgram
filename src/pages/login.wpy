@@ -34,7 +34,7 @@
                 btn-style="background-color:#f6f8f9;width:60vw;border:1px solid #55efc4;color:#55efc4;box-shadow:0px 0px 3px #55efc4;"
                 open-type="getUserInfo"></wxc-button>
   </view>
-  <image src="https://static.dongtu.com/netpic/20180402161620ZTB5F8DIEOD8S9G2.gif" class="gif"></image>
+  <!--image src="https://static.dongtu.com/netpic/20180402161620ZTB5F8DIEOD8S9G2.gif" class="gif"></image-->
   <view class="copyright">Copyright @2018 知识分享平台</view>
 </template>
 <script>
@@ -70,5 +70,16 @@
       }
     }
     onLoad() {}
+    onShareAppMessage(res) {
+      if (res.from === 'menu') {
+        return {
+          title: '这个小程序真好',
+          path: '/pages/login',
+          success: function () {
+            console.log('menu转发成功')
+          }
+        }
+      }
+    }
   }
 </script>

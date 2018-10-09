@@ -27,6 +27,14 @@
   .active2{
     color: #00b894;
   }
+  button::after{
+    border: none
+  }
+  button{
+    background-color: inherit;
+    line-height: normal;
+    font-size: inherit;
+  }
 </style>
 <template>
   <view class="flex-column add-bar">
@@ -38,10 +46,10 @@
       <i class="iconfont icon-join1 bar-icon"></i>
       {{ park == 0 ? '参讲' : (park ==2 ? '已参讲' : '审核中') }}
     </view>
-    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="share" @tap="cmpTell">
+    <button open-type="share" class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="share" data-ksid="{{ksId}}" @tap="cmpTell">
       <i class="iconfont icon-share bar-icon"></i>
       分享
-    </view>
+    </button>
   </view>
 </template>
 <script>
@@ -56,6 +64,10 @@
       park: {
         type: Number,
         default: 0
+      },
+      ksId: {
+        type: Number,
+        default: -1
       }
     }
     data = {}
@@ -68,7 +80,6 @@
         this.$emit('tell', e.currentTarget.dataset.type)
       }
     };
-
     events = {};
     // Other properties
   }
