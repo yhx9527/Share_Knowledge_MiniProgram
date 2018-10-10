@@ -99,7 +99,22 @@
         console.log(this)
       },
       release() {
-        this.$navigate('./forms/info')
+        let that = this
+        let ksUser = wx.getStorageSync('ksUser')
+        let ifInfo = this.$parent.doData.doInfo(ksUser)
+        if (ifInfo === true) {
+          that.$navigate('./forms/subform')
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: '请您先前往完善个人资料',
+            success: function (res) {
+              if (res.confirm) {
+                that.$navigate('./forms/info')
+              }
+            }
+          })
+        }
       },
       searching() {
         this.$navigate('./forms/search')

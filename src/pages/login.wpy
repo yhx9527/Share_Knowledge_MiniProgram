@@ -61,6 +61,7 @@
                   .then(data => {
                     that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
                     that.$parent.globalData.ksUser = data.data.ksUser
+                    wx.setStorageSync('ksUser', data.data.ksUser)
                     console.log(data)
                   })
               }

@@ -50,20 +50,20 @@
       </view>
     </view>
   </view>
-  <picker class="input-wrap" bindchange="bindPickerChangeWork" value="{{index}}" range="{{workList}}">
+  <picker class="input-wrap" bindchange="bindPickerChangeWork" value="{{index}}" range="{{workList}}" range-key="kddDataName">
     <wxc-input type="text"
                icon="arrow-right"
-               value="{{workNumber}}"
-               placeholder="职业(点击选择)"
+               value="{{workNumber === '无' ? '' : workNumber}}"
+               placeholder="职业(点击选择,默认无)"
                data-type="work"
                disabled="{{ true }}">
     </wxc-input>
   </picker>
-  <picker class="input-wrap" bindchange="bindPickerChangeEdu" value="{{index}}" range="{{eduList}}">
+  <picker class="input-wrap" bindchange="bindPickerChangeEdu" value="{{index}}" range="{{eduList}}" range-key="kddDataName">
     <wxc-input type="text"
                icon="arrow-right"
-               value="{{eduNumber}}"
-               placeholder="受教育水平(点击选择)"
+               value="{{eduNumber === '无' ? '' : eduNumber}}"
+               placeholder="受教育水平(点击选择,默认无)"
                data-type="edu"
                disabled="{{ true }}">
     </wxc-input>
@@ -83,7 +83,7 @@
                value="{{infoNumber}}"
                placeholder="个人简介(选填)"
                data-type="info"
-               bind:blur="onBlur">
+               bind:input="onInput">
     </yhx-textarea>
   </view>
   <view class="button-large-wrap">
@@ -106,17 +106,19 @@
       }
     }
     data= {
+      kuId: '',
       mobileNumber: '',
       placeNumber: '',
       eduNumber: '',
+      eduId: 0,
       workNumber: '',
+      workId: 0,
       infoNumber: '',
       mobileTip: false,
       bgtitle: '个人资料',
       icontype: 'icon-info',
-      eduList: ['小学', '专科', '初中', '高中', '大专', '本科', '研究生', '博士生', '其他'],
-      workList: ['学生', '教育与教学行业', '科学与研究行业', '建筑与工程行业', '商业与金融行业', 'IT与计算机行业',
-        '艺术与设计行业', '医疗与卫生行业', '行政与司法行业', '媒体与传播行业', '食品与营养行业', '农林行业', '其他'],
+      eduList: [],
+      workList: [],
       ifsave: false
     }
     components = {
@@ -128,6 +130,11 @@
         let number = e.detail.value
         this[type + 'Number'] = number
         this.validate(number, type)
+      },
+      onInput(e) {
+        let type = e.target.dataset.type
+        let number = e.detail.value
+        this[type + 'Number'] = number
       },
       clearInput(e) {
         let type = e.currentTarget.dataset.type
@@ -152,7 +159,7 @@
       }
       this.mobileTip = tip
     }
-    validateQQ(number) {
+  /*  validateQQ(number) {
       let tip = false
       let regQQ = /^[1-9]\d{4,10}$/
       if (!regQQ.test(number) && number.length > 0) {
@@ -160,14 +167,16 @@
         tip = true
       }
       this.qqTip = tip
-    }
+    } */
     bindPickerChangeEdu(e) {
       let eduList = this.eduList
-      this.eduNumber = eduList[e.detail.value]
+      this.eduNumber = eduList[e.detail.value].kddDataName
+      this.eduId = eduList[e.detail.value].kddDataValue
     }
     bindPickerChangeWork(e) {
       let workList = this.workList
-      this.workNumber = workList[e.detail.value]
+      this.workNumber = workList[e.detail.value].kddDataName
+      this.workId = workList[e.detail.value].kddDataValue
     }
     resetInfo() {
       // this['data'] = {mobileNumber: '', placeNumber: '', eduNumber: '', workNumber: '', infoNumber: ''}
@@ -176,10 +185,63 @@
       this['eduNumber'] = ''
       this['infoNumber'] = ''
       this['workNumber'] = ''
+      this['eduId'] = ''
+      this['workId'] = ''
     }
     saveInfo() {
-      var {mobileNumber, placeNumber, eduNumber, workNumber, infoNumber} = this.data
-      console.log(mobileNumber)
+      var {mobileNumber, placeNumber, eduId, workId, infoNumber, kuId, mobileTip} = this.data
+      console.log(infoNumber + 'dd' + this.data.infoNumber)
+      if (!mobileTip && mobileNumber.length > 0) {
+        let mUser = {
+          kuPhone: mobileNumber,
+          kuCompany: placeNumber,
+          kuIntro: infoNumber,
+          kuIndustry: workId,
+          kuEducation: eduId
+        }
+        this.$parent.apis.putuser(kuId, mUser)
+          .then(data => {
+            if (data.success) {
+              wx.showToast({
+                title: '修改成功'
+              })
+              wx.setStorageSync('ksUser', data.data)
+            }
+          })
+          .catch(data => {
+
+          })
+      } else {
+        wx.showToast({
+          title: '请检查手机号',
+          icon: 'none'
+        })
+      }
+    }
+    onLoad() {
+      var that = this
+      let ksUser = wx.getStorageSync('ksUser')
+      this.kuId = ksUser.kuId
+      this.mobileNumber = ksUser.kuPhone
+      // this.mobileTip = Boolean(ksUser.kuPhone)
+      this.placeNumber = ksUser.kuCompany
+      this.infoNumber = ksUser.kuIntro
+      this.eduId = ksUser.kuEducation
+      this.workId = ksUser.kuIndustry
+      this.$parent.apis.getdictcode('kuIndustry')
+        .then(data => {
+          that.workList = Object.values(data.ksDictDataMap)
+          console.log(ksUser.kuIndustry)
+          console.log(data.ksDictDataMap[ksUser.kuIndustry])
+          that.workNumber = data.ksDictDataMap[ksUser.kuIndustry].kddDataName
+          that.$apply()
+        })
+      this.$parent.apis.getdictcode('kuEducation')
+        .then(data => {
+          that.eduList = Object.values(data.ksDictDataMap)
+          that.eduNumber = data.ksDictDataMap[ksUser.kuEducation].kddDataName
+          that.$apply()
+        })
     }
   }
 </script>

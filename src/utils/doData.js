@@ -48,4 +48,10 @@ export default class {
     })
     return subject
   }
+  doInfo(ksUser) {
+    if (ksUser.kuPhone) {
+      return true
+    }
+    return false
+  }
 }

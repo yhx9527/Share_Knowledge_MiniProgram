@@ -18,6 +18,14 @@ class Apis {
   postcode (code, wxUserInfo) {
     return this._request.post('tokens/' + code, wxUserInfo)
   }
+  // 修改个人信息
+  putuser (kuId, mUser) {
+    return this._request.put('users/' + kuId, mUser)
+  }
+  // 获取用户信息
+  getuser (kuId) {
+    return this._request.get('users/' + kuId)
+  }
   /**
    * subject-controller
    */
@@ -102,6 +110,14 @@ class Apis {
   // 获取商家列表
   getbusiness(page = 1, pageSize = 15) {
     return this._request.get('businesses', {page: page, pageSize: pageSize})
+  }
+
+  /**
+   * dict-controller
+   */
+  // 获取字典值
+  getdictcode(type) {
+    return this._request.get('dictionaries/' + type)
   }
 }
 export default new Apis()
