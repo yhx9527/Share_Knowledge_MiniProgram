@@ -29,7 +29,7 @@ export default class {
     if (list === null) {
       return []
     }
-    return list.sort(this.desc)
+    return list.sort(this.desc('kcId'))
   }
   subInfo(subject, kuId) {
     subject.enroll = 0
