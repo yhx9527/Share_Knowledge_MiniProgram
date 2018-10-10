@@ -54,4 +54,9 @@ export default class {
     }
     return false
   }
+  checkEmpty(form, array) {
+    return array.every(item => {
+      return form[item] !== ''
+    })
+  }
 }

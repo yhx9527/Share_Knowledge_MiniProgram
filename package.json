@@ -29,6 +29,7 @@
     "@minui/wxc-list": "^1.0.1",
     "@minui/wxc-loadmore": "^1.0.5",
     "@minui/wxc-panel": "^1.0.1",
+    "@minui/wxc-popup": "^1.0.9",
     "@minui/wxc-search": "^1.0.1",
     "@minui/wxc-toast": "^1.0.9",
     "redux": "^3.7.2",

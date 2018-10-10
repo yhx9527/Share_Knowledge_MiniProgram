@@ -185,8 +185,8 @@
       this['eduNumber'] = ''
       this['infoNumber'] = ''
       this['workNumber'] = ''
-      this['eduId'] = ''
-      this['workId'] = ''
+      this['eduId'] = 0
+      this['workId'] = 0
     }
     saveInfo() {
       var {mobileNumber, placeNumber, eduId, workId, infoNumber, kuId, mobileTip} = this.data

@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 5,
+			"current": 6,
 			"list": [
 				{
 					"id": -1,
@@ -64,7 +64,13 @@
 				{
 					"id": -1,
 					"name": "search",
-					"pathName": "pages/forms/search"
+					"pathName": "pages/forms/search",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "subform",
+					"pathName": "pages/forms/subform"
 				}
 			]
 		}
