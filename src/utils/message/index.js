@@ -1,7 +1,7 @@
 const default_data = {
   visible: false,
   content: '',
-  duration: 2,
+  duration: 1,
   type: 'default' // default || success || warning || error
 }
 let timmer = null
@@ -15,7 +15,7 @@ Component({
 
     methods: {
         handleShow (options) {
-            const { type = 'default', duration = 2 } = options;
+            const { type = 'default', duration = 1 } = options;
 
             this.setData({
                 ...options,

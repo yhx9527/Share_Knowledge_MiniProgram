@@ -48,6 +48,12 @@
     align-items: center;
     display: flex;
   }
+  .more{
+    text-align: center;
+    color: #74b9ff;
+    margin-bottom: 10px;
+    background-color: white;
+  }
 </style>
 <template>
   <i-message id="message" />
@@ -90,7 +96,8 @@
   <i-panel title="已报名">
     <view style="padding: 15px;"></view>
   </i-panel>
-  <commentArea  :comments.sync = "comments" :ksId.sync = "ksId"></commentArea>
+  <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
+  <view class="blank"></view>
   <view class="input-wrap">
     <wxc-input type="text"
                icon="message"
@@ -116,9 +123,11 @@
         'wxc-elip': '../packages/@minui/wxc-elip/dist/index',
         'wxc-input': '../packages/@minui/wxc-input/dist/index',
         'wxc-label': '../packages/@minui/wxc-label/dist/index',
-        'i-message': '../utils/message/index'
+        'i-message': '../utils/message/index',
+        'wxc-loadmore': '../packages/@minui/wxc-loadmore/dist/index'
       },
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      onReachBottomDistance: 100
     }
     components= {
       commentArea: CommentArea,
@@ -129,7 +138,9 @@
       subject: {},
       ksId: '',
       enroll: 0,
-      park: 0
+      park: 0,
+      page: 1,
+      ifLc: false
     }
     methods = {
       tellwhich(type) {
@@ -205,12 +216,35 @@
         }
       }
     }
+    events = {
+    }
+    loadComments() {
+      var that = this
+      that.ifLc = true
+      that.$apply()
+      that.$parent.apis.getcomments(that.ksId, that.page++)
+        .then(data => {
+          that.ifLc = false
+          let temp = that.$parent.doData.comments(data.list)
+          that.comments.push(...temp)
+          /* if (that.page > 2) {
+            wx.showToast({
+              title: '评论已加载'
+            })
+          } */
+          that.$apply()
+        })
+        .catch(data => {
+          that.ifLc = false
+          that.$apply()
+        })
+    }
     onLoad(params, data) {
       this.ksId = params.ksId
       this.fresh(params.ksId)
+      this.loadComments()
     }
     onUnload () {
-      this.$com.commentArea.page = 1
     }
     async fresh(ksId) {
       var that = this
@@ -219,7 +253,7 @@
           that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
           that.enroll = that.subject.enroll
           that.park = that.subject.park
-          that.$apply()
+          // that.$apply()
           wx.stopPullDownRefresh()
           $Message({
             content: '加载成功',
@@ -238,7 +272,6 @@
       this.fresh(this.subject.ksId)
     }
     onReady() {
-      this.$invoke('commentArea', 'loadComment')
     }
     onShareAppMessage(res) {
       if (res.from === 'button') {
@@ -259,6 +292,9 @@
         }
       }
       console.log('转发' + JSON.stringify(res))
+    }
+    onReachBottom() {
+      this.loadComments()
     }
   }
 </script>

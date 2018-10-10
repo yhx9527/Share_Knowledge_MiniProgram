@@ -57,8 +57,8 @@
       <minCard :item.sync="item"></minCard>
       </view>
     </repeat>
-    <wxc-loadmore wx:if="{{ ifload }}"></wxc-loadmore>
-    <wxc-loadmore wx:if="{{ loadend }}" is-end="{{ true }}" text="没有了哦"></wxc-loadmore>
+    <!--wxc-loadmore wx:if="{{ ifload }}"></wxc-loadmore-->
+    <wxc-loadmore is-end="{{ !ifload }}" text="{{ifload ? '拼命加载中...' : '没有了哦'}}"></wxc-loadmore>
   </view>
 
 </template>
