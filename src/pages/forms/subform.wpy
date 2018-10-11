@@ -12,10 +12,9 @@
   .input-wrap {
     background: #fff;
   }
-  .popup__content {
+  .drawer-container {
     width: 300rpx;
-    height: 100%;
-    line-height: 400rpx;
+    height:100vh;
     background: #ffffff;
     text-align: center;
   }
@@ -52,7 +51,7 @@
     <view class="input-wrap">
       <wxc-input type="text" title="主讲人" placeholder="{{ksUser.kuName}}" disabled="{{ true }}"></wxc-input>
       <wxc-input type="text" title="标题" placeholder="请输入演讲标题" value="{{ksSubject.ksTitle}}" bind:input="onBlur" data-name="ksTitle" label="{{ true }}"></wxc-input>
-      <wxc-input type="text" title="类型" placeholder="请选择主题类型" disabled="{{ true }}" arrow="{{ true }}" value="{{ksTypeName}}" label="{{ true }}" bind:tap="showPopup"></wxc-input>
+      <wxc-input type="text" title="类型" placeholder="请选择主题类型" disabled="{{ true }}" arrow="{{ true }}" value="{{ksTypeName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
       <wxc-input type="text" title="摘要" placeholder="请输入主题摘要(关键字)" value="{{ksSubject.ksAbstract}}" bind:input="onBlur" data-name="ksAbstract" label="{{ true }}"></wxc-input>
       <yhx-textarea type="text" title="内容" placeholder="请输入主讲内容" value="{{ksSubject.ksContent}}" bind:input="onBlur" data-name="ksContent" label="{{ true }}"></yhx-textarea>
     </view>
@@ -67,7 +66,7 @@
   </view>
   <view class="subCon" wx:if="{{current >= 2 ? true : false}}">
     <view class="input-wrap">
-      <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}"></wxc-input>
+      <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
       <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
       <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
     </view>
@@ -76,13 +75,16 @@
     <button class="button button-3d button-rounded" disabled="{{current === 0 ? true : false}}" @tap="prev">上一步</button>
     <button class="button button-3d button-primary button-rounded" @tap="next">{{current >= 2 ? '提交' : '下一步'}}</button>
   </view>
-  <wxc-popup class="J_Popup" animation-mode="right" align="right">
-    <view class="popup__content">Hello World</view>
-  </wxc-popup>
+  <i-drawer mode="right" visible="{{showRight}}" bind:close="toggleRight">
+    <view class="drawer-container">
+      <drawerContent title="主题类型" :types.sync="ksTypes"></drawerContent>
+    </view>
+  </i-drawer>
 </template>
 <script>
   import wepy from 'wepy'
   import BigTitle from '../../components/bigTitle'
+  import DrawerContent from '../../components/drawerContent'
 
   export default class Subform extends wepy.page {
     config={
@@ -93,18 +95,22 @@
         'i-step': '../../packages/other/step',
         'wxc-input': '../../packages/@minui/wxc-input/dist/index',
         'yhx-textarea': '../../packages/@minui/yhx-textarea/dist/index',
-        'wxc-popup': '../../packages/@minui/wxc-popup/dist/index'
+        'i-drawer': '../../packages/other/drawer',
+        'wxc-list': '../../packages/@minui/wxc-list/dist/index'
       }
     }
     components = {
-      bigTitle: BigTitle
+      bigTitle: BigTitle,
+      drawerContent: DrawerContent
     }
     data = {
       bgtitle: '主题发布',
       icontype: 'icon-subject',
+      showRight: false,
       current: 0,
       ksUser: {},
       ksTypeName: '',
+      ksTypes: [],
       kbName: '',
       ksSubject: {
         ksTitle: '',
@@ -148,19 +154,36 @@
       },
       onBlur(e) {
         this.ksSubject[e.currentTarget.dataset.name] = e.detail.value
-      },
-      showPopup() {
-        console.log(this)
-        let popupComponent = this.selectComponent('.J_Popup')
-        popupComponent && popupComponent.show()
-      },
-      hidePopup() {
-        let popupComponent = this.selectComponent('.J_Popup')
-        popupComponent && popupComponent.hide()
+      }
+    }
+    toggleRight() {
+      let that = this
+      this.showRight = !this.showRight
+      if (this.showRight) {
+        if (!this.ksTypes) {
+          this.$parent.apis.getdictcode('ksType')
+            .then(data => {
+              that.ksTypes = Object.values(data.ksDictDataMap)
+            })
+        }
       }
     }
     onLoad() {
       this.ksUser = wx.getStorageSync('ksUser')
+    }
+    onReady() {
+      var that = this
+      this.$parent.apis.getdictcode('ksType')
+        .then(data => {
+          that.ksTypes = Object.values(data.ksDictDataMap)
+        })
+    }
+    events = {
+      'type': function (e) {
+        this.ksSubject.ksType = e
+        this.ksTypeName = this.ksTypes[e].kddDataName
+        this.showRight = false
+      }
     }
   }
 </script>

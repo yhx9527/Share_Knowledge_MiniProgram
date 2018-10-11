@@ -1,0 +1,62 @@
+<style lang="less" scoped>
+  /** less **/
+  .list-wrap {
+    width: 100%;
+    background: #efefef;
+    padding-top: 10rpx;
+  }
+  .list-item {
+    background: #fff;
+    margin-bottom: 30rpx;
+  }
+  .list-item:last-child {
+    margin: 0;
+  }
+  .drawer-title{
+    font-size:24px;
+    text-align: center;
+    height:80px;
+    line-height:80px;
+  }
+  .drawer-desc{
+    font-size: 14px;
+    color: #636e72;
+    text-align: left;
+  }
+</style>
+<template>
+  <view>
+    <view class="drawer-title">{{title}}</view>
+    <view class="drawer-desc">请点击选择</view>
+    <view class="list-wrap">
+      <view class="list-item">
+        <repeat for="{{types}}" key="index" index="index" item="item">
+          <wxc-list title="{{item.kddDataName}}" arrow="{{false}}" @tap="clickType" data-value="{{item.kddDataValue}}"></wxc-list>
+        </repeat>
+      </view>
+  </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class DrawerContent extends wepy.component {
+    components = {};
+    data = {};
+    props= {
+      title: String,
+      types: {
+        type: Object,
+        default: {}
+      }
+    }
+    methods = {
+      clickType(e) {
+        this.$emit('type', e.currentTarget.dataset.value)
+      }
+    };
+
+    events = {};
+    // Other properties
+  }
+</script>
