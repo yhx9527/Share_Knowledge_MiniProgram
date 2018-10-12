@@ -66,9 +66,13 @@
   </view>
   <view class="subCon" wx:if="{{current >= 2 ? true : false}}">
     <view class="input-wrap">
-      <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
-      <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
-      <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
+      <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight1"></wxc-input>
+      <dtPicker ksDt="0">
+        <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
+      </dtPicker>
+      <dtPicker1 ksDt="1">
+        <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
+      </dtPicker1>
     </view>
   </view>
   <view class="btn-form">
@@ -77,7 +81,12 @@
   </view>
   <i-drawer mode="right" visible="{{showRight}}" bind:close="toggleRight">
     <view class="drawer-container">
-      <drawerContent title="主题类型" :types.sync="ksTypes"></drawerContent>
+      <drawerContent title="主题类型" :types.sync="ksTypes" :flag.sync="flag" idParams="kddDataValue" nameParams="kddDataName"></drawerContent>
+    </view>
+  </i-drawer>
+  <i-drawer mode="right" visible="{{showRight1}}" bind:close="toggleRight1">
+    <view class="drawer-container">
+      <drawerContent1 title="商家/地点" :types.sync="kbIds" :flag.sync="flag" idParams="kbId" nameParams="kbName"></drawerContent1>
     </view>
   </i-drawer>
 </template>
@@ -85,6 +94,7 @@
   import wepy from 'wepy'
   import BigTitle from '../../components/bigTitle'
   import DrawerContent from '../../components/drawerContent'
+  import DtPicker from '../../components/dtPicker'
 
   export default class Subform extends wepy.page {
     config={
@@ -101,17 +111,25 @@
     }
     components = {
       bigTitle: BigTitle,
-      drawerContent: DrawerContent
+      drawerContent: DrawerContent,
+      drawerContent1: DrawerContent,
+      dtPicker: DtPicker,
+      dtPicker1: DtPicker
     }
     data = {
       bgtitle: '主题发布',
       icontype: 'icon-subject',
       showRight: false,
+      showRight1: false,
       current: 0,
       ksUser: {},
       ksTypeName: '',
       ksTypes: [],
+      kbIds: [],
       kbName: '',
+      page: 1,
+      drawerTitle: '',
+      flag: false,
       ksSubject: {
         ksTitle: '',
         ksAbstract: '',
@@ -141,9 +159,6 @@
         if (this.current < 3) {
           if (this.$parent.doData.checkEmpty(this.data.ksSubject, map[this.current])) {
             this.current++
-            if (this.current === 3) {
-              console.log(this.data.ksSubject)
-            }
           } else {
             wx.showToast({
               title: '标红星内容不能为空',
@@ -151,25 +166,48 @@
             })
           }
         }
+        if (this.current === 3) {
+          wx.showLoading({title: '发布中...', mask: true})
+          this.$parent.apis.postsubject(this.ksSubject)
+            .then(data => {
+              wx.hideLoading()
+              if (data.success) {
+                wx.showToast({title: '发布成功'})
+              } else {
+                wx.showModal({title: '提示', content: data.message})
+              }
+            })
+            .catch(data => {
+              wx.hideLoading()
+            })
+          console.log(this.ksSubject)
+        }
       },
       onBlur(e) {
         this.ksSubject[e.currentTarget.dataset.name] = e.detail.value
       }
     }
-    toggleRight() {
-      let that = this
+    toggleRight(e) {
       this.showRight = !this.showRight
-      if (this.showRight) {
-        if (!this.ksTypes) {
-          this.$parent.apis.getdictcode('ksType')
-            .then(data => {
-              that.ksTypes = Object.values(data.ksDictDataMap)
-            })
-        }
-      }
+      this.flag = false
+      this.drawerTitle = '主题类型'
+    }
+    toggleRight1(e) {
+      this.showRight1 = !this.showRight1
+      this.flag = true
+      this.drawerTitle = '商家/地点'
     }
     onLoad() {
       this.ksUser = wx.getStorageSync('ksUser')
+    }
+    fresh() {
+      var that = this
+      this.$parent.apis.getbusiness(this.page++)
+        .then(data => {
+          that.kbIds.push(...data.list)
+          that.$apply()
+        })
+      that.$apply()
     }
     onReady() {
       var that = this
@@ -177,12 +215,30 @@
         .then(data => {
           that.ksTypes = Object.values(data.ksDictDataMap)
         })
+      this.fresh()
+      that.$apply()
     }
     events = {
       'type': function (e) {
-        this.ksSubject.ksType = e
-        this.ksTypeName = this.ksTypes[e].kddDataName
-        this.showRight = false
+        if (!e.flag) {
+          this.ksSubject.ksType = e.value
+          this.ksTypeName = this.ksTypes[e.value].kddDataName
+          this.showRight = false
+        } else {
+          this.ksSubject.kbId = e.value
+          this.kbName = this.kbIds[e.index].kbName
+          this.showRight1 = false
+        }
+      },
+      'dt': function (ksDt, ...arr) {
+        if (ksDt === '0') {
+          this.ksSubject.ksStartTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+        } else {
+          this.ksSubject.ksEndTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+        }
+      },
+      'load': function () {
+        this.fresh()
       }
     }
   }

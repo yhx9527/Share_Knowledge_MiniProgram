@@ -29,12 +29,23 @@
     <view class="drawer-title">{{title}}</view>
     <view class="drawer-desc">请点击选择</view>
     <view class="list-wrap">
-      <view class="list-item">
+      <!--view class="list-item" wx:if="{{flag}}">
+        <repeat for="{{types}}" key="index" index="index" item="item">
+          <wxc-list title="{{item.kbName}}" arrow="{{false}}" @tap="clickId" data-value="{{item.kbId}}"  data-index="{{index}}"></wxc-list>
+        </repeat>
+      </view>
+      <view class="list-item" wx:else>
         <repeat for="{{types}}" key="index" index="index" item="item">
           <wxc-list title="{{item.kddDataName}}" arrow="{{false}}" @tap="clickType" data-value="{{item.kddDataValue}}"></wxc-list>
         </repeat>
-      </view>
+      </view-->
+      <view class="list-item">
+        <repeat for="{{types}}" key="index" index="index" item="item">
+          <wxc-list title="{{item[nameParams]}}" arrow="{{false}}" @tap="clickType" data-value="{{item[idParams]}}" data-flag="{{flag}}" data-index="{{index}}"></wxc-list>
+        </repeat>
+        </view>
   </view>
+    <view  wx:if="{{flag}}" hover-class="animated infinite flipInY" @tap="freshList"><i class="iconfont icon-more"></i></view>
   </view>
 </template>
 
@@ -42,17 +53,29 @@
   import wepy from 'wepy'
   export default class DrawerContent extends wepy.component {
     components = {};
-    data = {};
+    data = {
+    };
     props= {
       title: String,
       types: {
-        type: Object,
-        default: {}
-      }
+        type: Array,
+        default: []
+      },
+      flag: {
+        type: Boolean,
+        default: false
+      },
+      idParams: String,
+      nameParams: String
     }
     methods = {
       clickType(e) {
-        this.$emit('type', e.currentTarget.dataset.value)
+        this.$emit('type', e.currentTarget.dataset)
+      },
+      freshList() {
+        console.log('hh')
+        var that = this
+        that.$emit('load')
       }
     };
 

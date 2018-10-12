@@ -108,7 +108,7 @@ class Apis {
    * business-controller
    */
   // 获取商家列表
-  getbusiness(page = 1, pageSize = 15) {
+  getbusiness(page = 1, pageSize = 10) {
     return this._request.get('businesses', {page: page, pageSize: pageSize})
   }
 
