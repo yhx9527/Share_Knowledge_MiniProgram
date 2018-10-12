@@ -1,0 +1,42 @@
+<style lang="css">
+
+</style>
+<template>
+  <bigTitle title="主讲记录" icontype="icon-jilu"></bigTitle>
+  <i-tabs current="{{ current }}" bindchange="handleChange">
+    <i-tab key="unchecked" title="未审核"></i-tab>
+    <i-tab key="ing" title="进行中"></i-tab>
+    <i-tab key="ed" title="已结束"></i-tab>
+  </i-tabs>
+  <repeat for="{{list}}" key="index" index="index" item="item">
+    <YhxSwiperout></YhxSwiperout>
+  </repeat>
+</template>
+<script>
+  import wepy from 'wepy'
+  import BigTitle from '../../components/bigTitle'
+  import YhxSwiperout from '../../components/yhx-swiperout'
+  export default class SubjectRec extends wepy.page {
+    config={
+      usingComponents: {
+        'wxc-button': '../../packages/@minui/wxc-button/dist/index',
+        'wxc-icon': '../../packages/@minui/wxc-icon/dist/index',
+        'i-tabs': '../../packages/other/tabs/',
+        'i-tab': '../../packages/other/tab/',
+        'i-swipeout': '../../packages/other/swipeout/'
+      }
+    }
+    components = {
+      bigTitle: BigTitle,
+      YhxSwiperout: YhxSwiperout
+    }
+    data = {
+      current: 'ing',
+      list: [1, 2]
+    }
+    handleChange ({ detail }) {
+      this.current = detail.key
+    }
+    methods = {}
+  }
+</script>

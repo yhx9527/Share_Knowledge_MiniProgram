@@ -32,7 +32,7 @@
   }
 </style>
 <template>
-  <bigTitle :title="bgtitle" :icontype="icontype"></bigTitle>
+  <bigTitle title="个人资料" icontype="icon-info"></bigTitle>
   <form bindsubmit="saveInfo" bindreset="resetInfo">
   <view class="input-wrap">
     <wxc-input type="number"
@@ -115,8 +115,6 @@
       workId: 0,
       infoNumber: '',
       mobileTip: false,
-      bgtitle: '个人资料',
-      icontype: 'icon-info',
       eduList: [],
       workList: [],
       ifsave: false

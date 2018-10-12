@@ -20,7 +20,7 @@
   }
 </style>
 <template>
-  <bigTitle :title="bgtitle" :icontype="icontype"></bigTitle>
+  <bigTitle title="主题发布" icontype="icon-subject"></bigTitle>
   <i-steps i-class="steps" current="{{current}}">
     <i-step status="finish">
       <view slot="title">
@@ -117,8 +117,6 @@
       dtPicker1: DtPicker
     }
     data = {
-      bgtitle: '主题发布',
-      icontype: 'icon-subject',
       showRight: false,
       showRight1: false,
       current: 0,

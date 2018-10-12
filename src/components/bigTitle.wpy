@@ -25,10 +25,7 @@
     data = {};
     props= {
       title: String,
-      icontype: {
-        type: String,
-        default: 'icon-info'
-      }
+      icontype: String
     }
     methods = {};
 

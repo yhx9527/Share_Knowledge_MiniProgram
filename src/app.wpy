@@ -51,7 +51,8 @@ export default class extends wepy.app {
       'pages/index',
       'pages/forms/info',
       'pages/forms/subform',
-      'pages/forms/search'
+      'pages/forms/search',
+      'pages/parter/subjectRec'
     ],
     window: {
       backgroundTextStyle: 'light',
