@@ -1,0 +1,57 @@
+<style type="less">
+  .list-check {
+    display: flex;
+    align-items: center
+  }
+  .list-image {
+    width: 102rpx;
+    height: 102rpx;
+    margin-left: 30rpx;
+  }
+  .radius {
+    border-radius: 100px;
+  }
+  .item {
+    flex: 1;
+  }
+  .list-image {
+    width: 102rpx;
+    height: 102rpx;
+    background: #d8d8d8;
+  }
+</style>
+<template>
+  <view class="list-check">
+    <image class="list-image radius" mode="aspectFill" src="{{listitem.ksSubject.ksUser.kuHeadImgUrl}}"></image>
+    <wxc-list class="item" title="{{listitem.ksSubject.ksTitle}}" detail="--By {{listitem.ksSubject.ksUser.kuName}}" arrow="{{ false }}" bind:click="subMore"></wxc-list>
+    <button class="button button-raised button-action button-circle button-caution" style="margin-right:5px;" @tap="cancel"><i class="iconfont icon-cancel" style="font-size:20px;"></i></button>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class ShowItem extends wepy.component {
+    props = {
+      listitem: {
+        type: Object,
+        default: {}
+      },
+      index: {
+        type: Number,
+        default: -1
+      }
+    }
+
+    components = {
+    }
+    methods = {
+      subMore() {
+        this.$emit('subMore', this.listitem.ksSubject.ksId)
+      },
+      cancel() {
+        let id = this.listitem.kpId || this.listitem.keId
+        this.$emit('cancel', this.listitem.ksSubject.ksId, id, this.index)
+      }
+    }
+  }
+</script>

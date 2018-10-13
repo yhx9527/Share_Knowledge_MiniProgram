@@ -71,10 +71,10 @@ class Apis {
   }
   // 删除参与
   deleteparty(ksId, kpId) {
-    return this._request.delete('subjects/' + ksId + '/participations' + kpId)
+    return this._request.delete('subjects/' + ksId + '/participations/' + kpId)
   }
   // 获取我的报名
-  getsign(page, pageSize) {
+  getsign(page = 1, pageSize = 10) {
     return this._request.get('enrollments/', {page: page, pageSize: pageSize})
   }
   // 报名
@@ -83,7 +83,7 @@ class Apis {
   }
   // 删除报名
   deletesign(ksId, keId) {
-    return this._request.delete('subjects/' + ksId + '/enrollments' + keId)
+    return this._request.delete('subjects/' + ksId + '/enrollments/' + keId)
   }
 
   /**

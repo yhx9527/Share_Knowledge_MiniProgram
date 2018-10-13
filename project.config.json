@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 9,
 			"list": [
 				{
 					"id": -1,
@@ -82,7 +82,13 @@
 				{
 					"id": -1,
 					"name": "subformRev",
-					"pathName": "pages/forms/subformRev"
+					"pathName": "pages/forms/subformRev",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "joinRev",
+					"pathName": "pages/parter/joinRec"
 				}
 			]
 		}

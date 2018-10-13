@@ -165,8 +165,10 @@
             this.$navigate('./parter/subjectRec')
             break
           case '1':
+            this.$navigate('./parter/joinRec')
             break
           case '0':
+            this.$navigate('./parter/enrollRec')
             break
         }
       }
