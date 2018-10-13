@@ -70,9 +70,9 @@
       <image class="list-image" mode="aspectFill" src="{{userInfo.avatarUrl}}"></image>
     </view>
     <view class="list-check-fun">
-      <view class="head-fun" @tap="enterPart" data-type="2"><text class="fun-num">1</text><text class="fun-title">主讲</text></view>
-      <view class="head-fun" @tap="enterPart" data-type="1"><text class="fun-num">1</text><text class="fun-title">参讲</text></view>
-      <view class="head-fun" @tap="enterPart" data-type="0"><text class="fun-num">1</text><text class="fun-title">听讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="2"><text class="fun-num">{{subNum}}</text><text class="fun-title">主讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="1"><text class="fun-num">{{joinNum}}</text><text class="fun-title">参讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="0"><text class="fun-num">{{enrollNum}}</text><text class="fun-title">听讲</text></view>
     </view>
   </view>
   <view class="list-wrap">
@@ -142,6 +142,34 @@
         'wxc-search': '../packages/@minui/wxc-search/dist/index'
       }
     }
+    data= {
+      userInfo: {nickName: '昵称', province: '省份', city: '城市', 'avatarUrl': 'https://s11.mogucdn.com/p2/170413/upload_86dkh4e886991g9lji7a6g5c530ji_400x400.jpg'},
+      subNum: 0,
+      joinNum: 0,
+      enrollNum: 0
+    }
+    onLoad() {
+      this.userInfo = wx.getStorageSync('userInfo')
+      this.$apply()
+    }
+    onShow() {
+      var that = this
+      that.$parent.apis.getsubject(1, true)
+        .then(data => {
+          that.subNum = data.total
+          that.$apply()
+        })
+      that.$parent.apis.getparty()
+        .then(data => {
+          that.joinNum = data.total
+          that.$apply()
+        })
+      that.$parent.apis.getsign()
+        .then(data => {
+          that.enrollNum = data.total
+          that.$apply()
+        })
+    }
     methods = {
       reboot() {
         wx.showModal({
@@ -172,13 +200,6 @@
             break
         }
       }
-    }
-    onShow() {
-      this.userInfo = wx.getStorageSync('userInfo')
-      this.$apply()
-    }
-    data= {
-      userInfo: {nickName: '昵称', province: '省份', city: '城市', 'avatarUrl': 'https://s11.mogucdn.com/p2/170413/upload_86dkh4e886991g9lji7a6g5c530ji_400x400.jpg'}
     }
   }
 </script>

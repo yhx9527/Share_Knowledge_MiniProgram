@@ -121,6 +121,8 @@
                       that.listed.splice(index, 1)
                     }
                     that.$apply()
+                  } else {
+                    wx.showToast({title: data.message, icon: 'none'})
                   }
                 })
             }
@@ -136,10 +138,12 @@
             if (res.confirm) {
               that.$parent.apis.patchsubject(ksId)
                 .then(data => {
-                  wx.showToast({title: '成功结束'})
                   if (data.success) {
+                    wx.showToast({title: '成功结束'})
                     that.listing.pop(index)
                     that.listed.push(item)
+                  } else {
+                    wx.showToast({title: data.message, icon: 'none'})
                   }
                 })
             }

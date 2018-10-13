@@ -24,10 +24,16 @@
     width: 90rpx;
     height: 90rpx;
   }
+  .thumbnail{
+    display: inline-block;
+    margin-left: 10rpx;
+    width: 60rpx;
+    height: 60rpx;
+  }
   .title{
     font-size:24px;
     color:white;
-    margin:0px 20px;
+    margin:0px 10px;
     padding-top:10px;
 
   }
@@ -44,9 +50,8 @@
     height: 20vh;
   }
   .label{
-    margin-right: 20rpx;
-    align-items: center;
-    display: flex;
+    margin-left:10px;
+    align-items:center;
   }
   .more{
     text-align: center;
@@ -61,9 +66,8 @@
     <!--subjectTitle :ST.sync="subject"></subjectTitle-->
 
   <view class="STcontainer">
-    <view class="flex-row">
-      <view class='title'>{{ subject.ksTitle }}</view>
-      <wxc-label class="label" text="{{subject.ksTypeData.kddDataName}}" type-color="white"></wxc-label>
+    <view class="flex-row" style="margin-bottom:10px;">
+      <view class='title'>{{ subject.ksTitle }}<wxc-label class="label" text="{{subject.ksTypeData.kddDataName}}" type-color="white"></wxc-label></view>
     </view>
     <view class="author">By {{ subject.ksUser.kuName }}
       <wxc-avatar class="avatar avatar__1" src="{{ subject.ksUser.kuHeadImgUrl}}"></wxc-avatar>
@@ -91,10 +95,20 @@
     </view>
   </i-panel>
   <i-panel title="参讲者">
-    <view style="padding: 15px;"></view>
+    <view style="padding: 15px;" @tap="enterJoinMenu">
+      <repeat for="{{ksPartakeList}}" key="keId" index="index" item="item">
+        <wxc-avatar wx:if="{{index < 6}}" class="thumbnail" src="{{item.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+        <i wx:if="{{index >=6}}" class="iconfont icon-moredot" style="color: #00b894"></i>
+      </repeat>
+    </view>
   </i-panel>
   <i-panel title="已报名">
-    <view style="padding: 15px;"></view>
+    <view style="padding: 15px;" @tap="enterEnrollMenu">
+      <repeat for="{{ksEnrollList}}" key="keId" index="index" item="item">
+        <wxc-avatar wx:if="{{index < 6}}" class="thumbnail" src="{{item.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+        <i wx:if="{{index >=6}}" class="iconfont icon-moredot" style="color: #00b894"></i>
+      </repeat>
+    </view>
   </i-panel>
   <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
   <view class="blank"></view>
@@ -135,6 +149,8 @@
     }
     data= {
       comments: [],
+      ksEnrollList: [],
+      ksPartakeList: [],
       subject: {},
       ksId: '',
       enroll: 0,
@@ -214,6 +230,12 @@
 
             break
         }
+      },
+      enterJoinMenu() {
+        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksPartakeList)})
+      },
+      enterEnrollMenu() {
+        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksEnrollList)})
       }
     }
     events = {
@@ -253,7 +275,9 @@
           that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
           that.enroll = that.subject.enroll
           that.park = that.subject.park
-          // that.$apply()
+          that.ksEnrollList = that.subject.ksEnrollList
+          that.ksPartakeList = that.subject.ksPartakeList
+          that.$apply()
           wx.stopPullDownRefresh()
           $Message({
             content: '加载成功',

@@ -1,10 +1,21 @@
-<style lang="less">
-
+<style lang="less" scoped>
+  .place{
+    font-size:14px;
+    text-align:right;
+    color:#636e72;
+  }
+  .contentCard{
+    padding:30rpx;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+  }
 </style>
 <template>
-  <example-demo title="摘要" desc="{{}}" bind:click='onClick'>
-    <wxc-panel title="{{item.ksTitle}}"  >
-      <view class="content">内容</view>
+  <example-demo title="报名:{{item.ksEnrollNum}}/{{item.ksEnrollLimit}}" desc="开始时间:{{item.ksStartTime}}" bind:click='onClick'>
+    <wxc-panel title="{{item.ksTitle}} --By {{item.ksUser.kuName}}"  >
+      <view class="contentCard">{{item.ksAbstract}}</view>
+      <view class="place">举办地点:{{item.ksBusiness.kbName}}</view>
     </wxc-panel>
   </example-demo>
 </template>

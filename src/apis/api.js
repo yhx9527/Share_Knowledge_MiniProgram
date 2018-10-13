@@ -51,7 +51,7 @@ class Apis {
   }
   // 结束主题(开展完毕)
   patchsubject (ksId) {
-    return this._request.patch('subjects/' + ksId)
+    return this._request.post('subjects/' + ksId + '/end')
   }
 
   /**

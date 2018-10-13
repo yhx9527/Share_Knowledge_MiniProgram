@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 9,
+			"current": 10,
 			"list": [
 				{
 					"id": -1,
@@ -88,7 +88,13 @@
 				{
 					"id": -1,
 					"name": "joinRev",
-					"pathName": "pages/parter/joinRec"
+					"pathName": "pages/parter/joinRec",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "nameList",
+					"pathName": "pages/parter/nameList"
 				}
 			]
 		}

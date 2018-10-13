@@ -171,6 +171,9 @@
               wx.hideLoading()
               if (data.success) {
                 wx.showToast({title: '发布成功'})
+                setTimeout(function () {
+                  wx.redirectTo({url: '../parter/subjectRec'})
+                }, 1000)
               } else {
                 wx.showModal({title: '提示', content: data.message})
               }
