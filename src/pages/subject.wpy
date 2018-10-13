@@ -9,6 +9,7 @@
     bottom:0;
     width:100%;
     box-shadow: 0px 3px 3px -3px #55efc4 inset;
+    display:flex;
   }
   .content{
     padding: 10px;
@@ -58,6 +59,9 @@
     color: #74b9ff;
     margin-bottom: 10px;
     background-color: white;
+  }
+  .commentInput{
+    width: 90vw;
   }
 </style>
 <template>
@@ -112,12 +116,20 @@
   </i-panel>
   <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
   <view class="blank"></view>
-  <view class="input-wrap">
-    <wxc-input type="text"
-               icon="message"
-               placeholder="我也来说一句">
-    </wxc-input>
-  </view>
+  <form bindsubmit="sendComment">
+    <view class="input-wrap">
+      <wxc-input type="text"
+                 icon="message"
+                 placeholder="我也来说一句"
+                 i-class="commentInput"
+                 name="comment"
+                 value="{{commentContent}}"
+                 bind:input="commentInput">
+      </wxc-input>
+      <button formType="submit" class="button button-circle button-giant button-longshadow button-small" style="margin: auto;">
+        <i class="iconfont icon-fabu-2"></i></button>
+    </view>
+  </form>
 </template>
 <script>
   import wepy from 'wepy'
@@ -156,7 +168,8 @@
       enroll: 0,
       park: 0,
       page: 1,
-      ifLc: false
+      ifLc: false,
+      commentContent: ''
     }
     methods = {
       tellwhich(type) {
@@ -236,6 +249,33 @@
       },
       enterEnrollMenu() {
         this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksEnrollList)})
+      },
+      commentInput(e) {
+        console.log(e.detail.value)
+        this.commentContent = e.detail.value
+      },
+      sendComment() {
+        let that = this
+        if (this.commentContent !== '') {
+          wx.showModal({
+            title: '提示',
+            content: '发送评论?',
+            success: function (res) {
+              if (res.confirm) {
+                that.$parent.apis.postcomments(that.ksId, that.commentContent)
+                  .then(data => {
+                    if (data.success) {
+                      wx.showToast({title: '评论成功'})
+                      that.commentContent = ''
+                      that.$apply()
+                    }
+                  })
+              }
+            }
+          })
+        } else {
+          wx.showToast({title: '评论不能为空', icon: 'none'})
+        }
       }
     }
     events = {
@@ -247,8 +287,8 @@
       that.$parent.apis.getcomments(that.ksId, that.page++)
         .then(data => {
           that.ifLc = false
-          let temp = that.$parent.doData.comments(data.list)
-          that.comments.push(...temp)
+          that.comments.push(...data.list)
+          // let temp = that.$parent.doData.comments(data.list)
           /* if (that.page > 2) {
             wx.showToast({
               title: '评论已加载'

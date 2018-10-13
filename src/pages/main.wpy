@@ -163,7 +163,7 @@
           } else {
             that.ifload = false
             if (data.list === null) { that.loadend = true }
-            that.subjects = that.subjects.concat(doData.subject(data.list))
+            that.subjects.push(...doData.subject(data.list))
           }
           that.$apply()
         })
