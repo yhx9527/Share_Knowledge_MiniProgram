@@ -101,8 +101,8 @@
       this.fresh()
     }
     events= {
-      'subMore': function (ksId) {
-        this.$navigate('../subject?ksId=' + ksId)
+      'subMore': function (ksId, listitem) {
+        this.$navigate('./adminSub', {singleSub: JSON.stringify(listitem)})
       },
       'deleteSub': function (ksId, index) {
         var that = this

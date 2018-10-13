@@ -79,17 +79,17 @@
     <view class="list-item">
       <wxc-list
         class="item"
-        icon="home"
+        icon="coupon"
         icon-color="#55efc4"
-        desc="评价,收藏,钱包...都在这里哦"
-        title="个人中心"
+        desc=""
+        title="个人展示页"
         ></wxc-list>
       <wxc-list
         class="item"
         icon="footprint"
         icon-color="#55efc4"
-        desc="听讲,参讲,主讲记录在这里哦"
-        title="主题参与"></wxc-list>
+        desc=""
+        title="我的评论"></wxc-list>
       <wxc-list
         class="item"
         icon="edit"

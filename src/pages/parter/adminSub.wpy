@@ -1,0 +1,61 @@
+<style lang="css" scoped>
+  .content {
+    padding:10rpx;
+    font-size:14px;
+    color:#636e72;
+  }
+  .fashionBorder{
+    box-shadow: 0 10px 10px -10px #2d3436;
+    margin: 10px 15px;
+    background: #f6f8f9
+  }
+</style>
+<template>
+  <bigTitle title="主题管理" icontype="icon-admin"></bigTitle>
+  <view class="fashionBorder">
+    <wxc-panel title="{{singleSub.ksTitle}}(点击可进入主题页)" bind:click="onClick">
+      <view class="content">报名: {{singleSub.ksEnrollNum}}/{{singleSub.ksEnrollLimit}} || 参讲: {{singleSub.ksPartNum}}/{{singleSub.ksPartLimit}} || 地点: {{singleSub.ksBusiness.kbName}}</view>
+      <view class="content">时间: {{singleSub.ksStartTime}}到{{singleSub.ksEndTime}}</view>
+    </wxc-panel>
+  </view>
+  <i-tabs current="{{ current }}" bindchange="handleChange">
+    <i-tab key="join" title="参讲管理"></i-tab>
+    <i-tab key="talk" title="评论管理"></i-tab>
+  </i-tabs>
+</template>
+<script>
+  import wepy from 'wepy'
+  import BigTitle from '../../components/bigTitle'
+
+  export default class AdminSub extends wepy.page {
+    config={
+      usingComponents: {
+        'wxc-button': '../../packages/@minui/wxc-button/dist/index',
+        'wxc-icon': '../../packages/@minui/wxc-icon/dist/index',
+        'i-tabs': '../../packages/other/tabs/',
+        'i-tab': '../../packages/other/tab/',
+        'wxc-panel': '../../packages/@minui/wxc-panel/dist/index',
+      }
+    }
+    components = {
+      bigTitle: BigTitle
+    }
+    data = {
+      current: 'join',
+      singleSub: {}
+    }
+    props = {
+    }
+    onLoad(params) {
+      this.singleSub = JSON.parse(params.singleSub)
+    }
+    methods = {
+      onClick() {
+        this.$navigate('../subject', {ksId: this.singleSub.ksId})
+      }
+    }
+    handleChange ({ detail }) {
+      this.current = detail.key
+    }
+  }
+</script>

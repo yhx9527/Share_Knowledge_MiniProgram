@@ -48,7 +48,6 @@
   }
   .STcontainer{
     background-color: #55efc4;
-    height: 20vh;
   }
   .label{
     margin-left:10px;
@@ -305,6 +304,7 @@
       this.ksId = params.ksId
       this.fresh(params.ksId)
       this.loadComments()
+      this.$apply()
     }
     onUnload () {
     }
@@ -315,8 +315,12 @@
           that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
           that.enroll = that.subject.enroll
           that.park = that.subject.park
-          that.ksEnrollList = that.subject.ksEnrollList
-          that.ksPartakeList = that.subject.ksPartakeList
+          that.ksEnrollList = that.subject.ksEnrollList.filter(item => {
+            return item.ksStatus
+          })
+          that.ksPartakeList = that.subject.ksPartakeList.filter(item => {
+            return item.ksStatus
+          })
           that.$apply()
           wx.stopPullDownRefresh()
           $Message({
@@ -359,6 +363,7 @@
     }
     onReachBottom() {
       this.loadComments()
+      this.$apply()
     }
   }
 </script>

@@ -76,7 +76,7 @@
       </view>
       <view class="i-swipeout-des">
         <view class="i-swipeout-des-h2">{{listitem.ksTitle}}</view>
-        <view class="i-swipeout-des-detail">发布于: {{listitem.addTime}}(点击查看详情)</view>
+        <view class="i-swipeout-des-detail">发布于: {{listitem.addTime}}(点击进行管理)</view>
       </view>
     </view>
     <view slot="button" class="i-swipeout-demo-button-group" style="background:#2db7f5;">
@@ -110,7 +110,7 @@
     }
     methods = {
       handleOpen1() {
-        this.$emit('subMore', this.listitem.ksId)
+        this.$emit('subMore', this.listitem.ksId, this.listitem)
       },
       deleteSub() {
         this.$emit('deleteSub', this.listitem.ksId, this.index)
