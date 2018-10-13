@@ -93,7 +93,7 @@ class Request {
     return this.request({ url, method: METHOD.DELETE, header, data })
   }
   patch(url, data, header = this._header) {
-    return this.request({ url, method: METHOD.patch, header, data })
+    return this.request({ url, method: METHOD.PATCH, header, data })
   }
   set header(header) {
     this._header = header

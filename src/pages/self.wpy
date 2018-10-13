@@ -70,9 +70,9 @@
       <image class="list-image" mode="aspectFill" src="{{userInfo.avatarUrl}}"></image>
     </view>
     <view class="list-check-fun">
-      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">主讲</text></view>
-      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">参讲</text></view>
-      <view class="head-fun"><text class="fun-num">1</text><text class="fun-title">听讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="2"><text class="fun-num">1</text><text class="fun-title">主讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="1"><text class="fun-num">1</text><text class="fun-title">参讲</text></view>
+      <view class="head-fun" @tap="enterPart" data-type="0"><text class="fun-num">1</text><text class="fun-title">听讲</text></view>
     </view>
   </view>
   <view class="list-wrap">
@@ -157,6 +157,18 @@
       },
       reviseInfo() {
         this.$navigate('./forms/info')
+      },
+      enterPart(e) {
+        let type = e.currentTarget.dataset.type
+        switch (type) {
+          case '2':
+            this.$navigate('./parter/subjectRec')
+            break
+          case '1':
+            break
+          case '0':
+            break
+        }
       }
     }
     onShow() {

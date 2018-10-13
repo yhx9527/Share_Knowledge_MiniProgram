@@ -52,7 +52,10 @@ export default class extends wepy.app {
       'pages/forms/info',
       'pages/forms/subform',
       'pages/forms/search',
-      'pages/parter/subjectRec'
+      'pages/forms/subformRev',
+      'pages/parter/subjectRec',
+      'pages/parter/joinRec',
+      'pages/parter/enrollRec'
     ],
     window: {
       backgroundTextStyle: 'light',

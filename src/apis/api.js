@@ -30,7 +30,7 @@ class Apis {
    * subject-controller
    */
   // 获取主题
-  getsubject (page = 1, pageSize = 10, isAuthor = false) {
+  getsubject (page = 1, isAuthor = false, pageSize = 10) {
     return this._request.get('subjects', {isAuthor: isAuthor, page: page, pageSize: pageSize})
   }
   // 发起主题
@@ -51,7 +51,7 @@ class Apis {
   }
   // 结束主题(开展完毕)
   patchsubject (ksId) {
-    return this._request.patch('subjects' + ksId)
+    return this._request.patch('subjects/' + ksId)
   }
 
   /**

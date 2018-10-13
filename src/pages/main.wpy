@@ -65,6 +65,7 @@
 <script>
   import wepy from 'wepy'
   import MinCard from '../components/minCard'
+  /* global wx */
   // import { $Message } from '../utils/base'
   const { $Message } = require('../utils/base/index')
 

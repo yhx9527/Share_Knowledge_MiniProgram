@@ -1,11 +1,4 @@
 <style lang="css" scoped>
-  .steps{
-    margin-top:15px;
-  }
-  .btn-form{
-    display: flex;
-    justify-content: space-around;
-  }
   .subCon {
     margin:10px 10px 20px;
   }
@@ -20,52 +13,18 @@
   }
 </style>
 <template>
-  <bigTitle title="主题发布" icontype="icon-subject"></bigTitle>
-  <i-steps i-class="steps" current="{{current}}">
-    <i-step status="finish">
-      <view slot="title">
-        主题
-      </view>
-      <view slot="content">
-        请填写要发布的主题内容
-      </view>
-    </i-step>
-    <i-step status="content">
-      <view slot="title">
-        注意事项
-      </view>
-      <view slot="content">
-        请填写相关注意事项
-      </view>
-    </i-step>
-    <i-step status="">
-      <view slot="title">
-        时间地点
-      </view>
-      <view slot="content">
-        请选择活动的时间和地点
-      </view>
-    </i-step>
-  </i-steps>
-  <view class="subCon" wx:if="{{current === 0 ? true : false}}">
+  <bigTitle title="主题修改" icontype="icon-edit_line_b"></bigTitle>
+  <view class="subCon">
     <view class="input-wrap">
       <wxc-input type="text" title="主讲人" placeholder="{{ksUser.kuName}}" disabled="{{ true }}"></wxc-input>
       <wxc-input type="text" title="标题" placeholder="请输入演讲标题" value="{{ksSubject.ksTitle}}" bind:input="onBlur" data-name="ksTitle" label="{{ true }}"></wxc-input>
       <wxc-input type="text" title="类型" placeholder="请选择主题类型" disabled="{{ true }}" arrow="{{ true }}" value="{{ksTypeName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
       <wxc-input type="text" title="摘要" placeholder="请输入主题摘要(关键字)" value="{{ksSubject.ksAbstract}}" bind:input="onBlur" data-name="ksAbstract" label="{{ true }}"></wxc-input>
       <yhx-textarea type="text" title="内容" placeholder="请输入主讲内容" value="{{ksSubject.ksContent}}" bind:input="onBlur" data-name="ksContent" label="{{ true }}"></yhx-textarea>
-    </view>
-  </view>
-  <view class="subCon" wx:if="{{current === 1 ? true : false}}">
-    <view class="input-wrap">
       <wxc-input type="number" title="最多报名" placeholder="报名人数上限" value="{{ksSubject.ksEnrollLimit}}" bind:input="onBlur" data-name="ksEnrollLimit" label="{{ true }}"></wxc-input>
       <wxc-input type="number" title="最少报名" placeholder="报名人数下限" value="{{ksSubject.ksEnrollMinLimit}}" bind:input="onBlur" data-name="ksEnrollMinLimit" label="{{ true }}"></wxc-input>
       <wxc-input type="number" title="参讲人数" placeholder="和您一同演讲的人数" value="{{ksSubject.ksPartLimit}}" bind:input="onBlur" data-name="ksPartLimit" label="{{ true }}"></wxc-input>
       <yhx-textarea type="text" title="备注" placeholder="有其他需求请备注" value="{{ksSubject.ksRemark}}" bind:input="onBlur" data-name="ksRemark"></yhx-textarea>
-    </view>
-  </view>
-  <view class="subCon" wx:if="{{current >= 2 ? true : false}}">
-    <view class="input-wrap">
       <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight1"></wxc-input>
       <dtPicker ksDt="0">
         <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
@@ -75,10 +34,7 @@
       </dtPicker1>
     </view>
   </view>
-  <view class="btn-form">
-    <button class="button button-3d button-rounded" disabled="{{current === 0 ? true : false}}" @tap="prev">上一步</button>
-    <button class="button button-3d button-primary button-rounded" @tap="next">{{current >= 2 ? '提交' : '下一步'}}</button>
-  </view>
+  <button class="button button-block button-rounded button-primary button-large" style="margin: 15px;" @tap="submit">修改并提交</button>
   <i-drawer mode="right" visible="{{showRight}}" bind:close="toggleRight">
     <view class="drawer-container">
       <drawerContent title="主题类型" :types.sync="ksTypes" :flag.sync="flag" idParams="kddDataValue" nameParams="kddDataName"></drawerContent>
@@ -96,13 +52,11 @@
   import DrawerContent from '../../components/drawerContent'
   import DtPicker from '../../components/dtPicker'
 
-  export default class Subform extends wepy.page {
+  export default class SubformRev extends wepy.page {
     config={
       usingComponents: {
         'wxc-button': '../../packages/@minui/wxc-button/dist/index',
         'wxc-icon': '../../packages/@minui/wxc-icon/dist/index',
-        'i-steps': '../../packages/other/steps',
-        'i-step': '../../packages/other/step',
         'wxc-input': '../../packages/@minui/wxc-input/dist/index',
         'yhx-textarea': '../../packages/@minui/yhx-textarea/dist/index',
         'i-drawer': '../../packages/other/drawer',
@@ -117,6 +71,8 @@
       dtPicker1: DtPicker
     }
     data = {
+      ksId: '',
+      index: '',
       showRight: false,
       showRight1: false,
       current: 0,
@@ -142,35 +98,46 @@
         kbId: ''
       }
     }
+    onLoad(params) {
+      var that = this
+      this.ksUser = wx.getStorageSync('ksUser')
+      this.ksId = params.ksId
+      this.index = params.index
+      this.$parent.apis.getsubjectmore(params.ksId)
+        .then(data => {
+          Object.assign(this.ksSubject, data)
+          this.kbName = data.ksBusiness.kbName
+          this.ksTypeName = data.ksTypeData.kddDataName
+        })
+    }
+    onReady() {
+      var that = this
+      this.$parent.apis.getdictcode('ksType')
+        .then(data => {
+          that.ksTypes = Object.values(data.ksDictDataMap)
+        })
+      this.fresh()
+      that.$apply()
+    }
     methods = {
-      prev() {
-        if (this.current > 0) {
-          this.current--
-        }
+      onBlur(e) {
+        this.ksSubject[e.currentTarget.dataset.name] = e.detail.value
       },
-      next() {
-        let map = {
-          '0': ['ksTitle', 'ksAbstract', 'ksType', 'ksContent'],
-          '1': ['ksEnrollLimit', 'ksEnrollMinLimit', 'ksPartLimit'],
-          '2': ['kbId', 'ksStartTime', 'ksEndTime']
-        }
-        if (this.current < 3) {
-          if (this.$parent.doData.checkEmpty(this.data.ksSubject, map[this.current])) {
-            this.current++
-          } else {
-            wx.showToast({
-              title: '标红星内容不能为空',
-              icon: 'none'
-            })
-          }
-        }
-        if (this.current === 3) {
-          wx.showLoading({title: '发布中...', mask: true})
-          this.$parent.apis.postsubject(this.ksSubject)
+      submit() {
+        var that = this
+        let arr = ['ksTitle', 'ksAbstract', 'ksType', 'ksContent', 'ksEnrollLimit', 'ksEnrollMinLimit', 'ksPartLimit', 'kbId', 'ksStartTime', 'ksEndTime']
+        if (this.$parent.doData.checkEmpty(this.data.ksSubject, arr)) {
+          wx.showLoading({title: '修改中...', mask: true})
+          this.$parent.apis.putsubjectmore(this.ksId, this.ksSubject)
             .then(data => {
               wx.hideLoading()
               if (data.success) {
-                wx.showToast({title: '发布成功'})
+                wx.showToast({title: '修改成功'})
+                wx.setStorageSync('reviceTemp', {ksTitle: data.data.ksTitle, index: that.index})
+                setTimeout(function () {
+                  console.log(that)
+                  wx.navigateBack({delta: 1})
+                }, 1000)
               } else {
                 wx.showModal({title: '提示', content: data.message})
               }
@@ -179,10 +146,12 @@
               wx.hideLoading()
             })
           console.log(this.ksSubject)
+        } else {
+          wx.showToast({
+            title: '标红星内容不能为空',
+            icon: 'none'
+          })
         }
-      },
-      onBlur(e) {
-        this.ksSubject[e.currentTarget.dataset.name] = e.detail.value
       }
     }
     toggleRight(e) {
@@ -195,9 +164,7 @@
       this.flag = true
       this.drawerTitle = '商家/地点'
     }
-    onLoad() {
-      this.ksUser = wx.getStorageSync('ksUser')
-    }
+
     fresh() {
       var that = this
       this.$parent.apis.getbusiness(this.page++)
@@ -205,15 +172,6 @@
           that.kbIds.push(...data.list)
           that.$apply()
         })
-      that.$apply()
-    }
-    onReady() {
-      var that = this
-      this.$parent.apis.getdictcode('ksType')
-        .then(data => {
-          that.ksTypes = Object.values(data.ksDictDataMap)
-        })
-      this.fresh()
       that.$apply()
     }
     events = {

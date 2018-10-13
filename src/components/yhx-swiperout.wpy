@@ -28,14 +28,18 @@
     line-height:40px;
     text-align:center;
     border-radius:40px;
+  }
+  .image-color1{
     background: #2d8cf0;
+  }
+  .image-color2{
+    background: #55efc4;
   }
   .i-swipeout-des{
     margin-left:50px;
   }
   .i-swipeout-des-detail{
     font-size:12px;
-    word-break:break-all;
     color:#80848f;
   }
 
@@ -65,19 +69,20 @@
   }
 </style>
 <template>
-  <i-swipeout  i-class="i-swipeout-demo-item" operateWidth="{{140}}" unclosable="{{true}}" toggle="{{toggle}}">
+  <i-swipeout  i-class="i-swipeout-demo-item" operateWidth="{{!ifEnd ? 210 : 70}}" unclosable="{{true}}" toggle="{{toggle}}">
     <view slot="content"  catchtap='handleOpen1' data-item="{{item}}">
-      <view  class="i-swipeout-image">
-        <i-icon size="20" color="#FFFFFF" type="feedback_fill"></i-icon>
+      <view  class="i-swipeout-image {{!ifEnd ? 'image-color1' : 'image-color2'}}">
+        <i-icon size="20" color="#FFFFFF" type="{{!ifEnd ? 'time_fill' : 'success_fill'}}"></i-icon>
       </view>
       <view class="i-swipeout-des">
-        <view class="i-swipeout-des-h2">主题标题</view>
-        <view class="i-swipeout-des-detail">详情</view>
+        <view class="i-swipeout-des-h2">{{listitem.ksTitle}}</view>
+        <view class="i-swipeout-des-detail">发布于: {{listitem.addTime}}(点击查看详情)</view>
       </view>
     </view>
     <view slot="button" class="i-swipeout-demo-button-group" style="background:#2db7f5;">
-      <view class="i-swipeout-demo-button" style="width:70px;background:#74b9ff;" bindtap="rejectTrans" data-item="{{item}}"><i-icon size="32" type="delete_fill"></i-icon>删除</view>
-      <view class="i-swipeout-demo-button" style="width:70px" bindtap="agreeTrans" data-item='{{item}}'> <i-icon size="32" type="like_fill"></i-icon>修改</view>
+      <view class="i-swipeout-demo-button" style="width:70px;background:#74b9ff;" bindtap="deleteSub" data-item="{{item}}"><i-icon size="32" type="delete_fill"></i-icon>{{btn1}}</view>
+      <view wx:if="{{!ifEnd}}" class="i-swipeout-demo-button" style="width:70px" bindtap="reviseSub" data-item='{{item}}'> <i-icon size="32" type="brush_fill"></i-icon>修改</view>
+      <view wx:if="{{!ifEnd}}" class="i-swipeout-demo-button" style="width:70px;background:#0984e3;" bindtap="finishSub" data-item='{{item}}'> <i-icon size="32" type="offline_fill"></i-icon>结束</view>
     </view>
   </i-swipeout>
 </template>
@@ -86,11 +91,36 @@
 
   export default class YhxSwiperout extends wepy.component {
     props = {
+      ifEnd: {
+        type: Boolean,
+        default: false
+      },
+      listitem: {
+        type: Object,
+        default: {}
+      },
+      index: {
+        type: Number,
+        default: -1
+      },
+      btn1: String
     }
 
     components = {
     }
     methods = {
+      handleOpen1() {
+        this.$emit('subMore', this.listitem.ksId)
+      },
+      deleteSub() {
+        this.$emit('deleteSub', this.listitem.ksId, this.index)
+      },
+      reviseSub() {
+        this.$emit('reviseSub', this.listitem.ksId, this.index)
+      },
+      finishSub() {
+        this.$emit('finishSub', this.listitem.ksId, this.index, this.listitem)
+      }
     }
   }
 </script>
