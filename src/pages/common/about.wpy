@@ -1,0 +1,58 @@
+<style lang="css">
+  page{
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+  }
+
+  .img{
+    clip-path: polygon(40% 0,90% 50%, 40% 100%, 0 60%,0 40%);
+    height: 150px;
+    width: 150px;
+  }
+  .font{
+    color:#6c5ce7;
+    text-shadow:0 0 .1em,0 0 .3em;
+    font-size:23px;
+    margin-top:10px;
+    margin-left:10px;
+
+  }
+  .cutline{
+    height:1px;
+    width:150%;
+    background-color:#a29bfe;
+
+  }
+  .about{
+    flex:1;
+    margin-top:40px;
+    align-items:center;
+
+  }
+  .web{
+    font-size:16px;
+    margin-top:20px;
+    margin-left:-30px;
+    color:#6c5ce7;
+  }
+</style>
+<template>
+  <view class='flex-row' style='margin-top:10vh;'>
+    <image src="https://static.dongtu.com/netpic/20161213193733EA5RBST9DUG642I5.gif" class='img'></image>
+    <view class='flex-column about'>
+      <view class='cutline'></view>
+      <view class='font'>XXX出品</view>
+      <view class='row web'><navigator url="/pages/web/web" class="weui-footer__link"></navigator></view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class About extends wepy.page {
+    config={
+      usingComponents: {
+      }
+    }
+    methods = {}
+  }
+</script>
