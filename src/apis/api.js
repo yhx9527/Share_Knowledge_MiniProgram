@@ -101,7 +101,7 @@ class Apis {
   }
   // 主题人修改评论状态
   putcomments(ksId, kcId, kcShow = true, kcDeleted = false) {
-    return this._request.put('subjects/' + ksId + '/comments' + kcId, {kcDeleted: kcDeleted, kcShow: kcShow})
+    return this._request.put('subjects/' + ksId + '/comments/' + kcId, {kcDeleted: kcDeleted, kcShow: kcShow})
   }
 
   /**

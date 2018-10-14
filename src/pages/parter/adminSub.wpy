@@ -12,8 +12,8 @@
 </style>
 <template>
   <bigTitle title="主题管理" icontype="icon-admin"></bigTitle>
-  <view class="fashionBorder">
-    <wxc-panel title="{{singleSub.ksTitle}}(点击可进入主题页)" bind:click="onClick">
+  <view class="fashionBorder" @tap="onClick">
+    <wxc-panel title="{{singleSub.ksTitle}}(点击可进入主题页)">
       <view class="content">报名: {{singleSub.ksEnrollNum}}/{{singleSub.ksEnrollLimit}} || 参讲: {{singleSub.ksPartNum}}/{{singleSub.ksPartLimit}} || 地点: {{singleSub.ksBusiness.kbName}}</view>
       <view class="content">时间: {{singleSub.ksStartTime}}到{{singleSub.ksEndTime}}</view>
     </wxc-panel>
@@ -29,7 +29,7 @@
   </view>
   <view wx:else>
     <repeat for="{{content1}}" key="kcId" index="index" item="item">
-      <betterSwiperout1 :arr.sync="arr1" :content.sync="item" :index.sync="index"></betterSwiperout1>
+      <betterSwiperout1 :arr.sync="arr1" :content.sync="item" :index.sync="index" :ifEye.sync="ifEye"></betterSwiperout1>
     </repeat>
     <wxc-loadmore is-end="{{ !ifload }}" text="{{ifload ? '拼命加载中...' : '就这么多喽'}}"></wxc-loadmore>
   </view>
@@ -65,13 +65,14 @@
       arr: [{name: '拒绝', color: '#fff', fontsize: '20', width: 70, icon: 'delete_fill', background: '#ff7675', type: 'joinNo', text: '申请参讲'},
         {name: '同意', color: '#fff', fontsize: '20', width: 70, icon: 'success_fill', background: '#74b9ff', type: 'joinYes', text: '申请参讲'}],
       content: [],
-      arr1: [{name: '查封', color: '#fff', fontsize: '20', width: 70, icon: 'offline_fill', background: '#ff7675', type: 'comNo', text: '评论:'},
+      arr1: [{name: '展示', color: '#fff', fontsize: '20', width: 70, icon: 'like_fill', background: '#74b9ff', type: 'comNo', text: '评论:'},
         {name: '删除', color: '#fff', fontsize: '20', width: 70, icon: 'trash_fill', background: '#ff4f4e', type: 'comDel', text: '评论:'}],
       content1: [],
       page: 1,
       ksId: '',
       loadTemp: [],
-      ifLoad: false
+      ifLoad: false,
+      ifEye: true
     }
     props = {
     }
@@ -184,13 +185,17 @@
           case 'talk0':
             wx.showModal({
               title: '提示',
-              content: '您要查封该用户的评论吗？',
+              content: !item.kcShow ? '您要推送该用户的评论到评论区进行展示吗？' : '您要将此评论从评论区下架吗?',
               success: function (res) {
                 if (res.confirm) {
-                  that.$parent.apis.putcomments(item.ksId, item.kcId, false)
+                  that.$parent.apis.putcomments(item.ksId, item.kcId, !item.kcShow)
                     .then(data => {
                       if (data.success) {
-
+                        wx.showToast({title: '操作成功'})
+                        that.content1[index].kcShow = !item.kcShow
+                        that.$apply()
+                      } else {
+                        wx.showToast({title: data.message, icon: 'none'})
                       }
                     })
                 }
@@ -206,7 +211,11 @@
                   that.$parent.apis.putcomments(item.ksId, item.kcId, false, true)
                     .then(data => {
                       if (data.success) {
-
+                        wx.showToast({title: '删除成功'})
+                        that.content1.splice(index, 1)
+                        that.$apply()
+                      } else {
+                        wx.showToast({title: data.message, icon: 'none'})
                       }
                     })
                 }

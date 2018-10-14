@@ -286,7 +286,8 @@
       that.$parent.apis.getcomments(that.ksId, that.page++)
         .then(data => {
           that.ifLc = false
-          that.comments.push(...data.list)
+          let temp = that.$parent.doData.comments(data.list)
+          that.comments.push(...temp)
           // let temp = that.$parent.doData.comments(data.list)
           /* if (that.page > 2) {
             wx.showToast({

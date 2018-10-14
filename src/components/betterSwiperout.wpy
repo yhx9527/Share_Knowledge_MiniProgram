@@ -41,7 +41,8 @@
     background: #55efc4;
   }
   .i-swipeout-des{
-    margin-left:50px;
+    margin-left:10px;
+    flex: 1;
   }
   .i-swipeout-des-detail{
     font-size:12px;
@@ -72,14 +73,24 @@
   .spin{
     color:#6c5ce7 !important;
   }
+  .swiperContainer{
+    display: flex;
+  }
+  .showIcon{
+    display: inline;
+  }
 </style>
 <template>
   <i-swipeout  i-class="i-swipeout-demo-item" unclosable="{{true}}" actions="{{arr}}" bind:change="clickBtn" data-item="{{content}}">
-    <view slot="content"  catchtap='enterSelf' data-item="{{content}}">
+    <view slot="content"  catchtap='enterSelf' data-item="{{content}}" class="swiperContainer">
       <wxc-avatar class="thumb" src="{{content.ksUser.kuHeadImgUrl}}"></wxc-avatar>
       <view class="i-swipeout-des">
         <view class="i-swipeout-des-h2">{{content.ksUser.kuName}}(点击查看用户详情)</view>
         <view class="i-swipeout-des-detail">{{content.kcContent ? content.kcContent : (content.kpStatus ? '已同意他的参讲请求' : '申请参讲')}}</view>
+      </view>
+      <view wx:if="{{ifEye}}" class="showIcon">
+        <i wx:if="{{content.kcShow}}" class="iconfont icon-eye" style="color: #55efc4;"></i>
+        <i wx:else class="iconfont icon-eye-off" style="color: #2d3436;"></i>
       </view>
     </view>
     <!--view slot="button" class="i-swipeout-demo-button-group" style="background:#2db7f5;">
@@ -105,6 +116,10 @@
       index: {
         type: Number,
         default: -1
+      },
+      ifEye: {
+        type: Boolean,
+        default: false
       }
     }
 

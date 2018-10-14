@@ -29,7 +29,9 @@ export default class {
     if (list === null) {
       return []
     }
-    return list.sort(this.desc('kcId'))
+    return list.filter(item => {
+      return item.kcShow
+    })
   }
   subInfo(subject, kuId) {
     subject.enroll = 0
