@@ -52,7 +52,7 @@
     <i-spin fix size='large'></i-spin>
   </view>
   <view class="subjects">
-    <repeat for="{{subjects}}" key="index" index="index" item="item">
+    <repeat for="{{subjects}}" key="ksId" index="index" item="item">
       <view hover-class="animated zoomOut">
       <minCard :item.sync="item"></minCard>
       </view>
@@ -137,7 +137,7 @@
     onLoad() {
       var that = this
       this.userInfo = this.$parent.globalData.userInfo
-      this.fresh(1)
+      this.fresh()
         .then(data => {
           that.ifspin = false
           // that.$apply()
@@ -147,44 +147,42 @@
       // this.methods.fresh()
       console.log(this.$parent.globalData.userInfo)
     }
-    async fresh(page = 1) {
+    onShow(e) {
+    }
+    async fresh() {
       let doData = this.$parent.doData
       var that = this
-      if (page > 1) {
-        this.ifload = true
-        this.$apply()
-      }
-      this.$parent.apis.getsubject(page)
-        .then(data => {
-          wx.stopPullDownRefresh()
-          if (page === 1) {
-            $Message({
-              content: '加载成功',
-              type: 'success'
-            })
-            that.page = 1
-            that.subjects = doData.subject(data.list)
-          } else {
+      this.ifload = true
+      this.$apply()
+      if (this.page > 0) {
+        this.$parent.apis.getsubject(this.page)
+          .then(data => {
             that.ifload = false
-            if (data.list === null) { that.loadend = true }
-            that.subjects.push(...doData.subject(data.list))
-          }
-          that.$apply()
-        })
-        .catch(data => {
-          /*
-          $Message({
-            content: '加载失败',
-            type: 'error'
+            wx.stopPullDownRefresh()
+            if (that.page === 1) {
+              $Message({
+                content: '加载成功',
+                type: 'success'
+              })
+              that.subjects = doData.subject(data.list)
+            } else {
+              that.subjects.push(...doData.subject(data.list))
+            }
+            that.page = data.nextPage
+            that.$apply()
           })
-          */
-        })
+          .catch(data => {
+          })
+      } else {
+        this.ifload = false
+      }
     }
     onPullDownRefresh() {
-      this.fresh(1)
+      this.page = 1
+      this.fresh()
     }
     onReachBottom() {
-      this.fresh(++this.page)
+      this.fresh()
     }
     onShareAppMessage(res) {
       if (res.from === 'menu') {

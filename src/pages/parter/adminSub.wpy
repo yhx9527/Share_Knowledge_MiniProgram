@@ -98,22 +98,17 @@
     }
     fresh(ksId) {
       let that = this
-      if (that.loadTemp.length < 20) {
-        that.content1.pop(that.loadTemp)
-      }
-      that.$parent.apis.getcomments(ksId, this.page++)
-        .then(data => {
-          if (data.list != null) {
+      if (this.page > 0) {
+        that.$parent.apis.getcomments(ksId, this.page)
+          .then(data => {
             that.content1.push(...data.list)
-            that.loadTemp = data.list
-            if (data.list.length < 20) {
-              that.page--
-            }
+            that.ifLoad = false
+            that.page = data.nextPage
             that.$apply()
-          } else {
-            that.page--
-          }
-        })
+          })
+      } else {
+        this.ifLoad = false
+      }
     }
     methods = {
       onClick() {

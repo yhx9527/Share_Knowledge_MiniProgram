@@ -200,24 +200,26 @@
     }
     onLoad() {
       this.ksUser = wx.getStorageSync('ksUser')
-    }
-    fresh() {
-      var that = this
-      this.$parent.apis.getbusiness(this.page++)
-        .then(data => {
-          that.kbIds.push(...data.list)
-          that.$apply()
-        })
-      that.$apply()
-    }
-    onReady() {
       var that = this
       this.$parent.apis.getdictcode('ksType')
         .then(data => {
           that.ksTypes = Object.values(data.ksDictDataMap)
+          that.$apply()
         })
       this.fresh()
-      that.$apply()
+    }
+    fresh() {
+      var that = this
+      if (this.page > 0) {
+        this.$parent.apis.getbusiness(this.page)
+          .then(data => {
+            that.kbIds.push(...data.list)
+            that.page = data.nextPage
+            that.$apply()
+          })
+      }
+    }
+    onReady() {
     }
     events = {
       'type': function (e) {
@@ -230,6 +232,7 @@
           this.kbName = this.kbIds[e.index].kbName
           this.showRight1 = false
         }
+        this.$apply()
       },
       'dt': function (ksDt, ...arr) {
         if (ksDt === '0') {
@@ -237,6 +240,7 @@
         } else {
           this.ksSubject.ksEndTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
         }
+        this.$apply()
       },
       'load': function () {
         this.fresh()

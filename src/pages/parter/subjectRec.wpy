@@ -78,26 +78,32 @@
       wx.removeStorageSync('reviceTemp')
     }
     fresh() {
-      var that = this
-      this.$parent.apis.getsubject(this.page++, true)
-        .then(data => {
-          this.ifLoad = false
-          data.list.forEach(item => {
-            if (item.ksEnd) {
-              that.listed.push(item)
-            } else {
-              that.listing.push(item)
-            }
-          })
-          that.$apply()
-        })
-        .catch(data => {
-          this.ifLoad = false
-        })
-    }
-    onReachBottom() {
       this.ifLoad = true
       this.$apply()
+      var that = this
+      if (this.page > 0) {
+        this.$parent.apis.getsubject(this.page, true)
+          .then(data => {
+            that.ifLoad = false
+            data.list.forEach(item => {
+              if (item.ksEnd) {
+                that.listed.push(item)
+              } else {
+                that.listing.push(item)
+              }
+            })
+            that.page = data.nextPage
+            that.$apply()
+          })
+          .catch(data => {
+            that.ifLoad = false
+            that.$apply()
+          })
+      } else {
+        this.ifLoad = false
+      }
+    }
+    onReachBottom() {
       this.fresh()
     }
     events= {

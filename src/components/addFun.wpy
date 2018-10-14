@@ -40,11 +40,11 @@
   <view class="flex-column add-bar">
     <view class="flex-column-inline add-item {{ enroll == 0 ? '' : (enroll ==2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="enroll" @tap="cmpTell">
       <i class="iconfont icon-join bar-icon" ></i>
-      {{ enroll == 0 ? '报名' : (enroll ==2 ? '已报名' : '审核中') }}
+      {{ enroll === 0 ? '报名' : (enroll ===2 ? '已报名' : '审核中') }}
     </view>
     <view class="flex-column-inline add-item {{ park <= 0 ? '' : (park >=2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="join" @tap="cmpTell">
       <i class="iconfont icon-join1 bar-icon"></i>
-      {{ park == 0 ? '参讲' : (park ==2 ? '已参讲' : '审核中') }}
+      {{ park === 0 ? '参讲' : (park ===2 ? '已参讲' : '审核中') }}
     </view>
     <button open-type="share" class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="share" data-ksid="{{ksId}}" @tap="cmpTell">
       <i class="iconfont icon-share bar-icon"></i>
@@ -77,7 +77,7 @@
       },
       cmpTell(e) {
         console.log(this.enroll + '' + this.park)
-        this.$emit('tell', e.currentTarget.dataset.type)
+        this.$emit('tellwhich', e.currentTarget.dataset.type)
       }
     };
     events = {};

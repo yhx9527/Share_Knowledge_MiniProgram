@@ -65,7 +65,7 @@
 </style>
 <template>
   <i-message id="message" />
-  <addFun  @tell.user="tellwhich" :enroll.sync="enroll" :park.sync="park" :ksId.sync="ksId"></addFun>
+  <addFun :enroll.sync="enroll" :park.sync="park" :ksId.sync="ksId"></addFun>
     <!--subjectTitle :ST.sync="subject"></subjectTitle-->
 
   <view class="STcontainer">
@@ -138,7 +138,7 @@
   const { $Message } = require('../utils/base/index')
 
   export default class Subject extends wepy.page {
-    config={
+    config = {
       usingComponents: {
         'wxc-button': '../packages/@minui/wxc-button/dist/index',
         'wxc-icon': '../packages/@minui/wxc-icon/dist/index',
@@ -154,11 +154,11 @@
       enablePullDownRefresh: true,
       onReachBottomDistance: 100
     }
-    components= {
+    components = {
       commentArea: CommentArea,
       addFun: AddFun
     }
-    data= {
+    data = {
       comments: [],
       ksEnrollList: [],
       ksPartakeList: [],
@@ -171,7 +171,151 @@
       commentContent: ''
     }
     methods = {
-      tellwhich(type) {
+      enterJoinMenu() {
+        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksPartakeList)})
+      },
+      enterEnrollMenu() {
+        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksEnrollList)})
+      },
+      commentInput(e) {
+        console.log(e.detail.value)
+        this.commentContent = e.detail.value
+      },
+      sendComment() {
+        let that = this
+        if (this.commentContent !== '') {
+          wx.showModal({
+            title: '提示',
+            content: '发送评论?',
+            success: function (res) {
+              if (res.confirm) {
+                that.$parent.apis.postcomments(that.ksId, that.commentContent)
+                  .then(data => {
+                    if (data.success) {
+                      wx.showToast({title: '发送成功,等待展示', icon: 'none'})
+                      that.commentContent = ''
+                      that.$apply()
+                    }
+                  })
+              }
+            }
+          })
+        } else {
+          wx.showToast({title: '评论不能为空', icon: 'none'})
+        }
+      },
+      enterFace() {
+        this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
+      }
+    }
+    events = {
+      'enterFace': function (kuId) {
+        this.$navigate('./parter/face', {kuId: kuId})
+      }
+    }
+
+    loadComments() {
+      var that = this
+      that.ifLc = true
+      that.$apply()
+      if (that.page > 0) {
+        that.$parent.apis.getcomments(that.ksId, that.page)
+          .then(data => {
+            that.ifLc = false
+            let temp = that.$parent.doData.comments(data.list)
+            that.comments.push(...temp)
+            that.page = data.nextPage
+            // let temp = that.$parent.doData.comments(data.list)
+            /* if (that.page > 2) {
+              wx.showToast({
+                title: '评论已加载'
+              })
+            } */
+            that.$apply()
+          })
+          .catch(data => {
+            that.ifLc = false
+            that.$apply()
+          })
+      } else {
+        that.ifLc = false
+      }
+    }
+
+    onLoad(params, data) {
+      this.ksId = params.ksId
+      this.fresh(params.ksId)
+      this.loadComments()
+      this.$apply()
+    }
+
+    onUnload() {
+    }
+
+    async fresh(ksId) {
+      var that = this
+      this.$parent.apis.getsubjectmore(ksId)
+        .then(data => {
+          that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
+          that.enroll = that.subject.enroll
+          that.park = that.subject.park
+          that.ksEnrollList = that.subject.ksEnrollList.filter(item => {
+            return item.keStatus
+          })
+          that.ksPartakeList = that.subject.ksPartakeList.filter(item => {
+            return item.kpStatus
+          })
+          that.$apply()
+          wx.stopPullDownRefresh()
+          $Message({
+            content: '加载成功',
+            type: 'success'
+          })
+        })
+        .catch(data => {
+          wx.stopPullDownRefresh()
+          $Message({
+            content: '加载失败',
+            type: 'error'
+          })
+        })
+    }
+
+    onPullDownRefresh() {
+      this.fresh(this.subject.ksId)
+    }
+
+    onReady() {
+    }
+
+    onShareAppMessage(res) {
+      if (res.from === 'button') {
+        return {
+          title: '这个主题极好',
+          path: '/pages/subject?ksId=' + this.ksId,
+          success: function () {
+            console.log('btn转发成功')
+          }
+        }
+      } else if (res.from === 'menu') {
+        return {
+          title: '这个小程序真好',
+          path: '/pages/login',
+          success: function () {
+            console.log('menu转发成功')
+          }
+        }
+      }
+      console.log('转发' + JSON.stringify(res))
+    }
+
+    onReachBottom() {
+      this.loadComments()
+      this.$apply()
+    }
+
+    events = {
+      'tellwhich': function (type) {
         var that = this
         switch (type) {
           case 'enroll':
@@ -229,7 +373,7 @@
                     .catch(data => {
                       if (data.statusCode === 400) {
                         wx.showToast({
-                          title: '您已在申请中了',
+                          title: data.data.message,
                           icon: 'none'
                         })
                       }
@@ -242,135 +386,7 @@
 
             break
         }
-      },
-      enterJoinMenu() {
-        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksPartakeList)})
-      },
-      enterEnrollMenu() {
-        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksEnrollList)})
-      },
-      commentInput(e) {
-        console.log(e.detail.value)
-        this.commentContent = e.detail.value
-      },
-      sendComment() {
-        let that = this
-        if (this.commentContent !== '') {
-          wx.showModal({
-            title: '提示',
-            content: '发送评论?',
-            success: function (res) {
-              if (res.confirm) {
-                that.$parent.apis.postcomments(that.ksId, that.commentContent)
-                  .then(data => {
-                    if (data.success) {
-                      wx.showToast({title: '评论成功'})
-                      that.commentContent = ''
-                      that.$apply()
-                    }
-                  })
-              }
-            }
-          })
-        } else {
-          wx.showToast({title: '评论不能为空', icon: 'none'})
-        }
-      },
-      enterFace() {
-        this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
       }
-    }
-    events = {
-      'enterFace': function (kuId) {
-        this.$navigate('./parter/face', {kuId: kuId})
-      }
-    }
-    loadComments() {
-      var that = this
-      that.ifLc = true
-      that.$apply()
-      that.$parent.apis.getcomments(that.ksId, that.page++)
-        .then(data => {
-          that.ifLc = false
-          let temp = that.$parent.doData.comments(data.list)
-          that.comments.push(...temp)
-          // let temp = that.$parent.doData.comments(data.list)
-          /* if (that.page > 2) {
-            wx.showToast({
-              title: '评论已加载'
-            })
-          } */
-          that.$apply()
-        })
-        .catch(data => {
-          that.ifLc = false
-          that.$apply()
-        })
-    }
-    onLoad(params, data) {
-      this.ksId = params.ksId
-      this.fresh(params.ksId)
-      this.loadComments()
-      this.$apply()
-    }
-    onUnload () {
-    }
-    async fresh(ksId) {
-      var that = this
-      this.$parent.apis.getsubjectmore(ksId)
-        .then(data => {
-          that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
-          that.enroll = that.subject.enroll
-          that.park = that.subject.park
-          that.ksEnrollList = that.subject.ksEnrollList.filter(item => {
-            return item.ksStatus
-          })
-          that.ksPartakeList = that.subject.ksPartakeList.filter(item => {
-            return item.ksStatus
-          })
-          that.$apply()
-          wx.stopPullDownRefresh()
-          $Message({
-            content: '加载成功',
-            type: 'success'
-          })
-        })
-        .catch(data => {
-          wx.stopPullDownRefresh()
-          $Message({
-            content: '加载失败',
-            type: 'error'
-          })
-        })
-    }
-    onPullDownRefresh() {
-      this.fresh(this.subject.ksId)
-    }
-    onReady() {
-    }
-    onShareAppMessage(res) {
-      if (res.from === 'button') {
-        return {
-          title: '这个主题极好',
-          path: '/pages/subject?ksId=' + this.ksId,
-          success: function () {
-            console.log('btn转发成功')
-          }
-        }
-      } else if (res.from === 'menu') {
-        return {
-          title: '这个小程序真好',
-          path: '/pages/login',
-          success: function () {
-            console.log('menu转发成功')
-          }
-        }
-      }
-      console.log('转发' + JSON.stringify(res))
-    }
-    onReachBottom() {
-      this.loadComments()
-      this.$apply()
     }
   }
 </script>

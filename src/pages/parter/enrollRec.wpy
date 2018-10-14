@@ -63,27 +63,26 @@
     onShow() {
     }
     fresh() {
-      var that = this
-      this.$parent.apis.getsign(this.page++)
-        .then(data => {
-          this.ifLoad = false
-         /* data.list.forEach(item => {
-            if (item.ksStatus) {
-              that.listed.push(item)
-            } else {
-              that.listing.push(item)
-            }
-          }) */
-          that.listing.push(...data.list)
-          that.$apply()
-        })
-        .catch(data => {
-          this.ifLoad = false
-        })
-    }
-    onReachBottom() {
       this.ifLoad = true
       this.$apply()
+      var that = this
+      if (this.page > 0) {
+        this.$parent.apis.getsign(this.page)
+          .then(data => {
+            that.ifLoad = false
+            that.listing.push(...data.list)
+            that.page = data.nextPage
+            that.$apply()
+          })
+          .catch(data => {
+            that.ifLoad = false
+            that.$apply()
+          })
+      } else {
+        this.ifLoad = false
+      }
+    }
+    onReachBottom() {
       this.fresh()
     }
     events= {

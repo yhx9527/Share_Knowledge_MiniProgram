@@ -105,9 +105,10 @@
       this.index = params.index
       this.$parent.apis.getsubjectmore(params.ksId)
         .then(data => {
-          Object.assign(this.ksSubject, data)
-          this.kbName = data.ksBusiness.kbName
-          this.ksTypeName = data.ksTypeData.kddDataName
+          Object.assign(that.ksSubject, data)
+          that.kbName = data.ksBusiness.kbName
+          that.ksTypeName = data.ksTypeData.kddDataName
+          that.$apply()
         })
     }
     onReady() {
@@ -144,6 +145,9 @@
             })
             .catch(data => {
               wx.hideLoading()
+              if (data.statusCode === 400) {
+                wx.showToast({title: '主题时间设置有误', icon: 'none'})
+              }
             })
           console.log(this.ksSubject)
         } else {
@@ -167,12 +171,14 @@
 
     fresh() {
       var that = this
-      this.$parent.apis.getbusiness(this.page++)
-        .then(data => {
-          that.kbIds.push(...data.list)
-          that.$apply()
-        })
-      that.$apply()
+      if (this.page > 0) {
+        this.$parent.apis.getbusiness(this.page)
+          .then(data => {
+            that.kbIds.push(...data.list)
+            that.page = data.nextPage
+            that.$apply()
+          })
+      }
     }
     events = {
       'type': function (e) {
