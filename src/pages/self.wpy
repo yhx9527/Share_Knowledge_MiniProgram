@@ -118,7 +118,8 @@
         class="item"
         icon="search-square"
         icon-color="#a29bfe"
-        title="检查更新"></wxc-list>
+        title="检查更新"
+        bind:click="checkupdate"></wxc-list>
     </view>
     <view class="list-item">
       <wxc-list
@@ -203,6 +204,34 @@
       enterFace() {
         let ksUser = wx.getStorageSync('ksUser')
         this.$navigate('./parter/face', {kuId: ksUser.kuId})
+      },
+      // 检查小程序是否有新版本
+      checkupdate() {
+        const updateManager = wx.getUpdateManager()
+        new Promise((resolve, reject) => {
+          updateManager.onUpdateReady(function () {
+            resolve(1)
+            wx.showModal({
+              title: '更新提示',
+              content: '新版本已经准备好，是否重启应用？',
+              success: function (res) {
+                if (res.confirm) {
+                  // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                  updateManager.applyUpdate()
+                }
+              }
+            })
+          })
+          reject(1)
+        })
+          .then((data) => {
+          })
+          .catch(data => {
+            wx.showToast({
+              title: '无需更新',
+              icon: 'none'
+            })
+          })
       }
     }
   }
