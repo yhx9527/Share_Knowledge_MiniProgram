@@ -53,9 +53,11 @@
         if (userInfo) {
           this.$parent.globalData.userInfo = userInfo
           wx.setStorageSync('userInfo', userInfo)
+          wx.showLoading({title: '正在进入...', mask: true})
           wx.login({
             success: function (res) {
               if (res.code) {
+                wx.hideLoading()
                 wepy.switchTab({url: './main'})
                 that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {

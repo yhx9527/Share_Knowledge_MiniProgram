@@ -73,7 +73,7 @@
       <view class='title'>{{ subject.ksTitle }}<wxc-label class="label" text="{{subject.ksTypeData.kddDataName}}" type-color="white"></wxc-label></view>
     </view>
     <view class="author">By {{ subject.ksUser.kuName }}
-      <wxc-avatar class="avatar avatar__1" src="{{ subject.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+      <wxc-avatar class="avatar avatar__1" src="{{ subject.ksUser.kuHeadImgUrl}}" @tap="enterFace"></wxc-avatar>
       <slot></slot>
     </view>
   </view>
@@ -275,9 +275,15 @@
         } else {
           wx.showToast({title: '评论不能为空', icon: 'none'})
         }
+      },
+      enterFace() {
+        this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
       }
     }
     events = {
+      'enterFace': function (kuId) {
+        this.$navigate('./parter/face', {kuId: kuId})
+      }
     }
     loadComments() {
       var that = this

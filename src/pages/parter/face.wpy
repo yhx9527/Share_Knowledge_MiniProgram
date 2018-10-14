@@ -1,0 +1,32 @@
+<style lang="css">
+
+</style>
+<template>
+  <faceCard :user.sync="user"></faceCard>
+</template>
+<script>
+  import wepy from 'wepy'
+  import FaceCard from '../../components/faceCard'
+
+  export default class Face extends wepy.page {
+    config={
+      usingComponents: {
+      }
+    }
+    components = {
+      faceCard: FaceCard
+    }
+    data={
+      user: {}
+    }
+    onLoad(params) {
+      let that = this
+      that.$parent.apis.getuser(params.kuId)
+        .then(data => {
+          that.user = data
+          that.$apply()
+        })
+    }
+    methods = {}
+  }
+</script>

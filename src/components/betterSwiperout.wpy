@@ -82,7 +82,7 @@
 </style>
 <template>
   <i-swipeout  i-class="i-swipeout-demo-item" unclosable="{{true}}" actions="{{arr}}" bind:change="clickBtn" data-item="{{content}}">
-    <view slot="content"  catchtap='enterSelf' data-item="{{content}}" class="swiperContainer">
+    <view slot="content"  catchtap='enterFace' data-item="{{content}}" class="swiperContainer">
       <wxc-avatar class="thumb" src="{{content.ksUser.kuHeadImgUrl}}"></wxc-avatar>
       <view class="i-swipeout-des">
         <view class="i-swipeout-des-h2">{{content.ksUser.kuName}}(点击查看用户详情)</view>
@@ -132,8 +132,8 @@
         let item = e.currentTarget.dataset.item
         this.$emit('clickBtn', flag, item, this.index)
       },
-      enterSelf(e) {
-        console.log('进入个人资料')
+      enterFace(e) {
+        this.$emit('enterFace', this.content.kuId)
       }
     }
   }

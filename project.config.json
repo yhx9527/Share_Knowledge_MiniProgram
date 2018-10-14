@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 10,
+			"current": 11,
 			"list": [
 				{
 					"id": -1,
@@ -94,7 +94,13 @@
 				{
 					"id": -1,
 					"name": "nameList",
-					"pathName": "pages/parter/nameList"
+					"pathName": "pages/parter/nameList",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "face",
+					"pathName": "pages/parter/face"
 				}
 			]
 		}

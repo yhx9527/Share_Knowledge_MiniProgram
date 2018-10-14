@@ -83,7 +83,7 @@
         icon-color="#55efc4"
         desc=""
         title="个人展示页"
-        ></wxc-list>
+        bind:click="enterFace"></wxc-list>
       <wxc-list
         class="item"
         icon="footprint"
@@ -199,6 +199,10 @@
             this.$navigate('./parter/enrollRec')
             break
         }
+      },
+      enterFace() {
+        let ksUser = wx.getStorageSync('ksUser')
+        this.$navigate('./parter/face', {kuId: ksUser.kuId})
       }
     }
   }

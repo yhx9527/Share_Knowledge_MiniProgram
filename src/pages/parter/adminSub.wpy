@@ -223,6 +223,9 @@
             })
             break
         }
+      },
+      'enterFace': function (kuId) {
+        this.$navigate('./face', {kuId: kuId})
       }
     }
     handleChange ({ detail }) {

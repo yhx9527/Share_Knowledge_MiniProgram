@@ -50,7 +50,7 @@
     </view>
     <repeat for="{{comments}}" item="item">
       <view class="flex-row comment-item">
-        <wxc-avatar class="avatar1" src="{{item.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+        <wxc-avatar class="avatar1" src="{{item.ksUser.kuHeadImgUrl}}" @tap="enterFace" data-kuId="{{item.kuId}}"></wxc-avatar>
         <view class="flex-column comment-content">
           <text class="nick">{{item.ksUser.kuName}}</text>
           <wxc-elip line="3">{{item.kcContent}}</wxc-elip>
@@ -76,6 +76,9 @@
       }
     }
     methods = {
+      enterFace(e) {
+        this.$emit('enterFace', e.currentTarget.dataset.kuid)
+      }
     };
     events = {};
     // Other properties

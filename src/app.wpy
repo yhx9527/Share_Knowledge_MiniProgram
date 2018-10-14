@@ -57,7 +57,8 @@ export default class extends wepy.app {
       'pages/parter/joinRec',
       'pages/parter/enrollRec',
       'pages/parter/nameList',
-      'pages/parter/adminSub'
+      'pages/parter/adminSub',
+      'pages/parter/face'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -80,11 +81,6 @@ export default class extends wepy.app {
         text: '周围',
         iconPath: 'static/images/function.png',
         selectedIconPath: 'static/images/function1.png'
-      }, {
-        pagePath: 'pages/message',
-        text: '消息',
-        iconPath: 'static/images/message.png',
-        selectedIconPath: 'static/images/message1.png'
       }, {
         pagePath: 'pages/self',
         text: '我的',

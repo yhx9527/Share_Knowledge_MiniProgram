@@ -1,0 +1,81 @@
+<style type="less">
+  page{
+    background-color: #3b5178;
+  }
+  image{
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    overflow: hidden;
+  }
+  .iconBtn{
+    margin:0px 15px;
+  }
+  .btnInfo{
+    margin:0px 15px;
+    display: inline-block;
+  }
+  /*= common css to all effects =*/
+  .single-member{width: 80vw;margin: 100px auto; background-color: #fff; text-align: center; position: relative;}
+  .member-image .img{max-width: 100%; vertical-align: middle;}
+  .h3 {font-size: 24px; font-weight: normal; margin: 10px 0 0; text-transform: uppercase;}
+  .h5 {font-size: 16px; font-weight: 300; margin: 0 0 15px; line-height: 22px;}
+  .p {font-size: 14px; font-weight: 300; line-height: 22px; padding: 0 30px; margin-bottom: 10px;}
+  .social-touch .a{display: inline-block; width: 27px; height: 26px; vertical-align: middle; margin: 0 2px; background-repeat: no-repeat; opacity: 0.7; transition: 0.3s;}
+  .social-touch .a:hover{opacity: 1; transition: 0.3s;}
+  .fb-touch{background-position: 0 0;}
+  .tweet-touch{background-position: -35px 0;}
+  .linkedin-touch{background-position: -71px 0;}
+  .icon-colored .fb-touch{background-position: 0 -27px;}
+  .icon-colored .tweet-touch{background-position: -35px -27px;}
+  .icon-colored .linkedin-touch{background-position: -71px -27px;}
+  /*= common css to all effects end =*/
+
+  /*= effect-1 css =*/
+  .effect-1{border-radius: 5px 5px 0 0; padding-bottom: 40px;}
+  .effect-1 .member-image {border: 2px solid #fff; border-radius: 60px 0; display: inline-block; margin-top: -72px; overflow: hidden; transition: 0.3s;}
+  .effect-1 .social-touch{background-color: #55efc4; position: absolute; left: 0; bottom: 0; height: 5px; overflow: hidden; padding: 5px 0 0; width: 100%; transition: 0.3s;}
+  .effect-1 .member-image .img{transition: 0.3s; border-radius: 60px 0;}
+  .effect-1:hover .member-image{border-color: #55efc4; transition: 0.3s; border-radius: 50%;}
+  .effect-1:hover .social-touch{padding: 6px 0; height: 38px; transition: 0.3s;}
+  /*= effect-1 css end =*/
+</style>
+<template>
+  <view class="single-member effect-1">
+    <view class="member-image">
+      <image src="{{user.kuHeadImgUrl}}" alt="Member"></image>
+    </view>
+    <view class="member-info">
+      <view class="h3">{{user.kuName}}</view>
+      <view class="h5">{{user.kuSexData.kddDataName}}生</view>
+      <view class="p">联系方式:{{user.kuPhone || '未知'}}</view>
+      <view class="p">{{user.kuEducationData.kddDataName || '未知是否'}}毕业,目前从事{{user.kuIndustryData.kddDataName || '未知'}}</view>
+      <view class="p">公司/所在:{{user.kuCompany || '未知'}}</view>
+      <view class="p">个人介绍:{{user.kuIntro || '暂无'}}</view>
+      <view class="p">主题参与情况如下</view>
+      <view class="p"><view class="btnInfo">听讲<i class="iconfont icon-hand-point-down"></i></view><view class="btnInfo">&&</view><view class="btnInfo">参讲<i class="iconfont icon-hand-point-down"></i></view></view>
+      <view class="social-touch">
+          <button class="button button-circle button-small iconBtn">{{user.kuEnrollNum}}</button>
+          <button class="button button-circle button-small iconBtn"></button>
+          <button class="button button-circle button-small iconBtn">{{user.kuPartNum}}</button>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class FaceCard extends wepy.component {
+    props = {
+      user: {
+        type: Object,
+        default: {}
+      }
+    }
+
+    components = {
+    }
+    methods = {
+    }
+  }
+</script>
