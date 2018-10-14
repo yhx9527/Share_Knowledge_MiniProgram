@@ -1,0 +1,69 @@
+<style lang="css">
+  page{
+    background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+  }
+  .caption-wrap{
+    margin-bottom: 30px;
+  }
+  .caption-title{
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px #65c5f4;
+    padding:20px 10px;
+  }
+  .basefont{
+    font-family:"微软雅黑", "Dosis", sans-serif;
+    font-size: 35px;
+    text-align: center;
+    font-weight: bold;
+    text-transform:uppercase;
+    position: relative;
+  }
+  .collapse-item-title{
+    font-size: 12px;
+    color: #737373;
+    font-weight: bold;
+  }
+  .collapse-item-content{
+    font-size: 14px;
+    color: #444444;
+  }
+  .collapse{
+    border-top-color: #ace0f9 !important;
+  }
+</style>
+<template>
+  <view class="caption-wrap">
+    <view class="basefont caption-title">使用帮助</view>
+    <i-collapse name="{{name}}" accordion>
+      <block wx:for='{{helplist}}' wx:for-item='item'>
+        <i-collapse-item
+          name="{{item.name}}"
+          title="{{item.title}}"
+          i-class='collapse'
+          i-class-title="collapse-item-title"
+          i-class-content="collapse-item-content">
+          <view slot="content">
+            {{item.content}}
+          </view>
+        </i-collapse-item>
+      </block>
+    </i-collapse>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Help extends wepy.page {
+    config={
+      usingComponents: {
+        'i-collapse': '../../packages/other/collapse/',
+        'i-collapse-item': '../../packages/other/collapse-item'
+      }
+    }
+    data = {
+      helplist: [{ name: 'name1', title: '帮助标题一', content: '帮助内容一' },
+        { name: 'name2', title: '帮助标题二', content: '帮助内容二' }]
+    }
+    methods = {}
+  }
+</script>

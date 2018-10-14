@@ -58,7 +58,9 @@ export default class extends wepy.app {
       'pages/parter/enrollRec',
       'pages/parter/nameList',
       'pages/parter/adminSub',
-      'pages/parter/face'
+      'pages/parter/face',
+      'pages/common/help',
+      'pages/common/about'
     ],
     window: {
       backgroundTextStyle: 'light',

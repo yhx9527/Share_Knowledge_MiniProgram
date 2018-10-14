@@ -101,7 +101,8 @@
         class="item"
         icon="help"
         icon-color="#69A0DD"
-        title="使用帮助"></wxc-list>
+        title="使用帮助"
+        bind:click="enterHelp"></wxc-list>
       <wxc-list
         class="item"
         icon="feedback"
@@ -111,7 +112,8 @@
         class="item"
         icon="group"
         icon-color="#69A0DD"
-        title="关于我们"></wxc-list>
+        title="关于我们"
+        bind:click="enterAbout"></wxc-list>
     </view>
     <view class="list-item">
       <wxc-list
@@ -232,6 +234,12 @@
               icon: 'none'
             })
           })
+      },
+      enterHelp() {
+        this.$navigate('./common/help')
+      },
+      enterAbout() {
+        this.$navigate('./common/about')
       }
     }
   }
