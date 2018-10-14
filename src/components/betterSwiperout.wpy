@@ -127,7 +127,6 @@
     }
     methods = {
       clickBtn(e) {
-        console.log(e.currentTarget.dataset)
         let flag = e.detail.index
         let item = e.currentTarget.dataset.item
         this.$emit('clickBtn', flag, item, this.index)

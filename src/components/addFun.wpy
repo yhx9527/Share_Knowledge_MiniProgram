@@ -38,11 +38,11 @@
 </style>
 <template>
   <view class="flex-column add-bar">
-    <view class="flex-column-inline add-item {{ enroll == 0 ? '' : (enroll ==2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="enroll" @tap="cmpTell">
+    <view class="flex-column-inline add-item {{ enroll === 0 ? '' : (enroll === 2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="enroll" @tap="cmpTell">
       <i class="iconfont icon-join bar-icon" ></i>
       {{ enroll === 0 ? '报名' : (enroll ===2 ? '已报名' : '审核中') }}
     </view>
-    <view class="flex-column-inline add-item {{ park <= 0 ? '' : (park >=2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="join" @tap="cmpTell">
+    <view class="flex-column-inline add-item {{ park <= 0 ? '' : (park >= 2 ? 'active2' : 'active1') }}" hover-class="animated infinite bounceIn bar-icon-after" data-type="join" @tap="cmpTell">
       <i class="iconfont icon-join1 bar-icon"></i>
       {{ park === 0 ? '参讲' : (park ===2 ? '已参讲' : '审核中') }}
     </view>

@@ -183,8 +183,11 @@
               content: !item.kcShow ? '您要推送该用户的评论到评论区进行展示吗？' : '您要将此评论从评论区下架吗?',
               success: function (res) {
                 if (res.confirm) {
+                  // console.log(item.ksId + ',' + item.kcId + ',' + !item.kcShow)
+                  wx.showLoading({title: '操作中...'})
                   that.$parent.apis.putcomments(item.ksId, item.kcId, !item.kcShow)
                     .then(data => {
+                      wx.hideLoading()
                       if (data.success) {
                         wx.showToast({title: '操作成功'})
                         that.content1[index].kcShow = !item.kcShow
@@ -192,6 +195,10 @@
                       } else {
                         wx.showToast({title: data.message, icon: 'none'})
                       }
+                    })
+                    .catch(data => {
+                      wx.hideLoading()
+                      wx.showToast({title: '操作失败', icon: 'none'})
                     })
                 }
               }
@@ -203,8 +210,11 @@
               content: '您要删除该用户的评论吗？',
               success: function (res) {
                 if (res.confirm) {
+                  // console.log(item.ksId + ',' + item.kcId + ',' + !item.kcShow)
+                  wx.showLoading({title: '操作中...'})
                   that.$parent.apis.putcomments(item.ksId, item.kcId, false, true)
                     .then(data => {
+                      wx.hideLoading()
                       if (data.success) {
                         wx.showToast({title: '删除成功'})
                         that.content1.splice(index, 1)
@@ -212,6 +222,10 @@
                       } else {
                         wx.showToast({title: data.message, icon: 'none'})
                       }
+                    })
+                    .catch(data => {
+                      wx.hideLoading()
+                      wx.showToast({title: '操作失败', icon: 'none'})
                     })
                 }
               }

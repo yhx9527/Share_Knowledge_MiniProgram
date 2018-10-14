@@ -40,12 +40,12 @@
         </repeat>
       </view-->
       <view class="list-item">
-        <repeat for="{{types}}" key="index" index="index" item="item">
-          <wxc-list title="{{item[nameParams]}}" arrow="{{false}}" @tap="clickType" data-value="{{item[idParams]}}" data-flag="{{flag}}" data-index="{{index}}"></wxc-list>
+        <repeat for="{{ types }}" key="index" index="index" item="item">
+          <wxc-list title="{{ item[nameParams] }}" arrow="{{ false }}" @tap="clickType" data-value="{{ item[idParams] }}" data-flag="{{ flag }}" data-index="{{ index }}"></wxc-list>
         </repeat>
         </view>
   </view>
-    <view  wx:if="{{flag}}" hover-class="animated infinite flipInY" @tap="freshList"><i class="iconfont icon-more"></i></view>
+    <view  wx:if="{{ flag }}" hover-class="animated infinite flipInY" @tap="freshList"><i class="iconfont icon-more"></i></view>
   </view>
 </template>
 
@@ -55,7 +55,7 @@
     components = {};
     data = {
     };
-    props= {
+    props = {
       title: String,
       types: {
         type: Array,

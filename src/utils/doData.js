@@ -26,11 +26,11 @@ export default class {
     })
   }
   comments(list) {
-    if (list === null) {
+    if (list == null) {
       return []
     }
     return list.filter(item => {
-      return item.kcShow
+      return item.kcShow === true
     })
   }
   subInfo(subject, kuId) {

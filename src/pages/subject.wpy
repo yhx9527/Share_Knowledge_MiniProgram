@@ -257,8 +257,12 @@
       this.$parent.apis.getsubjectmore(ksId)
         .then(data => {
           that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
+          console.log('kuId' + that.$parent.globalData.ksUser.kuId)
+          console.log('enroll' + that.subject.enroll)
+          console.log('park' + that.subject.park)
           that.enroll = that.subject.enroll
           that.park = that.subject.park
+          that.$apply()
           that.ksEnrollList = that.subject.ksEnrollList.filter(item => {
             return item.keStatus
           })
@@ -386,6 +390,9 @@
 
             break
         }
+      },
+      'enterFace': function (kuId) {
+        this.$navigate('./parter/face', {kuId: kuId})
       }
     }
   }

@@ -148,6 +148,7 @@
       console.log(this.$parent.globalData.userInfo)
     }
     onShow(e) {
+      console.log(getCurrentPages())
     }
     async fresh() {
       let doData = this.$parent.doData

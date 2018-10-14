@@ -105,7 +105,8 @@
       this.index = params.index
       this.$parent.apis.getsubjectmore(params.ksId)
         .then(data => {
-          Object.assign(that.ksSubject, data)
+          // Object.assign(that.ksSubject, data)
+          that.ksSubject = {...data}
           that.kbName = data.ksBusiness.kbName
           that.ksTypeName = data.ksTypeData.kddDataName
           that.$apply()

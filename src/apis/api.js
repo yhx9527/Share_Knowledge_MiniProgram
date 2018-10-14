@@ -95,9 +95,9 @@ class Apis {
   }
   // 发布评论内容
   postcomments(ksId, content) {
-    let header = request.header
+    let header = JSON.parse(JSON.stringify(request.header))
     header['Content-Type'] = 'application/x-www-form-urlencoded'
-    return this._request.post('subjects/' + ksId + '/comments', {content: content})
+    return this._request.post('subjects/' + ksId + '/comments', {content: content}, header)
   }
   // 主题人修改评论状态
   putcomments(ksId, kcId, kcShow = true, kcDeleted = false) {

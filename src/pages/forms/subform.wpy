@@ -142,6 +142,17 @@
         kbId: ''
       }
     }
+    onLoad() {
+      this.ksUser = wx.getStorageSync('ksUser')
+      var that = this
+      this.$parent.apis.getdictcode('ksType')
+        .then(data => {
+          that.ksTypes = Object.values(data.ksDictDataMap)
+          // console.log('ksTypes' + JSON.stringify(that.ksTypes))
+          that.$apply()
+        })
+      this.fresh()
+    }
     methods = {
       prev() {
         if (this.current > 0) {
@@ -180,6 +191,7 @@
             })
             .catch(data => {
               wx.hideLoading()
+              console.log(JSON.stringify(data, undefined, '\t'))
             })
           console.log(this.ksSubject)
         }
@@ -198,16 +210,6 @@
       this.flag = true
       this.drawerTitle = '商家/地点'
     }
-    onLoad() {
-      this.ksUser = wx.getStorageSync('ksUser')
-      var that = this
-      this.$parent.apis.getdictcode('ksType')
-        .then(data => {
-          that.ksTypes = Object.values(data.ksDictDataMap)
-          that.$apply()
-        })
-      this.fresh()
-    }
     fresh() {
       var that = this
       if (this.page > 0) {
@@ -219,28 +221,28 @@
           })
       }
     }
-    onReady() {
-    }
     events = {
       'type': function (e) {
         if (!e.flag) {
           this.ksSubject.ksType = e.value
           this.ksTypeName = this.ksTypes[e.value].kddDataName
           this.showRight = false
+          this.$apply()
         } else {
           this.ksSubject.kbId = e.value
           this.kbName = this.kbIds[e.index].kbName
           this.showRight1 = false
+          this.$apply()
         }
-        this.$apply()
       },
       'dt': function (ksDt, ...arr) {
         if (ksDt === '0') {
           this.ksSubject.ksStartTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.$apply()
         } else {
           this.ksSubject.ksEndTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.$apply()
         }
-        this.$apply()
       },
       'load': function () {
         this.fresh()
