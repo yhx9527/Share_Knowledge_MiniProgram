@@ -11,6 +11,9 @@
   }
 </style>
 <template>
+  <i-notice-bar icon="message" closable color='#0984e3' background-color='#74b9ff'>
+    tip：可滑动组件进行相关操作
+  </i-notice-bar>
   <bigTitle title="主题管理" icontype="icon-admin"></bigTitle>
   <view class="fashionBorder" @tap="onClick">
     <wxc-panel title="{{singleSub.ksTitle}}(点击可进入主题页)">
@@ -50,7 +53,8 @@
         'i-swipeout': '../../packages/other/swipeout/',
         'i-icon': '../../packages/other/icon/',
         'wxc-loadmore': '../../packages/@minui/wxc-loadmore/dist/index',
-        'wxc-avatar': '../../packages/@minui/wxc-avatar/dist/index'
+        'wxc-avatar': '../../packages/@minui/wxc-avatar/dist/index',
+        'i-notice-bar': '../../packages/other/notice-bar/'
       },
       onReachBottomDistance: 100
     }

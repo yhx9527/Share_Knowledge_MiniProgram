@@ -26,10 +26,10 @@
       <wxc-input type="number" title="参讲人数" placeholder="和您一同演讲的人数" value="{{ksSubject.ksPartLimit}}" bind:input="onBlur" data-name="ksPartLimit" label="{{ true }}"></wxc-input>
       <yhx-textarea type="text" title="备注" placeholder="有其他需求请备注" value="{{ksSubject.ksRemark}}" bind:input="onBlur" data-name="ksRemark"></yhx-textarea>
       <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight1"></wxc-input>
-      <dtPicker ksDt="0">
+      <dtPicker ksDt="0" :begin.sync="begin">
         <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
       </dtPicker>
-      <dtPicker1 ksDt="1">
+      <dtPicker1 ksDt="1" :begin.sync="begin">
         <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
       </dtPicker1>
     </view>
@@ -96,7 +96,8 @@
         ksEnrollLimit: '',
         ksEnrollMinLimit: '',
         kbId: ''
-      }
+      },
+      begin: [0, 0, 0, 0, 0]
     }
     onLoad(params) {
       var that = this
@@ -119,6 +120,8 @@
           that.ksTypes = Object.values(data.ksDictDataMap)
         })
       this.fresh()
+      let date = new Date()
+      this.begin = [(date.getFullYear() - 2018), (date.getMonth()), (date.getDate() - 1), date.getHours(), date.getMinutes()]
       that.$apply()
     }
     methods = {

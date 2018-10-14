@@ -71,7 +71,7 @@
           .then(data => {
             that.ifLoad = false
             data.list.forEach(item => {
-              if (item.ksStatus) {
+              if (item.kpStatus) {
                 that.listed.push(item)
               } else {
                 that.listing.push(item)

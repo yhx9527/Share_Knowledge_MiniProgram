@@ -204,6 +204,9 @@
                 title: '修改成功'
               })
               wx.setStorageSync('ksUser', data.data)
+              setTimeout(function () {
+                wx.navigateBack({delta: 1})
+              }, 1000)
             }
           })
           .catch(data => {

@@ -145,10 +145,10 @@
       // this.apis = this.$parent.apis
       // this.$parent.apis.getsubject(1)
       // this.methods.fresh()
-      console.log(this.$parent.globalData.userInfo)
+      // console.log(this.$parent.globalData.userInfo)
     }
     onShow(e) {
-      console.log(getCurrentPages())
+      // console.log(getCurrentPages())
     }
     async fresh() {
       let doData = this.$parent.doData

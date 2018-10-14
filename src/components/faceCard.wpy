@@ -47,8 +47,8 @@
     </view>
     <view class="member-info">
       <view class="h3">{{user.kuName}}</view>
-      <view class="h5">{{user.kuSexData.kddDataName}}生</view>
-      <view class="p">联系方式:{{user.kuPhone || '未知'}}</view>
+      <view class="h5">性别:{{user.kuSexData.kddDataName  || '未知'}}</view>
+      <view class="p">联系方式:{{user.kuPhone  || '未知'}}</view>
       <view class="p">{{user.kuEducationData.kddDataName || '未知是否'}}毕业,目前从事{{user.kuIndustryData.kddDataName || '未知'}}</view>
       <view class="p">公司/所在:{{user.kuCompany || '未知'}}</view>
       <view class="p">个人介绍:{{user.kuIntro || '暂无'}}</view>
