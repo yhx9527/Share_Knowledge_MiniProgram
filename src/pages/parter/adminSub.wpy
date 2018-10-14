@@ -22,10 +22,22 @@
     <i-tab key="join" title="参讲管理"></i-tab>
     <i-tab key="talk" title="评论管理"></i-tab>
   </i-tabs>
+  <view wx:if="{{current ==='join'}}">
+    <repeat for="{{content}}" key="kpId" index="index" item="item">
+      <betterSwiperout :arr.sync="arr" :content.sync="item" :index.sync="index"></betterSwiperout>
+    </repeat>
+  </view>
+  <view wx:else>
+    <repeat for="{{content1}}" key="kcId" index="index" item="item">
+      <betterSwiperout1 :arr.sync="arr1" :content.sync="item" :index.sync="index"></betterSwiperout1>
+    </repeat>
+    <wxc-loadmore is-end="{{ !ifload }}" text="{{ifload ? '拼命加载中...' : '就这么多喽'}}"></wxc-loadmore>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
   import BigTitle from '../../components/bigTitle'
+  import BetterSwiperout from '../../components/betterSwiperout'
 
   export default class AdminSub extends wepy.page {
     config={
@@ -35,23 +47,173 @@
         'i-tabs': '../../packages/other/tabs/',
         'i-tab': '../../packages/other/tab/',
         'wxc-panel': '../../packages/@minui/wxc-panel/dist/index',
-      }
+        'i-swipeout': '../../packages/other/swipeout/',
+        'i-icon': '../../packages/other/icon/',
+        'wxc-loadmore': '../../packages/@minui/wxc-loadmore/dist/index',
+        'wxc-avatar': '../../packages/@minui/wxc-avatar/dist/index'
+      },
+      onReachBottomDistance: 100
     }
     components = {
-      bigTitle: BigTitle
+      bigTitle: BigTitle,
+      betterSwiperout: BetterSwiperout,
+      betterSwiperout1: BetterSwiperout
     }
     data = {
       current: 'join',
-      singleSub: {}
+      singleSub: {},
+      arr: [{name: '拒绝', color: '#fff', fontsize: '20', width: 70, icon: 'delete_fill', background: '#ff7675', type: 'joinNo', text: '申请参讲'},
+        {name: '同意', color: '#fff', fontsize: '20', width: 70, icon: 'success_fill', background: '#74b9ff', type: 'joinYes', text: '申请参讲'}],
+      content: [],
+      arr1: [{name: '查封', color: '#fff', fontsize: '20', width: 70, icon: 'offline_fill', background: '#ff7675', type: 'comNo', text: '评论:'},
+        {name: '删除', color: '#fff', fontsize: '20', width: 70, icon: 'trash_fill', background: '#ff4f4e', type: 'comDel', text: '评论:'}],
+      content1: [],
+      page: 1,
+      ksId: '',
+      loadTemp: [],
+      ifLoad: false
     }
     props = {
     }
     onLoad(params) {
-      this.singleSub = JSON.parse(params.singleSub)
+      let that = this
+      // this.singleSub = JSON.parse(params.singleSub)
+      // this.ksId = this.singleSub.ksId
+      this.ksId = params.ksId
+      that.$parent.apis.getsubjectmore(params.ksId)
+        .then(data => {
+          that.singleSub = data
+          that.content.push(...data.ksPartakeList)
+          that.$apply()
+        })
+      this.fresh(this.ksId)
+    }
+    onReachBottom() {
+      if (this.current === 'talk') {
+        this.ifLoad = true
+        this.$apply()
+        this.fresh(this.ksId)
+      }
+    }
+    fresh(ksId) {
+      let that = this
+      if (that.loadTemp.length < 20) {
+        that.content1.pop(that.loadTemp)
+      }
+      that.$parent.apis.getcomments(ksId, this.page++)
+        .then(data => {
+          if (data.list != null) {
+            that.content1.push(...data.list)
+            that.loadTemp = data.list
+            if (data.list.length < 20) {
+              that.page--
+            }
+            that.$apply()
+          } else {
+            that.page--
+          }
+        })
     }
     methods = {
       onClick() {
         this.$navigate('../subject', {ksId: this.singleSub.ksId})
+      }
+    }
+    events = {
+      'clickBtn': function (e, item, index) {
+        var that = this
+        switch (this.current + e) {
+          case 'join0':
+            wx.showModal({
+              title: '提示',
+              content: '您要拒绝该用户参讲请求吗？',
+              success: function (res) {
+                if (res.confirm) {
+                  that.$parent.apis.putparty(item.ksId, item.kpId, false)
+                    .then(data => {
+                      if (data.success) {
+                        wx.showToast({title: '拒绝成功'})
+                        if (item.kpStatus) {
+                          that.singleSub.ksPartNum--
+                        }
+                        that.content.splice(index, 1)
+                        that.$apply()
+                      } else {
+                        wx.showToast({title: data.message, icon: 'none'})
+                      }
+                    })
+                 /* wx.showToast({title: '拒绝成功'})
+                  if (item.kpStatus) {
+                    that.singleSub.ksPartNum--
+                  }
+                  that.content.splice(index, 1)
+                  that.$apply() */
+                }
+              }
+            })
+            break
+          case 'join1':
+            if (!item.kpStatus) {
+              wx.showModal({
+                title: '提示',
+                content: '您要同意该用户参讲请求吗？',
+                success: function (res) {
+                  if (res.confirm) {
+                    that.$parent.apis.putparty(item.ksId, item.kpId, true)
+                      .then(data => {
+                        if (data.success) {
+                          wx.showToast({title: '同意成功'})
+                          that.content[index].kpStatus = true
+                          that.singleSub.ksPartNum++
+                          that.$apply()
+                        } else {
+                          wx.showToast({title: data.message, icon: 'none'})
+                        }
+                      })
+                    /* wx.showToast({title: '同意成功'})
+                    that.content[index].kpStatus = true
+                    that.singleSub.ksPartNum++
+                    that.$apply() */
+                  }
+                }
+              })
+            } else {
+              wx.showToast({title: '您已同意过了', icon: 'none'})
+            }
+            break
+          case 'talk0':
+            wx.showModal({
+              title: '提示',
+              content: '您要查封该用户的评论吗？',
+              success: function (res) {
+                if (res.confirm) {
+                  that.$parent.apis.putcomments(item.ksId, item.kcId, false)
+                    .then(data => {
+                      if (data.success) {
+
+                      }
+                    })
+                }
+              }
+            })
+            break
+          case 'talk1':
+            wx.showModal({
+              title: '提示',
+              content: '您要删除该用户的评论吗？',
+              success: function (res) {
+                if (res.confirm) {
+                  that.$parent.apis.putcomments(item.ksId, item.kcId, false, true)
+                    .then(data => {
+                      if (data.success) {
+
+                      }
+                    })
+                }
+              }
+            })
+            break
+        }
       }
     }
     handleChange ({ detail }) {

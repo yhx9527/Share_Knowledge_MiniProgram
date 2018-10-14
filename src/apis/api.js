@@ -67,7 +67,7 @@ class Apis {
   }
   // 主讲人审查参与
   putparty(ksId, kpId, status = true) {
-    return this._request.put('subjects/' + ksId + '/participations' + kpId, {status: status})
+    return this._request.put('subjects/' + ksId + '/participations/' + kpId + '?audit_status=' + status)
   }
   // 删除参与
   deleteparty(ksId, kpId) {
@@ -100,8 +100,8 @@ class Apis {
     return this._request.post('subjects/' + ksId + '/comments', {content: content})
   }
   // 主题人修改评论状态
-  putcomments(ksId, kcId, ksComment) {
-    return this._request.put('subjects/' + ksId + '/comments' + kcId, {ksComment: ksComment})
+  putcomments(ksId, kcId, kcShow = true, kcDeleted = false) {
+    return this._request.put('subjects/' + ksId + '/comments' + kcId, {kcDeleted: kcDeleted, kcShow: kcShow})
   }
 
   /**
