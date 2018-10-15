@@ -21,7 +21,7 @@ class Request {
       case 401:
         wx.showModal({
           title: '提示',
-          content: '目前账号未进行注册，是否前往授权注册？',
+          content: '您还未授权注册或者授权已过期,是否重新授权？',
           success: function (res) {
             if (res.confirm) {
               wx.reLaunch({url: '/pages/login'})
