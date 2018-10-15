@@ -50,10 +50,10 @@
       getuserinfo (e) {
         let userInfo = e.detail.userInfo
         var that = this
+        wx.showLoading({title: '正在进入...', mask: true})
         if (userInfo) {
           this.$parent.globalData.userInfo = userInfo
           wx.setStorageSync('userInfo', userInfo)
-          wx.showLoading({title: '正在进入...', mask: true})
           wx.login({
             success: function (res) {
               if (res.code) {
@@ -67,8 +67,14 @@
                     console.log(data)
                   })
               }
+            },
+            fail: function () {
+              wx.hideLoading()
+              wx.showToast({title: '联网失败', icon: 'none'})
             }
           })
+        } else {
+          wx.showToast({title: '用户资料未加载，请重试', icon: 'none'})
         }
       }
     }

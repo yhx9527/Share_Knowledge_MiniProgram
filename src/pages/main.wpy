@@ -173,6 +173,13 @@
             that.$apply()
           })
           .catch(data => {
+            wx.stopPullDownRefresh()
+            if (that.page === 1) {
+              $Message({
+                content: '加载失败',
+                type: 'error'
+              })
+            }
           })
       } else {
         this.ifload = false

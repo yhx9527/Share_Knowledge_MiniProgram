@@ -343,12 +343,12 @@
                       }
                     })
                     .catch(data => {
-                      if (data.statusCode === 400) {
+                     /* if (data.statusCode === 400) {
                         wx.showToast({
                           title: '您已报名了',
                           icon: 'none'
                         })
-                      }
+                      } */
                     })
                 }
               }
@@ -375,12 +375,12 @@
                       }
                     })
                     .catch(data => {
-                      if (data.statusCode === 400) {
+                      /* if (data.statusCode === 400) {
                         wx.showToast({
                           title: data.data.message,
                           icon: 'none'
                         })
-                      }
+                      } */
                     })
                 }
               }

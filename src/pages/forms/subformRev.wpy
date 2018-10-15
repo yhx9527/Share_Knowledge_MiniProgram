@@ -149,9 +149,9 @@
             })
             .catch(data => {
               wx.hideLoading()
-              if (data.statusCode === 400) {
+              /* if (data.statusCode === 400) {
                 wx.showToast({title: '主题时间设置有误', icon: 'none'})
-              }
+              } */
             })
           console.log(this.ksSubject)
         } else {

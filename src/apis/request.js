@@ -10,6 +10,14 @@ const METHOD = {
 class Request {
   errorhandle(data) {
     switch (data.statusCode) {
+      case 400:
+        wx.showModal({
+          title: '提示',
+          content: data.data.message,
+          success: function (res) {
+          }
+        })
+        break
       case 401:
         wx.showModal({
           title: '提示',

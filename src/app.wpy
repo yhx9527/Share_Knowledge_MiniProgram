@@ -63,7 +63,7 @@ export default class extends wepy.app {
       'pages/common/about'
     ],
     window: {
-      backgroundTextStyle: 'light',
+      backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '微言',
       navigationBarTextStyle: 'black'
