@@ -44,10 +44,10 @@
     display:flex;
     margin-left:10vw;
     align-items:flex-end;
-
   }
   .STcontainer{
     background-color: #55efc4;
+    padding-bottom: 10px;
   }
   .label{
     margin-left:10px;
