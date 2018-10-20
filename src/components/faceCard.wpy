@@ -21,8 +21,8 @@
   .h3 {font-size: 24px; font-weight: normal; margin: 10px 0 0; text-transform: uppercase;}
   .h5 {font-size: 16px; font-weight: 300; margin: 0 0 15px; line-height: 22px;}
   .p {font-size: 14px; font-weight: 300; line-height: 22px; padding: 0 30px; margin-bottom: 10px;}
-  .social-touch .a{display: inline-block; width: 27px; height: 26px; vertical-align: middle; margin: 0 2px; background-repeat: no-repeat; opacity: 0.7; transition: 0.3s;}
-  .social-touch .a:hover{opacity: 1; transition: 0.3s;}
+  .social-touch .a{display: inline-block; width: 27px; height: 26px; vertical-align: middle; margin: 0 2px; background-repeat: no-repeat; opacity: 0.7; transition: 0.3s; opacity: 1; }
+  /*.social-touch .a:hover{opacity: 1; transition: 0.3s;}*/
   .fb-touch{background-position: 0 0;}
   .tweet-touch{background-position: -35px 0;}
   .linkedin-touch{background-position: -71px 0;}
@@ -33,11 +33,11 @@
 
   /*= effect-1 css =*/
   .effect-1{border-radius: 5px 5px 0 0; padding-bottom: 40px;}
-  .effect-1 .member-image {border: 2px solid #fff; border-radius: 60px 0; display: inline-block; margin-top: -72px; overflow: hidden; transition: 0.3s;}
-  .effect-1 .social-touch{background-color: #55efc4; position: absolute; left: 0; bottom: 0; height: 5px; overflow: hidden; padding: 5px 0 0; width: 100%; transition: 0.3s;}
+  .effect-1 .member-image {border: 2px solid #fff; border-radius: 60px 0; display: inline-block; margin-top: -72px; overflow: hidden; transition: 0.3s; border-color: #55efc4; transition: 0.3s; border-radius: 50%;}
+  .effect-1 .social-touch{background-color: #55efc4; position: absolute; left: 0; bottom: 0; height: 5px; overflow: hidden; padding: 5px 0 0; width: 100%; transition: 0.3s; padding: 6px 0; height: 38px; }
   .effect-1 .member-image .img{transition: 0.3s; border-radius: 60px 0;}
-  .effect-1:hover .member-image{border-color: #55efc4; transition: 0.3s; border-radius: 50%;}
-  .effect-1:hover .social-touch{padding: 6px 0; height: 38px; transition: 0.3s;}
+ /* .effect-1:hover .member-image{border-color: #55efc4; transition: 0.3s; border-radius: 50%;}
+  .effect-1:hover .social-touch{padding: 6px 0; height: 38px; transition: 0.3s;}*/
   /*= effect-1 css end =*/
 </style>
 <template>

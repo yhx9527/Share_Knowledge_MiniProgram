@@ -89,7 +89,8 @@
         icon="footprint"
         icon-color="#55efc4"
         desc=""
-        title="我的评论"></wxc-list>
+        title="我的评论"
+        bind:click="unable"></wxc-list>
       <wxc-list
         class="item"
         icon="edit"
@@ -107,7 +108,8 @@
         class="item"
         icon="feedback"
         icon-color="#69A0DD"
-        title="意见反馈"></wxc-list>
+        title="意见反馈"
+        bind:click="unable"></wxc-list>
       <wxc-list
         class="item"
         icon="group"
@@ -240,6 +242,9 @@
       },
       enterAbout() {
         this.$navigate('./common/about')
+      },
+      unable() {
+        wx.showToast({title: '暂不可用哦', icon: 'none'})
       }
     }
   }

@@ -33,17 +33,17 @@
 <template>
   <example title="资源" desc="讲座相关">
   <wxc-flex class="wrap" wrap="wrap">
-    <view class="item">
+    <view class="item" @tap="unable">
       <view class="flex-column-inline">
         <i class="iconfont icon-wodehuiyuan" style="font-size: 30px;color: #ff7675;"></i><text class="fun-icon-info">积分中心</text>
       </view>
     </view>
-    <view class="item">
+    <view class="item" @tap="unable">
       <view class="flex-column-inline">
         <i class="iconfont icon-wendazhuanqu" style="font-size: 30px;color: #55efc4;"></i><text class="fun-icon-info">讲座群</text>
       </view>
     </view>
-    <view class="item">
+    <view class="item" @tap="unable">
       <view class="flex-column-inline">
         <i class="iconfont icon-diyicimaigu" style="font-size: 30px;color: #a29bfe;"></i><text class="fun-icon-info">资源</text>
       </view>
@@ -52,17 +52,17 @@
 </example>
   <example title="商家" desc="周围地点">
     <wxc-flex class="wrap" wrap="wrap">
-      <view class="item">
+      <view class="item" @tap="unable">
         <view class="flex-column-inline">
           <i class="iconfont icon-shop" style="font-size: 30px;color: #81ecec;"></i><text class="fun-icon-info">商家</text>
         </view>
       </view>
-      <view class="item">
+      <view class="item" @tap="unable">
         <view class="flex-column-inline">
           <i class="iconfont icon-schoolnews_sel" style="font-size: 30px;color: #78e08f;"></i><text class="fun-icon-info">校园</text>
         </view>
       </view>
-      <view class="item">
+      <view class="item" @tap="unable">
         <view class="flex-column-inline">
           <i class="iconfont icon-Coffee" style="font-size: 30px;color: #ffeaa7;"></i><text class="fun-icon-info">咖啡厅</text>
         </view>
@@ -70,12 +70,12 @@
     </wxc-flex>
   </example><example title="更多" desc="...">
   <wxc-flex class="wrap" wrap="wrap">
-    <view class="item">
+    <view class="item" @tap="unable">
       <view class="flex-column-inline">
         <i class="iconfont icon-join2" style="font-size: 30px;color: #fd79a8;"></i><text class="fun-icon-info">商家入驻</text>
       </view>
     </view>
-    <view class="item">
+    <view class="item" @tap="unable">
       <view class="flex-column-inline">
         <i class="iconfont icon-BusinessInsight-ico" style="font-size: 30px;color: #fdcb6e;"></i><text class="fun-icon-info">邀请有奖</text>
       </view>
@@ -95,7 +95,11 @@
         'example': '../packages/@minui/wxc-example/dist/index'
       }
     }
-    methods = {}
+    methods = {
+      unable() {
+        wx.showToast({title: '暂不可用哦', icon: 'none'})
+      }
+    }
     onShareAppMessage(res) {
       if (res.from === 'menu') {
         return {

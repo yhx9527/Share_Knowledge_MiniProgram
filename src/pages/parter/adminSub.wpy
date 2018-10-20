@@ -18,7 +18,7 @@
   <view class="fashionBorder" @tap="onClick">
     <wxc-panel title="{{singleSub.ksTitle}}(点击可进入主题页)">
       <view class="content">报名: {{singleSub.ksEnrollNum}}/{{singleSub.ksEnrollLimit}} || 参讲: {{singleSub.ksPartNum}}/{{singleSub.ksPartLimit}} || 地点: {{singleSub.ksBusiness.kbName}}</view>
-      <view class="content">时间: {{singleSub.ksStartTime}}到{{singleSub.ksEndTime}}</view>
+      <view class="content">时间: {{singleSub.ksStartTime}}--{{singleSub.ksEndTime}}</view>
     </wxc-panel>
   </view>
   <i-tabs current="{{ current }}" bindchange="handleChange">
@@ -87,7 +87,7 @@
       this.ksId = params.ksId
       that.$parent.apis.getsubjectmore(params.ksId)
         .then(data => {
-          that.singleSub = data
+          that.singleSub = that.$parent.doData.oneSubject(data)
           that.content.push(...data.ksPartakeList)
           that.$apply()
         })
@@ -105,7 +105,9 @@
       if (this.page > 0) {
         that.$parent.apis.getcomments(ksId, this.page)
           .then(data => {
-            that.content1.push(...data.list)
+            if (data.list != null) {
+              that.content1.push(...data.list)
+            }
             that.ifLoad = false
             that.page = data.nextPage
             that.$apply()

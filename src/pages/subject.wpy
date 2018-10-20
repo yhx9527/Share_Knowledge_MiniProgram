@@ -62,6 +62,14 @@
   .commentInput{
     width: 90vw;
   }
+  .status{
+    color:#feffa7;
+    font-size:38rpx;
+    flex:1;
+    text-align:right;
+    padding-right:10px;
+
+  }
 </style>
 <template>
   <i-message id="message" />
@@ -74,6 +82,7 @@
     </view>
     <view class="author">By {{ subject.ksUser.kuName }}
       <wxc-avatar class="avatar avatar__1" src="{{ subject.ksUser.kuHeadImgUrl}}" @tap="enterFace"></wxc-avatar>
+      <text class="status">{{!subject.ifPast ? '等待报名中' : (subject.ifEnd ? '已结束' : '进行中')}}</text>
       <slot></slot>
     </view>
   </view>

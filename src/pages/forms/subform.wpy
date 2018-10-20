@@ -68,10 +68,10 @@
     <view class="input-wrap">
       <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight1"></wxc-input>
       <dtPicker ksDt="0" :begin.sync="begin">
-        <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
+        <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksStartTime}}" label="{{ true }}"></wxc-input>
       </dtPicker>
       <dtPicker1 ksDt="1" :begin.sync="begin">
-        <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
+        <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksEndTime}}" label="{{ true }}"></wxc-input>
       </dtPicker1>
     </view>
   </view>
@@ -128,6 +128,8 @@
       page: 1,
       drawerTitle: '',
       flag: false,
+      ksStartTime: '',
+      ksEndTime: '',
       ksSubject: {
         ksTitle: '',
         ksAbstract: '',
@@ -243,9 +245,11 @@
       'dt': function (ksDt, ...arr) {
         if (ksDt === '0') {
           this.ksSubject.ksStartTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.ksStartTime = `${arr[0]}年${arr[1]}月${arr[2]}日 ${arr[3]}:${arr[4]}:00`
           this.$apply()
         } else {
           this.ksSubject.ksEndTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.ksEndTime = `${arr[0]}年${arr[1]}月${arr[2]}日 ${arr[3]}:${arr[4]}:00`
           this.$apply()
         }
       },

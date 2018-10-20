@@ -10,12 +10,26 @@
     text-overflow:ellipsis;
     overflow:hidden;
   }
+  .cardStatus{
+    float:right;
+    font-size:38rpx;
+    text-align:right;
+    color:#0984e3;
+  }
+  .status1{
+    color:#ffa7bc;
+  }
+  .status2{
+    color:#fdcb6e;
+  }
 </style>
 <template>
-  <example-demo title="报名:{{item.ksEnrollNum}}/{{item.ksEnrollLimit}}" desc="开始时间:{{item.ksStartTime}}" bind:click='onClick'>
+  <example-demo title="报名:{{item.ksEnrollNum}}/{{item.ksEnrollLimit}}" desc="开始时间:{{item.ksStartTime}}"
+                descRight="举办地点:{{item.ksBusiness.kbName}}" bind:click='onClick'>
     <wxc-panel title="{{item.ksTitle}} --By {{item.ksUser.kuName}}"  >
       <view class="contentCard">{{item.ksAbstract}}</view>
-      <view class="place">举办地点:{{item.ksBusiness.kbName}}</view>
+      <!--view class="place">举办地点:{{item.ksBusiness.kbName}}</view-->
+      <view class="cardStatus {{!item.ifPast ? '' : (item.ifEnd ? 'status1' : 'status2')}}">{{!item.ifPast ? '报名中' : (item.ifEnd ? '已结束' : '进行中')}}</view>
     </wxc-panel>
   </example-demo>
 </template>

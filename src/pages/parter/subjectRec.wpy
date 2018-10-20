@@ -86,6 +86,7 @@
           .then(data => {
             that.ifLoad = false
             data.list.forEach(item => {
+              item.addTime = that.$parent.doData.timeFormat(item.addTime)
               if (item.ksEnd) {
                 that.listed.push(item)
               } else {

@@ -41,6 +41,7 @@
         console.log('input: ', e.detail.value)
       },
       onConfirm(e) {
+        wx.showToast({title: '暂不可用哦', icon: 'none'})
         console.log('confirm: ', e)
       },
       onSearch(e) {

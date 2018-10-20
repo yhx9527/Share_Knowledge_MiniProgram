@@ -27,10 +27,10 @@
       <yhx-textarea type="text" title="备注" placeholder="有其他需求请备注" value="{{ksSubject.ksRemark}}" bind:input="onBlur" data-name="ksRemark"></yhx-textarea>
       <wxc-input type="text" title="地点" placeholder="请选择举办地点" disabled="{{ true }}" arrow="{{ true }}"value="{{kbName}}" label="{{ true }}" bind:tap="toggleRight1"></wxc-input>
       <dtPicker ksDt="0" :begin.sync="begin">
-        <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksStartTime}}" label="{{ true }}"></wxc-input>
+        <wxc-input type="text" title="开始时间" placeholder="请设置开讲时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksStartTime}}" label="{{ true }}"></wxc-input>
       </dtPicker>
       <dtPicker1 ksDt="1" :begin.sync="begin">
-        <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksSubject.ksEndTime}}" label="{{ true }}"></wxc-input>
+        <wxc-input type="text" title="结束时间" placeholder="请设置结束时间" disabled="{{ true }}" arrow="{{ true }}"value="{{ksEndTime}}" label="{{ true }}"></wxc-input>
       </dtPicker1>
     </view>
   </view>
@@ -84,6 +84,8 @@
       page: 1,
       drawerTitle: '',
       flag: false,
+      ksStartTime: '',
+      ksEndTime: '',
       ksSubject: {
         ksTitle: '',
         ksAbstract: '',
@@ -108,6 +110,8 @@
         .then(data => {
           // Object.assign(that.ksSubject, data)
           that.ksSubject = {...data}
+          that.ksStartTime = that.$parent.doData.timeFormat1(data.ksStartTime)
+          that.ksEndTime = that.$parent.doData.timeFormat1(data.ksEndTime)
           that.kbName = data.ksBusiness.kbName
           that.ksTypeName = data.ksTypeData.kddDataName
           that.$apply()
@@ -199,8 +203,10 @@
       'dt': function (ksDt, ...arr) {
         if (ksDt === '0') {
           this.ksSubject.ksStartTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.ksStartTime = `${arr[0]}年${arr[1]}月${arr[2]}日 ${arr[3]}:${arr[4]}:00`
         } else {
           this.ksSubject.ksEndTime = `${arr[0]}-${arr[1]}-${arr[2]}T${arr[3]}:${arr[4]}:00`
+          this.ksEndTime = `${arr[0]}年${arr[1]}月${arr[2]}日 ${arr[3]}:${arr[4]}:00`
         }
       },
       'load': function () {
