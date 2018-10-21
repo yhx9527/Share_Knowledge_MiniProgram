@@ -1,6 +1,8 @@
 <style lang="css">
   page{
-    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 150%);
+    background-image: linear-gradient(to bottom,#55efc4 0%,#f6f8f9 60%,#f6f8f9 100%);
+    background-repeat: no-repeat;
+    background-color: #f6f8f9;
   }
   .wrap {
     display:block;
