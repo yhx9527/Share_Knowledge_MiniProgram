@@ -61,8 +61,13 @@
       }
     }
     data = {
-      helplist: [{ name: 'name1', title: '帮助标题一', content: '帮助内容一' },
-        { name: 'name2', title: '帮助标题二', content: '帮助内容二' }]
+      helplist: [{ name: 'name1', title: '主题发布注意事项', content: '为保证主题的有效性，请您在发布主题之前先完成个人资料的填写' },
+        { name: 'name2', title: '主题发布流程', content: '填写主题内容并发布 -> 等待他人报名/参讲 -> 主讲人审核参讲 -> 进行主题演讲 -> 主题结束' },
+        { name: 'name3', title: '参讲主题', content: '在主题详情页选择参讲主题 -> 等待主讲人审核批准 -> 和主讲人共同演讲' },
+        { name: 'name4', title: '报名主题', content: '在主题详情页选择报名主题 -> 在规定时间到主题演讲地点进行听讲' },
+        { name: 'name5', title: '评论', content: '对某个主题发表评论后将经主讲人审核，主讲人可以选择性进行展示' },
+        { name: 'name6', title: '主题搜索功能', content: '目前暂不支持哦，带来的不便我们深感抱歉' },
+        { name: 'name7', title: '周围 页面中的不可用功能', content: '我们正在努力开发中，敬请期待' }]
     }
     methods = {}
   }
