@@ -46,6 +46,8 @@
     margin-right: 30rpx;
     border-radius: 6px;
     margin-left:10rpx;
+
+    overflow:hidden;
   }
   .head-fun{
     display: flex;
@@ -62,12 +64,46 @@
     font-weight:bold;
 
   }
+  .list__body {
+    display: flex;
+    align-items: center;
+    min-height: 90rpx;
+    line-height: 1.4;
+    padding: 20rpx 30rpx 20rpx 0;
+    margin-left: 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #ececec;
+    font-size: 32rpx;
+    color: #333
+  }
+  .list__none {
+    border: none
+  }
+  .list__title {
+    flex: 1
+  }
+  .list__title--sub {
+    margin-top: 14rpx;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    color: #999
+  }
 </style>
 <template>
   <view class="list-item" style="margin-bottom: 15rpx;">
     <view class="list-check">
-      <wxc-list class="item" title="{{userInfo.nickName}}" detail="{{userInfo.province}}.{{userInfo.city}}" arrow="{{false}}" mode="none"></wxc-list>
-      <image class="list-image" mode="aspectFill" src="{{userInfo.avatarUrl}}"></image>
+      <!--wxc-list class="item" title="{{userInfo.nickName}}" detail="{{userInfo.province}}.{{userInfo.city}}" arrow="{{false}}" mode="none"></wxc-list-->
+      <!--image class="list-image" mode="aspectFill" src="{{userInfo.avatarUrl}}"></image-->
+      <view class="list__body list__none" hover-class="list-item-hover" style="flex:1;">
+      <view class="list__title">
+        <open-data class="list__title--main" type="userNickName"></open-data>
+        <view class="list__title--sub">
+          <open-data  type="userProvince"></open-data>.
+          <open-data  type="userCity"></open-data>
+        </view>
+      </view>
+      </view>
+      <open-data type="userAvatarUrl" class="list-image"></open-data>
     </view>
     <view class="list-check-fun">
       <view class="head-fun" @tap="enterPart" data-type="2"><text class="fun-num">{{subNum}}</text><text class="fun-title">主讲</text></view>
@@ -137,7 +173,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-
+  /* global wx */
   export default class Self extends wepy.page {
     config={
       usingComponents: {
@@ -154,8 +190,8 @@
       enrollNum: 0
     }
     onLoad() {
-      this.userInfo = wx.getStorageSync('userInfo')
-      this.$apply()
+      /* this.userInfo = wx.getStorageSync('userInfo')
+      this.$apply() */
     }
     onShow() {
       var that = this

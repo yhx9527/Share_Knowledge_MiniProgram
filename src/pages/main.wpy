@@ -20,6 +20,16 @@
     border-radius:50%;
 
   }
+  .search-location-in {
+    height:70rpx;
+    line-height:70rpx;
+    margin-right:12rpx;
+    font-size:26rpx;
+    overflow:hidden;
+    width:70rpx;
+    border-radius:50%;
+
+  }
   .search {
     flex-grow: 1;
     margin-right:22rpx;
@@ -45,8 +55,8 @@
 <template>
   <i-message id="message" />
   <view class="search-wrap">
-    <wxc-avatar class="search-location" src="{{userInfo['avatarUrl']}}" @tap="enterFace"></wxc-avatar>
-    <!--open-data type="userAvatarUrl" class="search-location" ></open-data-->
+    <!--wxc-avatar class="search-location" src="{{userInfo['avatarUrl']}}" @tap="enterFace"></wxc-avatar-->
+    <view bind:tap="enterFace" class="search-location"><open-data type="userAvatarUrl" class="search-location-in"></open-data></view>
     <wxc-search class="search" radius="30" mode="static" placeholder="Search" @tap="searching"></wxc-search>
     <view class="fabuicon" hover-class="animated pulse" @tap = "release"><i class="iconfont icon-add" style="font-size:20px;"></i><text style="font-size: 10px;">发布</text></view>
   </view>
