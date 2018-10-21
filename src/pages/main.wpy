@@ -216,7 +216,6 @@
       if (this.page > 0) {
         this.$parent.apis.getsubject(this.page)
           .then(data => {
-            console.log(data.list)
             that.ifload = false
             wx.stopPullDownRefresh()
             if (that.page === 1) {
