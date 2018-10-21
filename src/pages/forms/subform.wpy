@@ -174,7 +174,14 @@
         }
         if (this.current < 3) {
           if (this.$parent.doData.checkEmpty(this.data.ksSubject, map[this.current])) {
-            this.current++
+            if (this.$parent.doData.checkRightNum(this.data.ksSubject, 'ksEnrollLimit', 'ksEnrollMinLimit', this.current)) {
+              this.current++
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '至少需要一人报名且最多报名应大于等于最少报名'
+              })
+            }
           } else {
             wx.showToast({
               title: '标红星内容不能为空',

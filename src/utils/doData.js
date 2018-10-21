@@ -102,4 +102,15 @@ export default class {
       return form[item] !== ''
     })
   }
+  checkRightNum(form, max, min, cur) {
+    if (cur !== 1) {
+      return true
+    }
+    let flag = form[max] >= form[min] && form[max] > 0
+    return flag
+  }
+  checkRightNum1(form, max, min) {
+    let flag = form[max] >= form[min] && form[max] > 0
+    return flag
+  }
 }
