@@ -40,8 +40,8 @@
     <image src="https://static.dongtu.com/netpic/20161213193733EA5RBST9DUG642I5.gif" class='img'></image>
     <view class='flex-column about'>
       <view class='cutline'></view>
-      <view class='font'>XXX出品</view>
-      <view class='row web'><navigator url="/pages/web/web" class="weui-footer__link"></navigator></view>
+      <view class='font'>微言</view>
+      <view class='row web'><navigator url="" class="weui-footer__link">Copyright @2018 知识分享平台</navigator></view>
     </view>
   </view>
 </template>
