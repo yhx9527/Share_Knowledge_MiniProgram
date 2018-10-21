@@ -59,8 +59,7 @@ export default class extends wepy.app {
       'pages/parter/adminSub',
       'pages/parter/face',
       'pages/common/help',
-      'pages/common/about',
-      'pages/login'
+      'pages/common/about'
     ],
     window: {
       backgroundTextStyle: 'dark',

@@ -17,21 +17,24 @@ export default class {
   }
  // 时间格式化
   timeFormat(timeString) {
-    let date = new Date(Date.parse(timeString))
+    let dateTemp = new Date(Date.parse(timeString))
+    let date = new Date(dateTemp.getTime() + dateTemp.getTimezoneOffset() * 60000)
     let month = date.getMonth() + 1
     let hours = date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()
     let minutes = date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()
     return date.getFullYear() + '年' + month + '月' + date.getDate() + '日' + '  ' + hours + '时' + minutes + '分'
   }
   timeFormat1(timeString) {
-    let date = new Date(Date.parse(timeString))
+    let dateTemp = new Date(Date.parse(timeString))
+    let date = new Date(dateTemp.getTime() + dateTemp.getTimezoneOffset() * 60000)
     let time = timeString.split('T')[1]
     let month = date.getMonth() + 1
     return date.getFullYear() + '年' + month + '月' + date.getDate() + '日' + '  ' + time
   }
   // 当前时间比较
   compareTime(kstime) {
-    let temp = Date.parse(kstime)
+    let date = new Date(Date.parse(kstime))
+    let temp = date.getTime() + date.getTimezoneOffset() * 60000
     let now = Date.now()
     if (now > temp) {
       return true
