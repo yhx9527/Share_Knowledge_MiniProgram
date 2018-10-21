@@ -197,6 +197,11 @@
                       if (data.success) {
                         wx.showToast({title: '操作成功'})
                         that.content1[index].kcShow = !item.kcShow
+                        if (item.kcShow) {
+                          that.arr1[0] = {name: '展示', color: '#fff', fontsize: '20', width: 70, icon: 'like_fill', background: '#74b9ff', type: 'comNo', text: '评论:'}
+                        } else {
+                          that.arr1[0] = {name: '隐藏', color: '#fff', fontsize: '20', width: 70, icon: 'delete_fill', background: '#fab1a0', type: 'comNo', text: '评论:'}
+                        }
                         that.$apply()
                       } else {
                         wx.showToast({title: data.message, icon: 'none'})
