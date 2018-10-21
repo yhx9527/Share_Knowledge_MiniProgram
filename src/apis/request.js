@@ -7,6 +7,7 @@ const METHOD = {
   DELETE: 'DELETE',
   PATCH: 'PATCH'
 }
+var auth = wx.getStorageSync('Authorization')
 class Request {
   errorhandle(data) {
     switch (data.statusCode) {
@@ -21,10 +22,10 @@ class Request {
       case 401:
         wx.showModal({
           title: '提示',
-          content: '您还未授权注册或者授权已过期,是否重新授权？',
+          content: '您的状态已过期,是否重新授权？',
           success: function (res) {
             if (res.confirm) {
-              wx.reLaunch({url: '/pages/login'})
+              wx.reLaunch({url: '/pages/main'})
             }
           }
         })
@@ -61,7 +62,7 @@ class Request {
     this._header = {
       token: null,
       'Content-Type': 'application/json',
-      'Authorization': null
+      'Authorization': auth
     }
     this._baseUrl = 'https://api.sharing-knowledge.club/'
   }

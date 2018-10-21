@@ -75,7 +75,7 @@
       page: 1,
       ksId: '',
       loadTemp: [],
-      ifLoad: false,
+      ifLoad: true,
       ifEye: true
     }
     props = {

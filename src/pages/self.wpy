@@ -219,7 +219,7 @@
           success: function (res) {
             if (res.confirm) {
               wx.clearStorage()
-              wepy.reLaunch({url: './login'})
+              wepy.reLaunch({url: './main'})
             }
           }
         })

@@ -59,7 +59,15 @@
               if (res.code) {
                 wx.hideLoading()
                 wepy.switchTab({url: './main'})
-                that.$parent.apis.postcode(res.code, userInfo)
+                that.$parent.apis.postcode(res.code, {
+                  'avatarUrl': 'string',
+                  'city': 'string',
+                  'country': 'string',
+                  'gender': 0,
+                  'language': 'string',
+                  'nickName': 'string',
+                  'province': 'string'
+                })
                   .then(data => {
                     that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
                     that.$parent.globalData.ksUser = data.data.ksUser

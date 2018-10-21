@@ -17,7 +17,7 @@
       <showItem1 :listitem.sync="item" :index.sync="index"></showItem1>
     </repeat>
   </view-->
-  <wxc-loadmore is-end="{{ !ifload }}" text="{{ifload ? '拼命加载中...' : '就这么多喽'}}"></wxc-loadmore>
+  <wxc-loadmore is-end="{{ !ifLoad }}" text="{{ifLoad ? '拼命加载中...' : '就这么多喽'}}"></wxc-loadmore>
 </template>
 <script>
   import wepy from 'wepy'
@@ -51,7 +51,7 @@
       ifEnd: false,
       ifEnd1: true,
       page: 1,
-      ifLoad: false
+      ifLoad: true
     }
     handleChange ({ detail }) {
       this.current = detail.key

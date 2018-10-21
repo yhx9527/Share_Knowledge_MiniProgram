@@ -177,7 +177,8 @@
       park: 0,
       page: 1,
       ifLc: false,
-      commentContent: ''
+      commentContent: '',
+      ksUser: {}
     }
     methods = {
       enterJoinMenu() {
@@ -253,20 +254,23 @@
 
     onLoad(params, data) {
       this.ksId = params.ksId
-      this.fresh(params.ksId)
+      let ksUser = wx.getStorageSync('ksUser')
+      this.fresh(params.ksId, ksUser.kuId)
       this.loadComments()
+      this.ksUser = ksUser
       this.$apply()
     }
 
     onUnload() {
     }
 
-    async fresh(ksId) {
+    async fresh(ksId, kuId) {
       var that = this
       this.$parent.apis.getsubjectmore(ksId)
         .then(data => {
-          that.subject = that.$parent.doData.subInfo(data, that.$parent.globalData.ksUser.kuId)
-          console.log('kuId' + that.$parent.globalData.ksUser.kuId)
+          console.log(that.$parent.globalData)
+          that.subject = that.$parent.doData.subInfo(data, kuId)
+          console.log('kuId' + kuId)
           console.log('enroll' + that.subject.enroll)
           console.log('park' + that.subject.park)
           that.enroll = that.subject.enroll
@@ -295,7 +299,7 @@
     }
 
     onPullDownRefresh() {
-      this.fresh(this.subject.ksId)
+      this.fresh(this.subject.ksId, this.ksUser.kuId)
     }
 
     onReady() {
@@ -313,7 +317,7 @@
       } else if (res.from === 'menu') {
         return {
           title: '这个小程序真好',
-          path: '/pages/login',
+          path: '/pages/main',
           success: function () {
             console.log('menu转发成功')
           }

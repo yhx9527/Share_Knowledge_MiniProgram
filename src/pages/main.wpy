@@ -144,7 +144,7 @@
       page: 1,
       loadend: false,
       ifspin: true,
-      ifload: false
+      ifload: true
     }
     onLoad() {
       var that = this
@@ -161,6 +161,34 @@
     }
     onShow(e) {
       // console.log(getCurrentPages())
+    }
+    onReady() {
+      var that = this
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            that.$parent.apis.postcode(res.code, {
+              'avatarUrl': 'string',
+              'city': 'string',
+              'country': 'string',
+              'gender': 0,
+              'language': 'string',
+              'nickName': 'string',
+              'province': 'string'
+            })
+              .then(data => {
+                that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
+                that.$parent.globalData.ksUser = data.data.ksUser
+                wx.setStorageSync('ksUser', data.data.ksUser)
+                // console.log(data)
+              })
+          }
+        },
+        fail: function () {
+          wx.hideLoading()
+          wx.showToast({title: '联网失败', icon: 'none'})
+        }
+      })
     }
     async fresh() {
       let doData = this.$parent.doData
@@ -208,7 +236,7 @@
       if (res.from === 'menu') {
         return {
           title: '这个小程序真好',
-          path: '/pages/login',
+          path: '/pages/main',
           success: function () {
             console.log('menu转发成功')
           }
