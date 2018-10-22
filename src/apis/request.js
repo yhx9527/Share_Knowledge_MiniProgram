@@ -10,6 +10,7 @@ const METHOD = {
 var auth = wx.getStorageSync('Authorization')
 class Request {
   errorhandle(data) {
+    var that = this
     switch (data.statusCode) {
       case 400:
         wx.showModal({
@@ -22,10 +23,10 @@ class Request {
       case 401:
         wx.showModal({
           title: '提示',
-          content: '您的状态已过期,是否重新授权？',
+          content: '您的状态已过期,是否重新申请？',
           success: function (res) {
             if (res.confirm) {
-              wx.reLaunch({url: '/pages/main'})
+              that.saveStatus()
             }
           }
         })
@@ -109,6 +110,26 @@ class Request {
   }
   get header() {
     return this._header
+  }
+  // token维持
+  saveStatus() {
+    var that = this
+    wx.login({
+      success(res) {
+        if (res.code) {
+          let userInfo = wx.getStorageSync('userInfo')
+          that.post('tokens/' + res.code, userInfo)
+            .then(data => {
+              wx.showToast({title: '请继续使用'})
+              that.header = {'Authorization': 'Bearer ' + data.data.accessToken}
+              wx.setStorageSync('ksUser', data.data.ksUser)
+            })
+            .catch(data => {
+              wx.showToast({title: '状态申请失败', icon: 'none'})
+            })
+        }
+      }
+    })
   }
 }
 export default new Request()

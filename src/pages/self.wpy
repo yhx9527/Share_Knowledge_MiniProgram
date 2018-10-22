@@ -173,6 +173,7 @@
 </template>
 <script>
   import wepy from 'wepy'
+  const aop = require('../utils/intercept')
   /* global wx */
   export default class Self extends wepy.page {
     config={
@@ -194,6 +195,9 @@
       this.$apply() */
     }
     onShow() {
+      aop.before(this.getUS, this)
+    }
+    getUS() {
       var that = this
       that.$parent.apis.getsubject(1, true)
         .then(data => {
@@ -225,6 +229,9 @@
         })
       },
       reviseInfo() {
+        aop.before(this.methods.reviseInfo_b, this)
+      },
+      reviseInfo_b() {
         this.$navigate('./forms/info')
       },
       enterPart(e) {
@@ -242,6 +249,9 @@
         }
       },
       enterFace() {
+        aop.before(this.methods.enterFace_b, this)
+      },
+      enterFace_b() {
         let ksUser = wx.getStorageSync('ksUser')
         this.$navigate('./parter/face', {kuId: ksUser.kuId})
       },

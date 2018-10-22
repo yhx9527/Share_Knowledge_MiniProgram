@@ -145,6 +145,7 @@
   import CommentArea from '../components/commentArea'
   import AddFun from '../components/addFun'
   const { $Message } = require('../utils/base/index')
+  const aop = require('../utils/intercept')
 
   export default class Subject extends wepy.page {
     config = {
@@ -192,6 +193,9 @@
         this.commentContent = e.detail.value
       },
       sendComment() {
+        aop.before(this.methods.sendComment_b, this)
+      },
+      sendComment_b() {
         let that = this
         if (this.commentContent !== '') {
           wx.showModal({
@@ -333,6 +337,9 @@
 
     events = {
       'tellwhich': function (type) {
+        aop.before(this.events.tellwhich_b, this, type)
+      },
+      'tellwhich_b': function (type) {
         var that = this
         switch (type) {
           case 'enroll':

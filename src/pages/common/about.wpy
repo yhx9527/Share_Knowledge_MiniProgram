@@ -51,7 +51,9 @@
     </view>
   </view>
   <view class="describe">  微言Talk是一个互联网知识分享共享平台，把具有共同属性的用户聚集起来并提供互动服务的线上平台和线下平台的综合平台。着重提供更多高效高品质的线下活动，致力为平台用户提供全新高效的学习交流、思维碰撞、融合创新的机会</view>
+  <!--button class="button button-square button-tiny" @tap="enter"/-->
 </template>
+
 <script>
   import wepy from 'wepy'
 
@@ -60,6 +62,27 @@
       usingComponents: {
       }
     }
-    methods = {}
+    methods = {
+      /* enter(e) {
+        // 查看是否授权
+        wx.getSetting({
+          success (res) {
+            if (res.authSetting['scope.userInfo']) {
+              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+              wx.getUserInfo({
+                success: function(res) {
+                  console.log(res.userInfo)
+                },
+                fail: function () {
+                  wx.openSetting({})
+                }
+              })
+            } else {
+              wx.openSetting({})
+            }
+          }
+        })
+      } */
+    }
   }
 </script>

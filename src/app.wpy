@@ -59,7 +59,8 @@ export default class extends wepy.app {
       'pages/parter/adminSub',
       'pages/parter/face',
       'pages/common/help',
-      'pages/common/about'
+      'pages/common/about',
+      'pages/login'
     ],
     window: {
       backgroundTextStyle: 'dark',
@@ -113,35 +114,32 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    var that = this
-    wx.login({
-      success: function (res) {
-        if (res.code) {
-          wepy.request({
-            url: 'https://api.sharing-knowledge.club/tokens/' + res.code,
-            method: 'POST',
-            data: {
-              'avatarUrl': 'string',
-              'city': 'string',
-              'country': 'string',
-              'gender': 0,
-              'language': 'string',
-              'nickName': 'string',
-              'province': 'string'
-            }
-          })
-            .then(data => {
-              if ((data.statusCode === 200 && data.statusCode < 300) || data.statusCode === 304) {
-                if (data.data.success) {
-                  wx.setStorageSync('Authorization', 'Bearer ' + data.data.data.accessToken)
-                  wx.setStorageSync('ksUser', data.data.data.ksUser)
-                  // that.globalData.ksUser = data.data.data.ksUser
-                }
-              }
+    /* var that = this
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            wepy.request({
+              url: 'https://api.sharing-knowledge.club/tokens/' + res.code,
+              method: 'POST',
+              data: userInfo
             })
+              .then(data => {
+                if ((data.statusCode === 200 && data.statusCode < 300) || data.statusCode === 304) {
+                  if (data.data.success) {
+                    wx.setStorageSync('Authorization', 'Bearer ' + data.data.data.accessToken)
+                    wx.setStorageSync('ksUser', data.data.data.ksUser)
+                    // that.globalData.ksUser = data.data.data.ksUser
+                  }
+                }
+              })
+          }
         }
-      }
-    })
+      })
+    } else {
+      console.log('该用户首次使用/清除了缓存')
+    } */
   }
 
   sleep (s) {

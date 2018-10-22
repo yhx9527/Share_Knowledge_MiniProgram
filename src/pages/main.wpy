@@ -86,6 +86,7 @@
   /* global wx */
   // import { $Message } from '../utils/base'
   const { $Message } = require('../utils/base/index')
+  const aop = require('../utils/intercept')
 
   export default class Main extends wepy.page {
     config={
@@ -118,6 +119,10 @@
         console.log(this)
       },
       release() {
+        // console.log(this.methods.release_b)
+        aop.before(this.methods.release_b, this)
+      },
+      release_b() {
         let that = this
         let ksUser = wx.getStorageSync('ksUser')
         let ifInfo = this.$parent.doData.doInfo(ksUser)
@@ -139,6 +144,9 @@
         this.$navigate('./forms/search')
       },
       enterFace() {
+        aop.before(this.methods.enterFace_b, this)
+      },
+      enterFace_b() {
         let ksUser = wx.getStorageSync('ksUser')
         this.$navigate('./parter/face', {kuId: ksUser.kuId})
       },
@@ -174,31 +182,28 @@
     }
     onReady() {
       var that = this
-      wx.login({
-        success: function (res) {
-          if (res.code) {
-            that.$parent.apis.postcode(res.code, {
-              'avatarUrl': 'string',
-              'city': 'string',
-              'country': 'string',
-              'gender': 0,
-              'language': 'string',
-              'nickName': 'string',
-              'province': 'string'
+      aop.getUserInfo()
+        .then(data => {
+          if (data) {
+            wx.login({
+              success: function (res) {
+                if (res.code) {
+                  that.$parent.apis.postcode(res.code, data)
+                    .then(data => {
+                      that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
+                      that.$parent.globalData.ksUser = data.data.ksUser
+                      wx.setStorageSync('ksUser', data.data.ksUser)
+                      // console.log(data)
+                    })
+                }
+              },
+              fail: function () {
+                wx.hideLoading()
+                wx.showToast({title: '联网失败', icon: 'none'})
+              }
             })
-              .then(data => {
-                that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
-                that.$parent.globalData.ksUser = data.data.ksUser
-                wx.setStorageSync('ksUser', data.data.ksUser)
-                // console.log(data)
-              })
           }
-        },
-        fail: function () {
-          wx.hideLoading()
-          wx.showToast({title: '联网失败', icon: 'none'})
-        }
-      })
+        })
     }
    /* onPageScroll(scrollTop) {
       console.log(scrollTop)

@@ -30,7 +30,7 @@
 </style>
 <template>
   <view class="button-large-wrap" hover-class="animated infinite bounceOut">
-    <wxc-button bindgetuserinfo="getuserinfo" plain="{{true}}" size="large" type="success" value="进入微言"
+    <wxc-button bindgetuserinfo="getuserinfo" plain="{{true}}" size="large" type="success" value="点击进行授权"
                 btn-style="background-color:#f6f8f9;width:60vw;border:1px solid #55efc4;color:#55efc4;box-shadow:0px 0px 3px #55efc4;"
                 open-type="getUserInfo"></wxc-button>
   </view>
@@ -50,29 +50,21 @@
       getuserinfo (e) {
         let userInfo = e.detail.userInfo
         var that = this
-        wx.showLoading({title: '正在进入...', mask: true})
         if (userInfo) {
-          this.$parent.globalData.userInfo = userInfo
+          wx.showLoading({title: '授权进行中...', mask: true})
+          // this.$parent.globalData.userInfo = userInfo
           wx.setStorageSync('userInfo', userInfo)
           wx.login({
             success: function (res) {
               if (res.code) {
                 wx.hideLoading()
-                wepy.switchTab({url: './main'})
-                that.$parent.apis.postcode(res.code, {
-                  'avatarUrl': 'string',
-                  'city': 'string',
-                  'country': 'string',
-                  'gender': 0,
-                  'language': 'string',
-                  'nickName': 'string',
-                  'province': 'string'
-                })
+                wx.navigateBack({delta: 1})
+               // wepy.switchTab({url: './main'})
+                that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
                     that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
                     that.$parent.globalData.ksUser = data.data.ksUser
                     wx.setStorageSync('ksUser', data.data.ksUser)
-                    console.log(data)
                   })
               }
             },
@@ -82,7 +74,7 @@
             }
           })
         } else {
-          wx.showToast({title: '用户资料未加载，请重试', icon: 'none'})
+          wx.showToast({title: '请授权以体验更多功能', icon: 'none'})
         }
       }
     }
@@ -91,7 +83,7 @@
       if (res.from === 'menu') {
         return {
           title: '这个小程序真好',
-          path: '/pages/login',
+          path: '/pages/main',
           success: function () {
             console.log('menu转发成功')
           }
