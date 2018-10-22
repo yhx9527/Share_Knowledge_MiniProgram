@@ -50,7 +50,7 @@
   <view class="subCon" wx:if="{{current === 0 ? true : false}}">
     <view class="input-wrap">
       <wxc-input type="text" title="主讲人" placeholder="{{ksUser.kuName}}" disabled="{{ true }}"></wxc-input>
-      <wxc-input type="text" title="标题" placeholder="请输入演讲标题" value="{{ksSubject.ksTitle}}" bind:input="onBlur" data-name="ksTitle" label="{{ true }}"></wxc-input>
+      <wxc-input type="text" title="标题" placeholder="请输入演讲标题" value="{{ksSubject.ksTitle}}" maxlength="30"bind:input="onBlur" data-name="ksTitle" label="{{ true }}"></wxc-input>
       <wxc-input type="text" title="类型" placeholder="请选择主题类型" disabled="{{ true }}" arrow="{{ true }}" value="{{ksTypeName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
       <wxc-input type="text" title="摘要" placeholder="请输入主题摘要(关键字)" value="{{ksSubject.ksAbstract}}" bind:input="onBlur" data-name="ksAbstract" label="{{ true }}"></wxc-input>
       <yhx-textarea type="text" title="内容" placeholder="请输入主讲内容" value="{{ksSubject.ksContent}}" bind:input="onBlur" data-name="ksContent" label="{{ true }}"></yhx-textarea>

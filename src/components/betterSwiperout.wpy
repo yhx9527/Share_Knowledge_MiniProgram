@@ -43,10 +43,13 @@
   .i-swipeout-des{
     margin-left:10px;
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .i-swipeout-des-detail{
     font-size:12px;
     color:#80848f;
+
   }
 
 

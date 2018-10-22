@@ -53,7 +53,7 @@
         <wxc-avatar class="avatar1" src="{{item.ksUser.kuHeadImgUrl}}" @tap="enterFace" data-kuId="{{item.kuId}}"></wxc-avatar>
         <view class="flex-column comment-content">
           <text class="nick">{{item.ksUser.kuName}}</text>
-          <wxc-elip line="3">{{item.kcContent}}</wxc-elip>
+          <wxc-elip line="18">{{item.kcContent}}</wxc-elip>
         </view>
       </view>
     </repeat>
