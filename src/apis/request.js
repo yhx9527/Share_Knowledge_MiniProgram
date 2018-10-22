@@ -7,7 +7,7 @@ const METHOD = {
   DELETE: 'DELETE',
   PATCH: 'PATCH'
 }
-var auth = wx.getStorageSync('Authorization')
+// var auth = wx.getStorageSync('Authorization')
 class Request {
   errorhandle(data) {
     var that = this
@@ -63,7 +63,7 @@ class Request {
     this._header = {
       token: null,
       'Content-Type': 'application/json',
-      'Authorization': auth
+      'Authorization': ''
     }
     this._baseUrl = 'https://api.sharing-knowledge.club/'
   }

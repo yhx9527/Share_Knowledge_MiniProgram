@@ -235,6 +235,9 @@
         this.$navigate('./forms/info')
       },
       enterPart(e) {
+        aop.before(this.methods.enterPart_b, this, e)
+      },
+      enterPart_b(e) {
         let type = e.currentTarget.dataset.type
         switch (type) {
           case '2':
