@@ -67,6 +67,14 @@
   .spin{
     color:#6c5ce7 !important;
   }
+  .i-swipeout-des-h2{
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .i-swipeout-des-detail{
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
 <template>
   <i-swipeout  i-class="i-swipeout-demo-item" operateWidth="{{!ifEnd ? 210 : 70}}" unclosable="{{true}}" toggle="{{toggle}}">
