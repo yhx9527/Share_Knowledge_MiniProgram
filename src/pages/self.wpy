@@ -275,7 +275,7 @@
               }
             })
           })
-          reject(1)
+          reject(new Error('no update'))
         })
           .then((data) => {
           })

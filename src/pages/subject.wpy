@@ -219,6 +219,9 @@
         }
       },
       enterFace() {
+        aop.before(this.methods.enterFace_b, this)
+      },
+      enterFace_b() {
         this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
       }
     }
@@ -337,7 +340,9 @@
 
     events = {
       'tellwhich': function (type) {
-        aop.before(this.events.tellwhich_b, this, type)
+        if (type !== 'share') {
+          aop.before(this.events.tellwhich_b, this, type)
+        }
       },
       'tellwhich_b': function (type) {
         var that = this

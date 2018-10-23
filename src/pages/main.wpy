@@ -6,8 +6,8 @@
     width: 100%;
     height: 90rpx;
     color: #fff;
-    background-color: @mainC;
-    border-bottom: 1px solid @mainC;
+    background-color: #55efc4;
+    border-bottom: 1px solid #55efc4;
   }
   .search-location {
     height:70rpx;
@@ -166,7 +166,7 @@
     }
     onLoad() {
       var that = this
-      this.userInfo = this.$parent.globalData.userInfo
+      this.userInfo = wx.getStorageSync('userInfo')
       this.fresh()
         .then(data => {
           that.ifspin = false
