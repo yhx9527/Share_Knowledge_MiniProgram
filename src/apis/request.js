@@ -7,7 +7,7 @@ const METHOD = {
   DELETE: 'DELETE',
   PATCH: 'PATCH'
 }
-// var auth = wx.getStorageSync('Authorization')
+var auth = wx.getStorageSync('Authorization')
 class Request {
   errorhandle(data) {
     var that = this
@@ -63,7 +63,7 @@ class Request {
     this._header = {
       token: null,
       'Content-Type': 'application/json',
-      'Authorization': ''
+      'Authorization': auth
     }
     this._baseUrl = 'https://api.sharing-knowledge.club/'
   }
@@ -84,8 +84,8 @@ class Request {
         if ((data.statusCode === 200 && data.statusCode < 300) || data.statusCode === 304) {
           resolve(data.data)
         } else {
-          reject(data)
           this.errorhandle(data)
+          reject(data)
         }
       })
     })
