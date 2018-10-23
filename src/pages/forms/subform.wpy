@@ -190,23 +190,34 @@
           }
         }
         if (this.current === 3) {
-          wx.showLoading({title: '发布中...', mask: true})
-          this.$parent.apis.postsubject(this.ksSubject)
-            .then(data => {
-              wx.hideLoading()
-              if (data.success) {
-                wx.showToast({title: '发布成功'})
-                setTimeout(function () {
-                  wx.redirectTo({url: '../parter/subjectRec'})
-                }, 1000)
-              } else {
-                wx.showModal({title: '提示', content: data.message})
-              }
-            })
-            .catch(data => {
-              wx.hideLoading()
-              console.log(JSON.stringify(data, undefined, '\t'))
-            })
+          let timeFlag = this.$parent.doData.checkRightTime(this.data.ksSubject, 'ksStartTime', 'ksEndTime')
+          if (timeFlag === 2) {
+            wx.showLoading({title: '发布中...', mask: true})
+            this.$parent.apis.postsubject(this.ksSubject)
+              .then(data => {
+                wx.hideLoading()
+                if (data.success) {
+                  wx.showToast({title: '发布成功'})
+                  setTimeout(function () {
+                    wx.redirectTo({url: '../parter/subjectRec'})
+                  }, 1000)
+                } else {
+                  wx.showModal({title: '提示', content: data.message})
+                }
+              })
+              .catch(data => {
+                wx.hideLoading()
+                wx.showToast({
+                  title: '服务器错误',
+                  icon: 'none'
+                })
+                console.log(JSON.stringify(data, undefined, '\t'))
+              })
+          } else if (timeFlag === 1) {
+            wx.showToast({title: '主题时长至少20分钟', icon: 'none'})
+          } else if (timeFlag === 0) {
+            wx.showToast({title: '主题至少提前6个小时发布', icon: 'none', duration: 2300})
+          }
           console.log(this.ksSubject)
         }
       },

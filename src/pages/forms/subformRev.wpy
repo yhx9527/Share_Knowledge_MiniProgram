@@ -137,27 +137,34 @@
         let arr = ['ksTitle', 'ksAbstract', 'ksType', 'ksContent', 'ksEnrollLimit', 'ksEnrollMinLimit', 'ksPartLimit', 'kbId', 'ksStartTime', 'ksEndTime']
         if (this.$parent.doData.checkEmpty(this.data.ksSubject, arr)) {
           if (this.$parent.doData.checkRightNum1(this.data.ksSubject, 'ksEnrollLimit', 'ksEnrollMinLimit')) {
-            wx.showLoading({title: '修改中...', mask: true})
-            this.$parent.apis.putsubjectmore(this.ksId, this.ksSubject)
-              .then(data => {
-                wx.hideLoading()
-                if (data.success) {
-                  wx.showToast({title: '修改成功'})
-                  wx.setStorageSync('reviceTemp', {ksTitle: data.data.ksTitle, index: that.index})
-                  setTimeout(function () {
-                    console.log(that)
-                    wx.navigateBack({delta: 1})
-                  }, 1000)
-                } else {
-                  wx.showModal({title: '提示', content: data.message})
-                }
-              })
-              .catch(data => {
-                wx.hideLoading()
-                /* if (data.statusCode === 400) {
-                  wx.showToast({title: '主题时间设置有误', icon: 'none'})
-                } */
-              })
+            let timeFlag = this.$parent.doData.checkRightTime(this.data.ksSubject, 'ksStartTime', 'ksEndTime')
+            if (timeFlag === 2) {
+              wx.showLoading({title: '修改中...', mask: true})
+              this.$parent.apis.putsubjectmore(this.ksId, this.ksSubject)
+                .then(data => {
+                  wx.hideLoading()
+                  if (data.success) {
+                    wx.showToast({title: '修改成功'})
+                    wx.setStorageSync('reviceTemp', {ksTitle: data.data.ksTitle, index: that.index})
+                    setTimeout(function () {
+                      console.log(that)
+                      wx.navigateBack({delta: 1})
+                    }, 1000)
+                  } else {
+                    wx.showModal({title: '提示', content: data.message})
+                  }
+                })
+                .catch(data => {
+                  wx.hideLoading()
+                  /* if (data.statusCode === 400) {
+                    wx.showToast({title: '主题时间设置有误', icon: 'none'})
+                  } */
+                })
+            } else if (timeFlag === 1) {
+              wx.showToast({title: '主题时长至少20分钟', icon: 'none'})
+            } else if (timeFlag === 0) {
+              wx.showToast({title: '主题至少提前6个小时发布', icon: 'none', duration: 2300})
+            }
             console.log(this.ksSubject)
           } else {
             wx.showModal({

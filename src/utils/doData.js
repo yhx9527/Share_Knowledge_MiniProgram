@@ -113,4 +113,21 @@ export default class {
     let flag = form[max] >= form[min] && form[max] > 0
     return flag
   }
+  checkRightTime(form, start, end) {
+    let date1 = new Date(Date.parse(form[start]))
+    let temp1 = date1.getTime() + date1.getTimezoneOffset() * 60000
+    let date2 = new Date(Date.parse(form[end]))
+    let temp2 = date2.getTime() + date2.getTimezoneOffset() * 60000
+    let now = Date.now() + 6 * 60 * 60000
+    console.log(new Date(now).toLocaleString())
+    console.log(new Date(temp1).toLocaleString())
+    console.log(now, temp1, temp2)
+    if (now <= temp1) {
+      if (temp2 - temp1 >= 20 * 60000) {
+        return 2
+      }
+      return 1
+    }
+    return 0
+  }
 }

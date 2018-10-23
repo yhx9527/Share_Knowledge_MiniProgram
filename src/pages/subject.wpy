@@ -258,7 +258,7 @@
 
     onLoad(params, data) {
       this.ksId = params.ksId
-      let ksUser = wx.getStorageSync('ksUser')
+      let ksUser = wx.getStorageSync('ksUser') || {}
       this.fresh(params.ksId, ksUser.kuId)
       this.loadComments()
       this.ksUser = ksUser
