@@ -119,5 +119,12 @@ class Apis {
   getdictcode(type) {
     return this._request.get('dictionaries/' + type)
   }
+
+  /**
+   * wx-controller
+   */
+  getwxcode(ksId) {
+    return this._request.get('subjects/' + ksId + '/WXACode')
+  }
 }
 export default new Apis()
