@@ -1,2 +1,3 @@
 dist/*
 wx
+src/utils/bytes.js

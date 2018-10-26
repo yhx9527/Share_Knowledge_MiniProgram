@@ -14,6 +14,7 @@
     <repeat for="{{listing}}" key="index" index="index" item="item">
       <YhxSwiperout :ifEnd.sync="ifEnd" :listitem.sync="item" :index="index" btn1="删除"></YhxSwiperout>
     </repeat>
+    <FashionBorder></FashionBorder>
   </view>
   <view wx:if="{{current === 'ed'}}">
     <repeat for="{{listed}}" key="ksId" index="index" item="item">
@@ -26,6 +27,7 @@
   import wepy from 'wepy'
   import BigTitle from '../../components/bigTitle'
   import YhxSwiperout from '../../components/yhx-swiperout'
+  import FashionBorder from '../../components/fashionBorder'
   /* global wx */
   export default class SubjectRec extends wepy.page {
     config={
@@ -37,14 +39,16 @@
         'i-swipeout': '../../packages/other/swipeout/',
         'i-icon': '../../packages/other/icon/',
         'wxc-loadmore': '../../packages/@minui/wxc-loadmore/dist/index',
-        'i-notice-bar': '../../packages/other/notice-bar/'
+        'i-notice-bar': '../../packages/other/notice-bar/',
+        'wxc-panel': '../../packages/@minui/wxc-panel/dist/index'
       },
       onReachBottomDistance: 100
     }
     components = {
       bigTitle: BigTitle,
       YhxSwiperout: YhxSwiperout,
-      YhxSwiperout1: YhxSwiperout
+      YhxSwiperout1: YhxSwiperout,
+      FashionBorder: FashionBorder
     }
     data = {
       current: 'ing',

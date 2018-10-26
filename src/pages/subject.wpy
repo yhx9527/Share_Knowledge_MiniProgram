@@ -124,6 +124,7 @@
   </i-panel>
   <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
   <view class="blank"></view>
+  <image src="{{codeImg}}"></image>
   <form bindsubmit="sendComment">
     <view class="input-wrap">
       <wxc-input type="text"
@@ -180,7 +181,8 @@
       page: 1,
       ifLc: false,
       commentContent: '',
-      ksUser: {}
+      ksUser: {},
+      codeImg: ''
     }
     methods = {
       enterJoinMenu() {
@@ -433,7 +435,12 @@
 
             break
           case 'spread':
-
+            that.$parent.apis.getwxcode(that.subject.ksId)
+              .then(data => {
+                // that.codeImg = base64.decode(data.data)
+                that.codeImg = 'data:image/png;base64,' + data.data
+                that.$apply()
+              })
             break
         }
       },

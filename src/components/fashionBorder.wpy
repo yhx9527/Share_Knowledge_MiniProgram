@@ -1,0 +1,56 @@
+<style type="less" scoped>
+  .content {
+    padding:10rpx;
+    font-size:14px;
+    color:#636e72;
+  }
+  .fashionBorder{
+    box-shadow: 0 10px 10px -10px #2d3436;
+    margin: 10px 15px;
+    background: #f6f8f9
+  }
+  .bars{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    background:white;
+    font-size:14px;
+    color:#2d3436;
+
+  }
+  .bar{
+    width: 33%;
+    padding: 5px 0px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+  }
+  .bar:hover{
+    background-color: #f6f8f9;
+  }
+</style>
+<template>
+    <view class="fashionBorder" @tap="onClick">
+      <wxc-panel title="{{singleSub.ksTitle}}我是标题">
+        <view class="content">报名: {{singleSub.ksEnrollNum}}/{{singleSub.ksEnrollLimit}} || 参讲: {{singleSub.ksPartNum}}/{{singleSub.ksPartLimit}} || 地点: {{singleSub.ksBusiness.kbName}}</view>
+        <view class="content">时间: {{singleSub.ksStartTime}}--{{singleSub.ksEndTime}}</view>
+      </wxc-panel>
+      <view class="bars">
+        <view class="bar"><i class="iconfont icon-alter_delete"></i>删除</view>
+        <view class="bar"><i class="iconfont icon-jiesu"></i>结束</view>
+        <view class="bar"><i class="iconfont icon-bianji"></i>修改</view>
+      </view>
+    </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class FashionBorder extends wepy.component {
+    props = {
+    }
+    data = {
+    }
+    methods = {
+    }
+  }
+</script>
