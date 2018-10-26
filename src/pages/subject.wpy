@@ -129,6 +129,7 @@
       <wxc-input type="text"
                  icon="message"
                  placeholder="我也来说一句"
+                 adjustPosition = "{{ true }}"
                  i-class="commentInput"
                  name="comment"
                  value="{{commentContent}}"
@@ -260,7 +261,8 @@
     }
 
     onLoad(params, data) {
-      this.ksId = params.ksId
+      console.log(decodeURIComponent(params.scene))
+      this.ksId = params.ksId || decodeURIComponent(params.scene)
       let ksUser = wx.getStorageSync('ksUser') || {}
       this.fresh(params.ksId, ksUser.kuId)
       this.loadComments()
@@ -348,70 +350,89 @@
         var that = this
         switch (type) {
           case 'enroll':
-            wx.showModal({
-              title: '提示',
-              content: '报名倾听该主题演讲',
-              success: function (res) {
-                if (res.confirm) {
-                  that.$parent.apis.postsign(that.ksId)
-                    .then(data => {
-                      if (data.success === true) {
-                        that.enroll = 2
-                        that.$apply()
-                        wx.showToast({
-                          title: '报名成功'
-                        })
-                      } else {
-                        wx.showToast({
-                          title: '报名失败'
-                        })
-                      }
-                    })
-                    .catch(data => {
-                     /* if (data.statusCode === 400) {
-                        wx.showToast({
-                          title: '您已报名了',
-                          icon: 'none'
-                        })
-                      } */
-                    })
+            if (that.enroll > 0) {
+              that.$parent.apis.deletesign(that.subject.ksId, that.subject.myKeId)
+                .then(data => {
+                  if (data.success) {
+                    that.fresh(that.subject.ksId, that.ksUser.kuId)
+                    wx.showToast({title: '取消成功'})
+                  }
+                })
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '报名倾听该主题演讲',
+                success: function (res) {
+                  if (res.confirm) {
+                    that.$parent.apis.postsign(that.ksId)
+                      .then(data => {
+                        if (data.success === true) {
+                          that.fresh(that.subject.ksId, that.ksUser.kuId)
+                          /* that.enroll = 2
+                          that.$apply() */
+                          wx.showToast({
+                            title: '报名成功'
+                          })
+                        } else {
+                          wx.showToast({
+                            title: '报名失败'
+                          })
+                        }
+                      })
+                      .catch(data => {
+                      })
+                  }
                 }
-              }
-            })
+              })
+            }
             break
           case 'join':
-            wx.showModal({
-              title: '提示',
-              content: '参与该主题的演讲，报名后需经主讲人审核',
-              success: function (res) {
-                if (res.confirm) {
-                  that.$parent.apis.postparty(that.ksId)
-                    .then(data => {
-                      if (data.success === true) {
-                        that.park = 1
-                        that.$apply()
-                        wx.showToast({
-                          title: '申请中'
-                        })
-                      } else {
-                        wx.showToast({
-                          title: '申请失败'
-                        })
-                      }
-                    })
-                    .catch(data => {
-                      /* if (data.statusCode === 400) {
-                        wx.showToast({
-                          title: data.data.message,
-                          icon: 'none'
-                        })
-                      } */
-                    })
+            if (that.park > 0) {
+              that.$parent.apis.deleteparty(that.subject.ksId, that.subject.myKpId)
+                .then(data => {
+                  if (data.success) {
+                    that.fresh(that.subject.ksId, that.ksUser.kuId)
+                    wx.showToast({title: '取消成功'})
+                  }
+                })
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '参与该主题的演讲，报名后需经主讲人审核',
+                success: function (res) {
+                  if (res.confirm) {
+                    that.$parent.apis.postparty(that.ksId)
+                      .then(data => {
+                        if (data.success === true) {
+                          /* that.park = 1
+                          that.$apply() */
+                          that.fresh(that.subject.ksId, that.ksUser.kuId)
+                          wx.showToast({
+                            title: '申请中'
+                          })
+                        } else {
+                          wx.showToast({
+                            title: '申请失败'
+                          })
+                        }
+                      })
+                      .catch(data => {
+                        /* if (data.statusCode === 400) {
+                          wx.showToast({
+                            title: data.data.message,
+                            icon: 'none'
+                          })
+                        } */
+                      })
+                  }
                 }
-              }
-            })
+              })
+            }
             break
           case 'share':
+
+            break
+          case 'spread':
 
             break
         }

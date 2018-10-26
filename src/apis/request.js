@@ -70,7 +70,6 @@ class Request {
 
   request(params) {
     const { url, method, header, data } = params
-
     return wepy.request({
       url: (this._baseUrl || '') + url,
       method: method || METHOD.GET,
@@ -88,6 +87,8 @@ class Request {
           reject(data)
         }
       })
+    }, data => {
+      wepy.showToast({title: '连接断了哦请重试', icon: 'none'})
     })
   }
   get(url, data, header = this._header) {

@@ -5,12 +5,14 @@
 </style>
 <template>
   <bigTitle title="参与名单" icontype="icon-renyuan"></bigTitle>
+  <view style="margin-bottom:15px;">
   <repeat for="{{menu}}" key="ksId" index="index" item="item">
     <i-card i-class="menuCard" title="{{item.ksUser.kuName}}" extra="联系方式:{{item.ksUser.kuPhone || '未知'}}" thumb="{{item.ksUser.kuHeadImgUrl}}" @tap="enterFace" data-kuid="{{item.kuId}}">
       <view slot="content">公司: {{item.ksUser.kuCompany || '未知'}}</view>
-      <view slot="footer">个人介绍: {{item.ksUser.kuIntro || '神秘人'}}</view>
+      <view slot="footer">个人介绍: {{item.ksUser.kuIntro || '无'}}</view>
     </i-card>
   </repeat>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'

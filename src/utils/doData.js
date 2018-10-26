@@ -82,11 +82,13 @@ export default class {
     subject.ksEnrollList.forEach(item => {
       if (item.kuId === kuId) {
         subject.enroll = item.keStatus ? 2 : 1
+        subject.myKeId = item.keId
       }
     })
     subject.ksPartakeList.forEach(item => {
       if (item.kuId === kuId) {
         subject.park = item.kpStatus ? 2 : 1
+        subject.myKpId = item.kpId
       }
     })
     return subject
@@ -102,16 +104,28 @@ export default class {
       return form[item] !== ''
     })
   }
-  checkRightNum(form, max, min, cur) {
+  checkRightNum(form, max, min, join, cur) {
     if (cur !== 1) {
-      return true
+      return 2
     }
-    let flag = form[max] >= form[min] && form[max] > 0
-    return flag
+    // let flag = form[max] >= form[min] && form[max] > 0
+    if (form[min] >= 0 && form[max] >= form[min] && form[max] > 0) {
+      if (form[join] >= 0 && form[join] <= 100) {
+        return 2
+      }
+      return 1
+    }
+    return 0
   }
-  checkRightNum1(form, max, min) {
-    let flag = form[max] >= form[min] && form[max] > 0
-    return flag
+  checkRightNum1(form, max, min, join) {
+    // let flag = form[max] >= form[min] && form[max] > 0
+    if (form[min] >= 0 && form[max] >= form[min] && form[max] > 0) {
+      if (form[join] >= 0 && form[join] <= 100) {
+        return 2
+      }
+      return 1
+    }
+    return 0
   }
   checkRightTime(form, start, end) {
     let date1 = new Date(Date.parse(form[start]))

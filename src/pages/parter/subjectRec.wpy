@@ -2,9 +2,9 @@
 
 </style>
 <template>
-  <i-notice-bar icon="message" closable color='#0984e3' background-color='#74b9ff'>
+  <!--i-notice-bar icon="message" closable color='#0984e3' background-color='#74b9ff'>
     tip：可滑动组件进行相关操作
-  </i-notice-bar>
+  </i-notice-bar-->
   <bigTitle title="主讲记录" icontype="icon-jilu"></bigTitle>
   <i-tabs current="{{ current }}" bindchange="handleChange">
     <i-tab key="ing" title="进行中"></i-tab>

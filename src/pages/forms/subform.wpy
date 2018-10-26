@@ -52,8 +52,8 @@
       <wxc-input type="text" title="主讲人" placeholder="{{ksUser.kuName}}" disabled="{{ true }}"></wxc-input>
       <wxc-input type="text" title="标题" placeholder="请输入演讲标题" value="{{ksSubject.ksTitle}}" maxlength="30"bind:input="onBlur" data-name="ksTitle" label="{{ true }}"></wxc-input>
       <wxc-input type="text" title="类型" placeholder="请选择主题类型" disabled="{{ true }}" arrow="{{ true }}" value="{{ksTypeName}}" label="{{ true }}" bind:tap="toggleRight"></wxc-input>
-      <wxc-input type="text" title="摘要" placeholder="请输入主题摘要(关键字)" value="{{ksSubject.ksAbstract}}" bind:input="onBlur" data-name="ksAbstract" label="{{ true }}"></wxc-input>
-      <yhx-textarea type="text" title="内容" placeholder="请输入主讲内容" value="{{ksSubject.ksContent}}" bind:input="onBlur" data-name="ksContent" label="{{ true }}"></yhx-textarea>
+      <wxc-input type="text" title="摘要" placeholder="请输入主题摘要(关键字)" value="{{ksSubject.ksAbstract}}" maxlength="200"bind:input="onBlur" data-name="ksAbstract" label="{{ true }}"></wxc-input>
+      <yhx-textarea show="{{show}}" type="text" title="内容" placeholder="请输入主讲内容" value="{{ksSubject.ksContent}}" maxlength="2000"bind:input="onBlur" data-name="ksContent" label="{{ true }}"></yhx-textarea>
     </view>
   </view>
   <view class="subCon" wx:if="{{current === 1 ? true : false}}">
@@ -61,7 +61,7 @@
       <wxc-input type="number" title="最多报名" placeholder="报名人数上限" value="{{ksSubject.ksEnrollLimit}}" bind:input="onBlur" data-name="ksEnrollLimit" label="{{ true }}"></wxc-input>
       <wxc-input type="number" title="最少报名" placeholder="报名人数下限" value="{{ksSubject.ksEnrollMinLimit}}" bind:input="onBlur" data-name="ksEnrollMinLimit" label="{{ true }}"></wxc-input>
       <wxc-input type="number" title="参讲人数" placeholder="和您一同演讲的人数" value="{{ksSubject.ksPartLimit}}" bind:input="onBlur" data-name="ksPartLimit" label="{{ true }}"></wxc-input>
-      <yhx-textarea type="text" title="备注" placeholder="有其他需求请备注" value="{{ksSubject.ksRemark}}" bind:input="onBlur" data-name="ksRemark"></yhx-textarea>
+      <yhx-textarea show="{{show}}" type="text" title="备注" placeholder="有其他需求请备注" maxlength="200"value="{{ksSubject.ksRemark}}" bind:input="onBlur" data-name="ksRemark"></yhx-textarea>
     </view>
   </view>
   <view class="subCon" wx:if="{{current >= 2 ? true : false}}">
@@ -119,6 +119,7 @@
     data = {
       showRight: false,
       showRight1: false,
+      show: true,
       current: 0,
       ksUser: {},
       ksTypeName: '',
@@ -174,12 +175,18 @@
         }
         if (this.current < 3) {
           if (this.$parent.doData.checkEmpty(this.data.ksSubject, map[this.current])) {
-            if (this.$parent.doData.checkRightNum(this.data.ksSubject, 'ksEnrollLimit', 'ksEnrollMinLimit', this.current)) {
+            let signal = this.$parent.doData.checkRightNum(this.data.ksSubject, 'ksEnrollLimit', 'ksEnrollMinLimit', 'ksPartLimit', this.current)
+            if (signal === 2) {
               this.current++
-            } else {
-              wx.showModal({
-                title: '提示',
-                content: '至少需要一人报名且最多报名应大于等于最少报名'
+            } else if (signal === 1) {
+              wx.showToast({
+                title: '参讲人数应在100以内',
+                icon: 'none'
+              })
+            } else if (signal === 0) {
+              wx.showToast({
+                title: '报名人数填写错误',
+                icon: 'none'
               })
             }
           } else {
@@ -207,10 +214,12 @@
               })
               .catch(data => {
                 wx.hideLoading()
-                wx.showToast({
-                  title: '服务器错误',
-                  icon: 'none'
-                })
+                if (data.statusCode === 500) {
+                  wx.showToast({
+                    title: '服务器错误',
+                    icon: 'none'
+                  })
+                }
                 console.log(JSON.stringify(data, undefined, '\t'))
               })
           } else if (timeFlag === 1) {
@@ -227,11 +236,13 @@
     }
     toggleRight(e) {
       this.showRight = !this.showRight
+      this.show = !this.show
       this.flag = false
       this.drawerTitle = '主题类型'
     }
     toggleRight1(e) {
       this.showRight1 = !this.showRight1
+      this.show = !this.show
       this.flag = true
       this.drawerTitle = '商家/地点'
     }
@@ -252,13 +263,14 @@
           this.ksSubject.ksType = e.value
           this.ksTypeName = this.ksTypes[e.value].kddDataName
           this.showRight = false
-          this.$apply()
+          this.show = !this.show
         } else {
           this.ksSubject.kbId = e.value
           this.kbName = this.kbIds[e.index].kbName
           this.showRight1 = false
-          this.$apply()
+          this.show = !this.show
         }
+        this.$apply()
       },
       'dt': function (ksDt, ...arr) {
         if (ksDt === '0') {

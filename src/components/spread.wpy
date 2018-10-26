@@ -1,0 +1,18 @@
+<style type="less">
+
+</style>
+<template>
+
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Spread extends wepy.component {
+    props = {
+    }
+    data = {
+    }
+    methods = {
+    }
+  }
+</script>

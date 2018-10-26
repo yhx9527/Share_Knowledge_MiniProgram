@@ -58,12 +58,12 @@
             success: function (res) {
               if (res.code) {
                 wx.hideLoading()
-                wx.navigateBack({delta: 1})
                // wepy.switchTab({url: './main'})
                 that.$parent.apis.postcode(res.code, userInfo)
                   .then(data => {
                     that.$parent.apis.header = {'Authorization': 'Bearer ' + data.data.accessToken}
                     that.$parent.globalData.ksUser = data.data.ksUser
+                    wx.navigateBack({delta: 1})
                     wx.setStorageSync('ksUser', data.data.ksUser)
                   })
               }

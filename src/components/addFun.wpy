@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="less" scoped>
   /** less **/
   .add-bar{
     position:fixed;
@@ -35,6 +35,10 @@
     line-height: normal;
     font-size: inherit;
   }
+  .btnImg{
+    width: 30px;
+    height: 30px;
+  }
 </style>
 <template>
   <view class="flex-column add-bar">
@@ -50,6 +54,12 @@
       <i class="iconfont icon-share bar-icon"></i>
       分享
     </button>
+    <!--button open-type="spread" class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="share" data-ksid="{{ksId}}" @tap="cmpTell">
+      <i class="iconfont icon-pengyouquan bar-icon"></i>
+    </button-->
+    <view class="flex-column-inline add-item" hover-class="animated infinite bounceIn bar-icon-after" data-type="spread" data-ksid="{{ksId}}" @tap="cmpTell">
+      <image src="/static/images/pengyouquan.png" class="btnImg"></image>
+    </view>
   </view>
 </template>
 <script>
