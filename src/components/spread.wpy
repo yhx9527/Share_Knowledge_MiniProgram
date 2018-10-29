@@ -1,18 +1,194 @@
-<style type="less">
-
+<style type="less" scoped>
+  .canvas-img {
+    width: 300px;
+    height: 400px;
+    margin: auto;
+  }
+  .saveBtn{
+    margin-top: 30px;
+  }
+  .canvas-container{
+    background-color: black;
+    opacity:0.3;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 11;
+  }
+  .wrap{
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 11;
+  }
+  .wrap-content{
+    display: inline-block;
+    position: fixed;
+    z-index: 100;
+    text-align:center;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
 </style>
 <template>
-
+ <!-- <wxc-mask content-align="cc" status="{{maskStatus}}" style="text-align:center;" bind:masktap="hideMask">
+    <canvas canvas-id="img" class="canvas-img"></canvas>
+    <button class="button button-primary button-pill saveBtn">保存分享卡片</button>
+  </wxc-mask>-->
+  <view class="wrap" wx:if="{{ifCanvas}}">
+    <view class="canvas-container" @tap="hide"></view>
+    <view class="wrap-content">
+      <canvas canvas-id="img" class="canvas-img"></canvas>
+      <button class="button button-primary button-pill saveBtn">保存分享卡片</button>
+    </view>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
 
   export default class Spread extends wepy.component {
-    props = {
-    }
-    data = {
+    draw() {
+      console.log('this', this)
+      var ctx = wepy.createCanvasContext('img')
+      ctx.drawImage('/static/images/spreadBack.jpg', 0, 0, 300, 400)
+      ctx.drawImage(this.img, 180, 250, 80, 80)
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(63, 248, 18, 0, 2 * Math.PI)
+      ctx.clip()
+      console.log(this.userInfo.avatarUrl)
+      ctx.drawImage(this.userInfo.avatarUrl, 45, 230, 36, 36)
+      ctx.restore()
+      /* ctx.setFontSize(20)
+      ctx.setFillStyle('#000000')
+      ctx.fillText(this.subject.ksTitle, 45, 80, 300) */
+      ctx.setFontSize(14)
+      ctx.setFillStyle('#2d3436')
+      ctx.fillText('By ' + this.subject.ksUser.kuName, 100, 110, 300)
+      ctx.setFontSize(12)
+      ctx.setFillStyle('#0984e3')
+      ctx.fillText(this.subject.ksStartTime + '开始报名喽', 50, 210, 300)
+      ctx.setFontSize(13)
+      ctx.setFillStyle('#2d3436')
+      ctx.fillText(this.userInfo.nickName, 90, 250, 200)
+      ctx.setFontSize(14)
+      ctx.setFillStyle('#000000')
+      ctx.fillText('朋友们这个主题极好!', 45, 290, 200)
+      ctx.fillText('快来看看(〜￣▽￣)〜', 45, 310, 200)
+      ctx.setFontSize(12)
+      ctx.setFillStyle('#2d3436')
+      ctx.fillText('长按扫码查看详情', 45, 335)
+      this.textWrap(ctx, {
+        x: 45,
+        y: 60,
+        width: 200,
+        height: 30,
+        line: 3,
+        color: '#333333',
+        size: 20,
+        align: 'left',
+        baseline: 'top',
+        text: this.subject.ksTitle,
+        bold: true
+      })
+      this.textWrap(ctx, {
+        x: 55,
+        y: 120,
+        width: 190,
+        height: 20,
+        line: 3,
+        color: '#2d3436',
+        size: 16,
+        align: 'left',
+        baseline: 'top',
+        text: this.subject.ksAbstract,
+        bold: false
+      })
+      ctx.draw()
+      this.ifCanvas = true
+      this.$apply()
     }
     methods = {
+      hide() {
+        this.ifCanvas = false
+        this.$apply()
+      }
+    }
+    props = {
+      subject: {
+        type: Object,
+        default: {}
+      },
+      userInfo: {
+        type: Object,
+        default: {}
+      }
+    }
+    data = {
+      ifCanvas: false,
+      /* subject: {ksTitle: '标题',
+        ksAbstarct: '摘要',
+        ksUser: {kuName: '主讲人', kuHeadImgUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLuT18s8rcmaA3niaMDZrjRAsgJwIRs4hwjg0ykpuafcrYXtszusnqGsaGhiaRAZiaWpc7RANwsauo1Q/132'},
+        ksStartTime: '2018年10月30日 5时20分'},
+      userInfo: {
+        nickName: '余汉祥',
+        avatar: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLuT18s8rcmaA3niaMDZrjRAsgJwIRs4hwjg0ykpuafcrYXtszusnqGsaGhiaRAZiaWpc7RANwsauo1Q/132',
+      }, */
+      img: '',
+      avatarUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLuT18s8rcmaA3niaMDZrjRAsgJwIRs4hwjg0ykpuafcrYXtszusnqGsaGhiaRAZiaWpc7RANwsauo1Q/132',
+    }
+    /**
+     * 渲染文字
+     *
+     * @param {Object} obj
+     */
+    drawText(ctx, obj) {
+      console.log('渲染文字')
+      ctx.save()
+      ctx.setFillStyle(obj.color)
+      ctx.setFontSize(obj.size)
+      ctx.setTextAlign(obj.align)
+      ctx.setTextBaseline(obj.baseline)
+      if (obj.bold) {
+        console.log('字体加粗')
+        ctx.fillText(obj.text, obj.x, obj.y - 0.5)
+        ctx.fillText(obj.text, obj.x - 0.5, obj.y)
+      }
+      ctx.fillText(obj.text, obj.x, obj.y)
+      if (obj.bold) {
+        ctx.fillText(obj.text, obj.x, obj.y + 0.5)
+        ctx.fillText(obj.text, obj.x + 0.5, obj.y)
+      }
+      ctx.restore()
+    }
+    /**
+     * 文本换行
+     *
+     * @param {Object} obj
+     */
+    textWrap(ctx, obj) {
+      console.log('文本换行')
+      var td = Math.ceil(obj.width / (obj.size))
+      var tr = Math.ceil(obj.text.length / td)
+      for (var i = 0; i < tr; i++) {
+        var txt = {
+          x: obj.x,
+          y: obj.y + (i * obj.height),
+          color: obj.color,
+          size: obj.size,
+          align: obj.align,
+          baseline: obj.baseline,
+          text: obj.text.substring(i * td, (i + 1) * td),
+          bold: obj.bold
+        }
+        if (i < obj.line) {
+          if (i === obj.line - 1) {
+            txt.text = txt.text.substring(0, txt.text.length - 3) + '...'
+          }
+          this.drawText(ctx, txt)
+        }
+      }
     }
   }
 </script>

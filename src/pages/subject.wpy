@@ -124,7 +124,6 @@
   </i-panel>
   <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
   <view class="blank"></view>
-  <image src="{{codeImg}}"></image>
   <form bindsubmit="sendComment">
     <view class="input-wrap">
       <wxc-input type="text"
@@ -140,12 +139,14 @@
         <i class="iconfont icon-fabu-2"></i></button>
     </view>
   </form>
+  <spread :subject.sync="subject" :userInfo.sync="userInfo"></spread>
 </template>
 <script>
   import wepy from 'wepy'
   // import Subjecttitle from '../components/subjectTitle'
   import CommentArea from '../components/commentArea'
   import AddFun from '../components/addFun'
+  import spread from '../components/spread'
   const { $Message } = require('../utils/base/index')
   const aop = require('../utils/intercept')
 
@@ -160,6 +161,7 @@
         'wxc-elip': '../packages/@minui/wxc-elip/dist/index',
         'wxc-input': '../packages/@minui/wxc-input/dist/index',
         'wxc-label': '../packages/@minui/wxc-label/dist/index',
+        'wxc-mask': '../packages/@minui/wxc-mask/dist/index',
         'i-message': '../utils/message/index',
         'wxc-loadmore': '../packages/@minui/wxc-loadmore/dist/index'
       },
@@ -168,7 +170,8 @@
     }
     components = {
       commentArea: CommentArea,
-      addFun: AddFun
+      addFun: AddFun,
+      spread: spread
     }
     data = {
       comments: [],
@@ -182,7 +185,10 @@
       ifLc: false,
       commentContent: '',
       ksUser: {},
-      codeImg: ''
+      codeImg: '',
+      maskStatus: 'hide',
+      ifCanvas: false,
+      userInfo: {}
     }
     methods = {
       enterJoinMenu() {
@@ -228,12 +234,6 @@
         this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
       }
     }
-    events = {
-      'enterFace': function (kuId) {
-        this.$navigate('./parter/face', {kuId: kuId})
-      }
-    }
-
     loadComments() {
       var that = this
       that.ifLc = true
@@ -264,11 +264,18 @@
 
     onLoad(params, data) {
       console.log(decodeURIComponent(params.scene))
+      var that = this
       this.ksId = params.ksId || decodeURIComponent(params.scene)
       let ksUser = wx.getStorageSync('ksUser') || {}
       this.fresh(params.ksId, ksUser.kuId)
       this.loadComments()
       this.ksUser = ksUser
+      wx.getStorage({key: 'userInfo',
+        success: function (res) {
+          that.userInfo = res.data
+          that.$apply()
+        }
+      })
       this.$apply()
     }
 
@@ -435,17 +442,23 @@
 
             break
           case 'spread':
+            wepy.showLoading({title: '努力生成中...'})
             that.$parent.apis.getwxcode(that.subject.ksId)
               .then(data => {
-                // that.codeImg = base64.decode(data.data)
-                that.codeImg = 'data:image/png;base64,' + data.data
-                that.$apply()
+                wepy.hideLoading()
+                that.$invoke('spread', 'draw')
               })
+              .catch(data => { wepy.hideLoading() })
             break
         }
       },
       'enterFace': function (kuId) {
         this.$navigate('./parter/face', {kuId: kuId})
+      },
+      'hideMask1': function () {
+        console.log('hh')
+        this.ifCanvas = false
+        this.$apply()
       }
     }
   }

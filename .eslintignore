@@ -1,3 +1,4 @@
 dist/*
 wx
-src/utils/bytes.js
+src/utils/*
+src/components/canvasdrawer.wpy
