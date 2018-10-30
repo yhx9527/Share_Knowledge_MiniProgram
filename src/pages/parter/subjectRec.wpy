@@ -12,9 +12,10 @@
   </i-tabs>
   <view wx:if="{{current === 'ing'}}">
     <repeat for="{{listing}}" key="index" index="index" item="item">
-      <YhxSwiperout :ifEnd.sync="ifEnd" :listitem.sync="item" :index="index" btn1="删除"></YhxSwiperout>
+      <FashionBorder></FashionBorder>
     </repeat>
     <FashionBorder></FashionBorder>
+    <!--YhxSwiperout :ifEnd.sync="ifEnd" :listitem.sync="item" :index="index" btn1="删除"></YhxSwiperout-->
   </view>
   <view wx:if="{{current === 'ed'}}">
     <repeat for="{{listed}}" key="ksId" index="index" item="item">

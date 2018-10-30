@@ -139,7 +139,8 @@
         <i class="iconfont icon-fabu-2"></i></button>
     </view>
   </form>
-  <spread :subject.sync="subject" :userInfo.sync="userInfo"></spread>
+
+  <spread :subject.sync="subject" :userInfo.sync="userInfo" :avatar.sync="avatar" :qrCode.sync="qrCode"></spread>
 </template>
 <script>
   import wepy from 'wepy'
@@ -188,7 +189,9 @@
       codeImg: '',
       maskStatus: 'hide',
       ifCanvas: false,
-      userInfo: {}
+      userInfo: {},
+      avatar: '',
+      qrCode: ''
     }
     methods = {
       enterJoinMenu() {
@@ -263,11 +266,12 @@
     }
 
     onLoad(params, data) {
-      console.log(decodeURIComponent(params.scene))
+      console.log('携带的参数', decodeURIComponent(params.scene))
       var that = this
-      this.ksId = params.ksId || decodeURIComponent(params.scene)
+      let ksId = params.ksId || decodeURIComponent(params.scene)
+      this.ksId = ksId
       let ksUser = wx.getStorageSync('ksUser') || {}
-      this.fresh(params.ksId, ksUser.kuId)
+      this.fresh(ksId, ksUser.kuId)
       this.loadComments()
       this.ksUser = ksUser
       wx.getStorage({key: 'userInfo',
@@ -321,6 +325,17 @@
     }
 
     onReady() {
+      var that = this
+      console.log('监视')
+      wx.getImageInfo({src: that.userInfo.avatarUrl,
+        success: function (res) {
+          that.avatar = res.path
+          that.$apply()
+          console.log('路径', that.avatar)
+        },
+        fail: function (res) {
+          console.log('失败了', res)
+        }})
     }
 
     onShareAppMessage(res) {
@@ -443,22 +458,29 @@
             break
           case 'spread':
             wepy.showLoading({title: '努力生成中...'})
-            that.$parent.apis.getwxcode(that.subject.ksId)
+            /* that.$parent.apis.getwxcode(that.subject.ksId)
               .then(data => {
-                wepy.hideLoading()
-                that.$invoke('spread', 'draw')
+                that.$apply()
               })
-              .catch(data => { wepy.hideLoading() })
+              .catch(data => { wepy.hideLoading() }) */
+            wx.getImageInfo({src: 'https://api.sharing-knowledge.club/subjects/' + that.subject.ksId + '/WXACode',
+              success: function (res) {
+                wepy.hideLoading()
+                that.qrCode = res.path
+                that.$apply()
+                that.$invoke('spread', 'draw')
+                console.log('小程序码路径', res.path)
+              },
+              fail: function (res) {
+                console.log('失败了', res)
+                wepy.hideLoading()
+              }})
+            // wx.downloadFile({url: '', success(res) { console.log('下载', res) }})
             break
         }
       },
       'enterFace': function (kuId) {
         this.$navigate('./parter/face', {kuId: kuId})
-      },
-      'hideMask1': function () {
-        console.log('hh')
-        this.ifCanvas = false
-        this.$apply()
       }
     }
   }

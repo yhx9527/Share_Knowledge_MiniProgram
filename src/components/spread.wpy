@@ -2,7 +2,6 @@
   .canvas-img {
     width: 300px;
     height: 400px;
-    margin: auto;
   }
   .saveBtn{
     margin-top: 30px;
@@ -36,11 +35,11 @@
     <canvas canvas-id="img" class="canvas-img"></canvas>
     <button class="button button-primary button-pill saveBtn">保存分享卡片</button>
   </wxc-mask>-->
-  <view class="wrap" wx:if="{{ifCanvas}}">
+  <view class="wrap" wx:if="{{ifCanvas}}" catchtouchmove="ture">
     <view class="canvas-container" @tap="hide"></view>
     <view class="wrap-content">
       <canvas canvas-id="img" class="canvas-img"></canvas>
-      <button class="button button-primary button-pill saveBtn">保存分享卡片</button>
+      <button class="button button-primary button-pill saveBtn" @tap="saveCard">保存分享卡片</button>
     </view>
   </view>
 </template>
@@ -52,13 +51,13 @@
       console.log('this', this)
       var ctx = wepy.createCanvasContext('img')
       ctx.drawImage('/static/images/spreadBack.jpg', 0, 0, 300, 400)
-      ctx.drawImage(this.img, 180, 250, 80, 80)
+      ctx.drawImage(this.qrCode, 180, 250, 80, 80)
       ctx.save()
       ctx.beginPath()
       ctx.arc(63, 248, 18, 0, 2 * Math.PI)
       ctx.clip()
-      console.log(this.userInfo.avatarUrl)
-      ctx.drawImage(this.userInfo.avatarUrl, 45, 230, 36, 36)
+      console.log('avatar', this.avatar)
+      ctx.drawImage(this.avatar, 45, 230, 36, 36)
       ctx.restore()
       /* ctx.setFontSize(20)
       ctx.setFillStyle('#000000')
@@ -68,7 +67,7 @@
       ctx.fillText('By ' + this.subject.ksUser.kuName, 100, 110, 300)
       ctx.setFontSize(12)
       ctx.setFillStyle('#0984e3')
-      ctx.fillText(this.subject.ksStartTime + '开始报名喽', 50, 210, 300)
+      ctx.fillText(this.subject.ksEnd ? '' : '正在报名哦', 190, 210, 300)
       ctx.setFontSize(13)
       ctx.setFillStyle('#2d3436')
       ctx.fillText(this.userInfo.nickName, 90, 250, 200)
@@ -113,6 +112,43 @@
       hide() {
         this.ifCanvas = false
         this.$apply()
+      },
+      async saveCard() {
+        var that = this
+        let tempfile = await this.getImg()
+        wx.saveImageToPhotosAlbum({
+          filePath: tempfile,
+          success(res) {
+            wx.showModal({
+              title: '提示',
+              content: '保存相册成功，现在可以去分享了哦!',
+              showCancel: false,
+              success: function (res) {
+                that.ifCanvas = false
+                that.$apply()
+              }
+            })
+          },
+          fail: function (res) {
+            console.log('图片保存失败')
+            wx.showModal({title: '提示',
+              content: '请先前往授权保存图片',
+              success: function (res) {
+                if (res.confirm) {
+                  wx.openSetting()
+                }
+              }})
+          }
+        })
+        console.log(tempfile)
+        /* wx.getSetting({
+          success: function (res) {
+            if (res.authSetting['scope.writePhotosAlbum']) {
+            } else {
+              wx.openSetting()
+            }
+          }
+        }) */
       }
     }
     props = {
@@ -123,7 +159,17 @@
       userInfo: {
         type: Object,
         default: {}
+      },
+      avatar: {
+        type: String,
+        default: ''
+      },
+      qrCode: {
+        type: String,
+        default: ''
       }
+    }
+    watch = {
     }
     data = {
       ifCanvas: false,
@@ -137,6 +183,19 @@
       }, */
       img: '',
       avatarUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLuT18s8rcmaA3niaMDZrjRAsgJwIRs4hwjg0ykpuafcrYXtszusnqGsaGhiaRAZiaWpc7RANwsauo1Q/132',
+    }
+    // 导出canvas图片
+    getImg() {
+      return new Promise((resolve, reject) => {
+        wx.canvasToTempFilePath({
+          canvasId: 'img',
+          quality: 1,
+          fileType: 'jpg',
+          success(res) {
+            resolve(res.tempFilePath)
+          }
+        })
+      })
     }
     /**
      * 渲染文字
