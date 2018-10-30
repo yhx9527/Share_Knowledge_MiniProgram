@@ -106,7 +106,7 @@
       var that = this
       this.ksUser = wx.getStorageSync('ksUser')
       this.ksId = params.ksId
-      this.index = params.index
+      this.index = params.index || ''
       this.$parent.apis.getsubjectmore(params.ksId)
         .then(data => {
           // Object.assign(that.ksSubject, data)
@@ -147,7 +147,20 @@
                   wx.hideLoading()
                   if (data.success) {
                     wx.showToast({title: '修改成功'})
-                    wx.setStorageSync('reviceTemp', {ksTitle: data.data.ksTitle, index: that.index})
+                    let sbTemp = {ksTitle: data.data.ksTitle,
+                      kbName: that.kbName,
+                      ksEnrollNum: data.data.ksEnrollNum,
+                      ksEnrollLimit: data.data.ksEnrollLimit,
+                      ksPartNum: data.data.ksPartNum,
+                      ksPartLimit: data.data.ksPartLimit,
+                      ksStartTime: data.data.ksStartTime,
+                      ksEndTime: data.data.ksEndTime,
+                      index: that.index}
+                    if (that.index) {
+                      wx.setStorageSync('reviceTemp', sbTemp)
+                    } else {
+                      wx.setStorageSync('fromSub', 'yes')
+                    }
                     setTimeout(function () {
                       console.log(that)
                       wx.navigateBack({delta: 1})

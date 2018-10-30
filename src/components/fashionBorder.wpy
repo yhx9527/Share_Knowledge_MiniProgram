@@ -31,14 +31,15 @@
 </style>
 <template>
     <view class="fashionBorder" @tap="onClick">
-      <wxc-panel title="{{singleSub.ksTitle}}我是标题">
-        <view class="content">报名: {{singleSub.ksEnrollNum}}/{{singleSub.ksEnrollLimit}} || 参讲: {{singleSub.ksPartNum}}/{{singleSub.ksPartLimit}} || 地点: {{singleSub.ksBusiness.kbName}}</view>
-        <view class="content">时间: {{singleSub.ksStartTime}}--{{singleSub.ksEndTime}}</view>
+      <wxc-panel title="{{listitem.ksTitle}}" @tap='handleOpen1'>
+        <view class="content">报名: {{listitem.ksEnrollNum}}/{{listitem.ksEnrollLimit}} || 参讲: {{listitem.ksPartNum}}/{{listitem.ksPartLimit}} || 地点: {{listitem.ksBusiness.kbName}}</view>
+        <view class="content">开始于: {{listitem.ksStartTime}}</view>
+        <view class="content">结束于: {{listitem.ksEndTime}}</view>
       </wxc-panel>
       <view class="bars">
-        <view class="bar"><i class="iconfont icon-alter_delete"></i>删除</view>
-        <view class="bar"><i class="iconfont icon-jiesu"></i>结束</view>
-        <view class="bar"><i class="iconfont icon-bianji"></i>修改</view>
+        <view class="bar" bindtap="deleteSub" ><i class="iconfont icon-alter_delete"></i>删除</view>
+        <view class="bar" bindtap="finishSub" ><i class="iconfont icon-jiesu"></i>结束</view>
+        <view class="bar" bindtap="reviseSub" ><i class="iconfont icon-bianji"></i>修改</view>
       </view>
     </view>
 </template>
@@ -47,10 +48,34 @@
 
   export default class FashionBorder extends wepy.component {
     props = {
+      ifEnd: {
+        type: Boolean,
+        default: false
+      },
+      listitem: {
+        type: Object,
+        default: {}
+      },
+      index: {
+        type: Number,
+        default: -1
+      }
     }
     data = {
     }
     methods = {
+      handleOpen1() {
+        this.$emit('subMore', this.listitem.ksId, this.listitem)
+      },
+      deleteSub() {
+        this.$emit('deleteSub', this.listitem.ksId, this.index)
+      },
+      reviseSub() {
+        this.$emit('reviseSub', this.listitem.ksId, this.index)
+      },
+      finishSub() {
+        this.$emit('finishSub', this.listitem.ksId, this.index, this.listitem)
+      }
     }
   }
 </script>

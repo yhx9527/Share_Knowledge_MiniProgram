@@ -10,14 +10,13 @@
     <i-tab key="ing" title="进行中"></i-tab>
     <i-tab key="ed" title="已结束"></i-tab>
   </i-tabs>
-  <view wx:if="{{current === 'ing'}}">
+  <view wx:if="{{current === 'ing'}}" style="overflow-x: hidden;">
     <repeat for="{{listing}}" key="index" index="index" item="item">
-      <FashionBorder></FashionBorder>
+      <FashionBorder :listitem.sync="item" :index="index"></FashionBorder>
     </repeat>
-    <FashionBorder></FashionBorder>
     <!--YhxSwiperout :ifEnd.sync="ifEnd" :listitem.sync="item" :index="index" btn1="删除"></YhxSwiperout-->
   </view>
-  <view wx:if="{{current === 'ed'}}">
+  <view wx:if="{{current === 'ed'}}" style="overflow-x: hidden;">
     <repeat for="{{listed}}" key="ksId" index="index" item="item">
       <YhxSwiperout1 :ifEnd.sync="ifEnd1" :listitem.sync="item" :index.sync="index" btn1="删除"></YhxSwiperout1>
     </repeat>
@@ -72,6 +71,13 @@
         let params = wx.getStorageSync('reviceTemp')
         if (params) {
           this.listing[params.index].ksTitle = params.ksTitle
+          this.listing[params.index].ksEnrollNum = params.ksEnrollNum
+          this.listing[params.index].ksEnrollLimit = params.ksEnrollLimit
+          this.listing[params.index].ksPartNum = params.ksPartNum
+          this.listing[params.index].ksPartLimit = params.ksPartLimit
+          this.listing[params.index].ksStartTime = this.$parent.doData.timeFormat(params.ksStartTime)
+          this.listing[params.index].ksEndTime = this.$parent.doData.timeFormat(params.ksEndTime)
+          this.listing[params.index].ksBusiness.kbName = params.kbName
         }
       } catch (e) {
       }
@@ -92,6 +98,8 @@
             that.ifLoad = false
             data.list.forEach(item => {
               item.addTime = that.$parent.doData.timeFormat(item.addTime)
+              item.ksStartTime = that.$parent.doData.timeFormat(item.ksStartTime)
+              item.ksEndTime = that.$parent.doData.timeFormat(item.ksEndTime)
               if (item.ksEnd) {
                 that.listed.push(item)
               } else {
@@ -115,7 +123,7 @@
     events= {
       'subMore': function (ksId, listitem) {
         // this.$navigate('./adminSub', {singleSub: JSON.stringify(listitem)})
-        this.$navigate('./adminSub', {ksId: ksId})
+        this.$navigate('../subject', {ksId: ksId})
       },
       'deleteSub': function (ksId, index) {
         var that = this

@@ -1,0 +1,95 @@
+<style lang="css">
+  .menuCard{
+    margin-top: 10px !important;
+  }
+  page{
+    background-color: #fffffe;
+  }
+</style>
+<template>
+  <bigTitle title="审核参与" icontype="icon-shenhe"></bigTitle>
+  <view style="margin-bottom:15px;">
+    <repeat for="{{menu}}" key="kpId" index="index" item="item">
+      <CheckCard :menuCard.sync="item" :index.sync="index"></CheckCard>
+    </repeat>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import BigTitle from '../../components/bigTitle'
+  import CheckCard from '../../components/checkCard'
+
+  export default class CheckParkers extends wepy.page {
+    config={
+      usingComponents: {
+        'wxc-button': '../../packages/@minui/wxc-button/dist/index',
+        'wxc-icon': '../../packages/@minui/wxc-icon/dist/index',
+        'i-card': '../../packages/other/card/'
+      }
+    }
+    components = {
+      bigTitle: BigTitle,
+      CheckCard: CheckCard
+    }
+    data = {
+      menu: []
+    }
+    onLoad(params) {
+      this.menu = JSON.parse(params.menu)
+      wx.setStorageSync('fromSub', 'yes')
+    }
+    methods = {
+    }
+    events = {
+      'agree': function (item, index) {
+        var that = this
+        if (!item.kpStatus) {
+          wx.showModal({
+            title: '提示',
+            content: '您要同意该用户参讲请求吗？',
+            success: function (res) {
+              if (res.confirm) {
+                that.$parent.apis.putparty(item.ksId, item.kpId, true)
+                  .then(data => {
+                    if (data.success) {
+                      wx.showToast({title: '同意成功'})
+                      that.menu[index].kpStatus = true
+                      that.$apply()
+                    } else {
+                      wx.showToast({title: data.message, icon: 'none'})
+                    }
+                  })
+              }
+            }
+          })
+        } else {
+          wx.showToast({title: '请勿重复操作', icon: 'none'})
+        }
+      },
+      'reject': function (item, index) {
+        var that = this
+        wx.showModal({
+          title: '提示',
+          content: '您要拒绝该用户参讲请求吗？',
+          success: function (res) {
+            if (res.confirm) {
+              that.$parent.apis.putparty(item.ksId, item.kpId, false)
+                .then(data => {
+                  if (data.success) {
+                    wx.showToast({title: '拒绝成功'})
+                    that.menu.splice(index, 1)
+                    that.$apply()
+                  } else {
+                    wx.showToast({title: data.message, icon: 'none'})
+                  }
+                })
+            }
+          }
+        })
+      },
+      'enterFace': function (kuId) {
+        this.$navigate('./face', {kuId: kuId})
+      }
+    }
+  }
+</script>

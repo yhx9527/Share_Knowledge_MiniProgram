@@ -1,0 +1,106 @@
+<style lang="less" scoped>
+  /** less **/
+  .avatar1{
+    display: inline-block;
+    width: 80rpx;
+    height: 80rpx;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 80rpx;
+  }
+  .nick{
+    font-size:12px;
+    color: #2f3542;
+    margin-left: -5px;
+  }
+  .comment-content{
+    flex: 1;
+    font-size:16px;
+  }
+  .comment-title{
+    color:#747d8c;
+    text-align:right;
+    border-bottom:1rpx solid #dfe4ea;
+    margin-right:10px;
+    font-size:18px;
+    padding:10px;
+  }
+  .commentarea{
+    background-color: white;
+    margin-top: 30px;
+  }
+  .comment-item{
+    margin: 10px;
+    border-bottom: 1rpx solid #f1f2f6;
+    padding-bottom: 10px;
+  }
+  .blank{
+    height: 50px;
+  }
+  .more{
+    text-align: center;
+    color: #74b9ff;
+    margin-bottom: 10px;
+  }
+  .showIcon{
+    display: inline;
+  }
+</style>
+<template>
+  <view class="commentarea">
+    <view class="comment-title">
+      <text style="font-size: 14px">(点击评论进行管理)</text>
+      <i class="iconfont icon-comment" style="margin-right:5rpx;"></i>评论区
+    </view>
+    <repeat for="{{comments}}" item="item" index="index">
+      <view class="flex-row comment-item" @tap="adminCom" data-item="{{item}}" data-index="{{index}}">
+        <wxc-avatar class="avatar1" src="{{item.ksUser.kuHeadImgUrl}}" @tap="enterFace" data-kuId="{{item.kuId}}"></wxc-avatar>
+        <view class="flex-column comment-content">
+          <text class="nick">{{item.ksUser.kuName}}</text>
+          <wxc-elip line="18">{{item.kcContent}}</wxc-elip>
+        </view>
+        <view  class="showIcon">
+          <i wx:if="{{item.kcShow}}" class="iconfont icon-eye" style="color: #55efc4;"></i>
+          <i wx:else class="iconfont icon-eye-off" style="color: #2d3436;"></i>
+        </view>
+      </view>
+    </repeat>
+    <wxc-loadmore is-end="{{ !ifLc }}" text="{{ifLc ? '拼命加载中...' : '没有了哦'}}"></wxc-loadmore>
+    <!--view class="blank"></view-->
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class CommentAreaOwner extends wepy.component {
+    components = {};
+    props = {
+      comments: {
+        type: Array,
+        default: []
+      },
+      ifLc: {
+        type: Boolean,
+        default: false
+      }
+    }
+    methods = {
+      enterFace(e) {
+        this.$emit('enterFace', e.currentTarget.dataset.kuid)
+      },
+      adminCom(e) {
+        let that = this
+        let data = e.currentTarget.dataset
+        let first = data.item.kcShow ? '下架评论' : '展示评论'
+        wx.showActionSheet({
+          itemList: [first, '删除评论'],
+          success: function(res) {
+            wx.showLoading('操作中...')
+            that.$emit('adminCom', res.tapIndex, data.item, data.index)
+          }
+        })
+      }
+    };
+    events = {};
+    // Other properties
+  }
+</script>

@@ -42,7 +42,7 @@
     font-size:14px;
     color:#f1f2f6;
     display:flex;
-    margin-left:10vw;
+    margin-left:8vw;
     align-items:flex-end;
   }
   .STcontainer{
@@ -70,6 +70,10 @@
     padding-right:10px;
 
   }
+  .edit-icon{
+    color:#0984e3;
+    font-size:24px;
+  }
 </style>
 <template>
   <i-message id="message" />
@@ -80,7 +84,9 @@
     <view class="flex-row" style="margin-bottom:10px;">
       <view class='title'>{{ subject.ksTitle }}<wxc-label class="label" text="{{subject.ksTypeData.kddDataName}}" type-color="white"></wxc-label></view>
     </view>
-    <view class="author">By {{ subject.ksUser.kuName }}
+    <view class="author">
+      <view  wx:if="{{ifOwner}}" hover-class="animated infinite rubberBand" @tap="editSub"><i class="iconfont icon-bianji edit-icon" ></i></view>
+      By {{ subject.ksUser.kuName }}
       <wxc-avatar class="avatar avatar__1" src="{{ subject.ksUser.kuHeadImgUrl}}" @tap="enterFace"></wxc-avatar>
       <text class="status">{{!subject.ifPast ? '等待报名中' : (subject.ifEnd ? '已结束' : '进行中')}}</text>
       <slot></slot>
@@ -106,10 +112,18 @@
       <view>当前参讲人数：{{subject.ksPartNum}}/{{subject.ksPartLimit}}</view>
     </view>
   </i-panel>
-  <i-panel title="参讲者">
+  <i-panel title="参讲者" wx:if="{{!ifOwner}}">
     <view style="padding: 15px;" @tap="enterJoinMenu">
       <repeat for="{{ksPartakeList}}" key="keId" index="index" item="item">
         <wxc-avatar wx:if="{{index < 6}}" class="thumbnail" src="{{item.ksUser.kuHeadImgUrl}}"></wxc-avatar>
+        <i wx:if="{{index >=6}}" class="iconfont icon-moredot" style="color: #00b894"></i>
+      </repeat>
+    </view>
+  </i-panel>
+  <i-panel title="参讲者(点击下方进入审核)" wx:else>
+    <view style="padding: 15px;" @tap="enterJoinMenu">
+      <repeat for="{{ksPartakeList}}" key="keId" index="index" item="item">
+        <wxc-avatar wx:if="{{index < 6}}" class="thumbnail" src="{{item.ksUser.kuHeadImgUrl}}" count="{{!item.kpStatus ? '1' : ''}}"></wxc-avatar>
         <i wx:if="{{index >=6}}" class="iconfont icon-moredot" style="color: #00b894"></i>
       </repeat>
     </view>
@@ -122,7 +136,8 @@
       </repeat>
     </view>
   </i-panel>
-  <commentArea  :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
+  <CommentAreaOwner  wx:if="{{ifOwner}}" :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></CommentAreaOwner>
+  <commentArea  wx:else :comments.sync = "comments" :ksId.sync = "ksId" :ifLc.sync = "ifLc"></commentArea>
   <view class="blank"></view>
   <form bindsubmit="sendComment">
     <view class="input-wrap">
@@ -135,8 +150,8 @@
                  value="{{commentContent}}"
                  bind:input="commentInput">
       </wxc-input>
-      <button formType="submit" class="button button-circle button-giant button-longshadow button-small" style="margin: auto;">
-        <i class="iconfont icon-fabu-2"></i></button>
+      <button formType="submit" class="button button-circle button-giant button-longshadow button-small" style="margin: auto;height: 35px;width: 35px">
+        <i class="iconfont icon-fabu-2" style="font-size: 23px;"></i></button>
     </view>
   </form>
 
@@ -146,6 +161,7 @@
   import wepy from 'wepy'
   // import Subjecttitle from '../components/subjectTitle'
   import CommentArea from '../components/commentArea'
+  import CommentAreaOwner from '../components/commentAreaOwner'
   import AddFun from '../components/addFun'
   import spread from '../components/spread'
   const { $Message } = require('../utils/base/index')
@@ -171,6 +187,7 @@
     }
     components = {
       commentArea: CommentArea,
+      CommentAreaOwner: CommentAreaOwner,
       addFun: AddFun,
       spread: spread
     }
@@ -191,11 +208,16 @@
       ifCanvas: false,
       userInfo: {},
       avatar: '',
-      qrCode: ''
+      qrCode: '',
+      ifOwner: false
     }
     methods = {
       enterJoinMenu() {
-        this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksPartakeList)})
+        if (this.ifOwner) {
+          this.$navigate('./parter/checkParkers', {menu: JSON.stringify(this.ksPartakeList)})
+        } else {
+          this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksPartakeList)})
+        }
       },
       enterEnrollMenu() {
         this.$navigate('./parter/nameList', {menu: JSON.stringify(this.ksEnrollList)})
@@ -235,6 +257,9 @@
       },
       enterFace_b() {
         this.$navigate('./parter/face', {kuId: this.subject.ksUser.kuId})
+      },
+      editSub() {
+        this.$navigate('./forms/subformRev?ksId=' + this.subject.ksId)
       }
     }
     loadComments() {
@@ -297,12 +322,17 @@
           console.log('park' + that.subject.park)
           that.enroll = that.subject.enroll
           that.park = that.subject.park
-          that.$apply()
+          if (data.kuId === kuId) {
+            that.ifOwner = true
+            that.ksPartakeList = that.subject.ksPartakeList
+          } else {
+            that.ifOwner = false
+            that.ksPartakeList = that.subject.ksPartakeList.filter(item => {
+              return item.kpStatus
+            })
+          }
           that.ksEnrollList = that.subject.ksEnrollList.filter(item => {
             return item.keStatus
-          })
-          that.ksPartakeList = that.subject.ksPartakeList.filter(item => {
-            return item.kpStatus
           })
           that.$apply()
           wx.stopPullDownRefresh()
@@ -321,9 +351,19 @@
     }
 
     onPullDownRefresh() {
-      this.fresh(this.subject.ksId, this.ksUser.kuId)
+      this.fresh(this.ksId, this.ksUser.kuId)
     }
-
+    onShow() {
+      try {
+        let params = wx.getStorageSync('fromSub')
+        wx.removeStorageSync('fromSub')
+        if (params) {
+          console.log('来自修改')
+          this.fresh(this.ksId, this.ksUser.kuId)
+        }
+      } catch (e) {
+      }
+    }
     onReady() {
       var that = this
       console.log('监视')
@@ -481,6 +521,42 @@
       },
       'enterFace': function (kuId) {
         this.$navigate('./parter/face', {kuId: kuId})
+      },
+      'adminCom': function (index, item, itemIndex) {
+        let that = this
+        if (index === 0) {
+          that.$parent.apis.putcomments(item.ksId, item.kcId, !item.kcShow)
+            .then(data => {
+              wx.hideLoading()
+              if (data.success) {
+                wx.showToast({title: '操作成功'})
+                that.comments[itemIndex].kcShow = !item.kcShow
+                that.$apply()
+              } else {
+                wx.showToast({title: data.message, icon: 'none'})
+              }
+            })
+            .catch(data => {
+              wx.hideLoading()
+              wx.showToast({title: '操作失败', icon: 'none'})
+            })
+        } else if (index === 1) {
+          that.$parent.apis.putcomments(item.ksId, item.kcId, false, true)
+            .then(data => {
+              wx.hideLoading()
+              if (data.success) {
+                wx.showToast({title: '删除成功'})
+                that.comments.splice(itemIndex, 1)
+                that.$apply()
+              } else {
+                wx.showToast({title: data.message, icon: 'none'})
+              }
+            })
+            .catch(data => {
+              wx.hideLoading()
+              wx.showToast({title: '操作失败', icon: 'none'})
+            })
+        }
       }
     }
   }

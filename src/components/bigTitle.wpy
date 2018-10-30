@@ -1,7 +1,6 @@
 <style lang="less">
   /** less **/
   .btContainer{
-    width:100vw;
     height:30px;
     background-image:linear-gradient(to right, #f6f8f9 0%, white 100%);
     display:flex;

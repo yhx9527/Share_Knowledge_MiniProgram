@@ -1,0 +1,124 @@
+<style type="less">
+  .ccImg{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin:5px;
+  }
+  .cardContainer{
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 4px 6px 0 hsla(0 ,0%, 0%, 0.2);
+    background-color: white;
+    margin: 5px 10px;
+    height: 140px;
+    border-top: 2px solid #6c5ce7;
+  }
+  .ccExtra{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top:10px;
+
+  }
+  .ccDetail{
+    flex: 1;
+    flex-wrap: wrap;
+  }
+  .ccBtnGroup{
+    display:flex;
+    justify-content:flex-end;
+    margin-right:10px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .ccFirst{
+    font-size:14px;
+    font-weight:bold;
+    color: hsl(0, 0%, 17%);
+    margin-bottom:10px;
+
+  }
+  .ccSecond{
+    font-weight: 400;
+    color: hsl(0, 0%, 40%);
+    font-size:12px;
+    margin-bottom: 10px;
+  }
+  .ccThird{
+    font-weight: 400;
+    color: hsl(0, 0%, 50%);
+    font-size:12px;
+    margin-bottom: 10px;
+  }
+  .largeText{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .ccreject{
+    font-size:14px;
+    background-color:white;
+    font-weight:600;
+    text-decoration:underline;
+    border-radius:0;
+  }
+  button::after{ border: none; }
+</style>
+<template>
+  <view class="cardContainer">
+    <image src="{{menuCard.ksUser.kuHeadImgUrl}}" class="ccImg"></image>
+    <view class="ccExtra">
+      <view class="ccDetail" @tap="enterFace" data-kuid="{{menuCard.kuId}}">
+        <view class="ccFirst">
+          <view>{{menuCard.ksUser.kuName}}</view>
+          <view>联系方式: {{menuCard.ksUser.kuPhone}}</view>
+        </view>
+        <view class="ccSecond">
+          <view>{{menuCard.ksUser.kuSex > 0 ? (menuCard.ksUser.kuSex === 1 ? '男生' : '女生') : '性别未知' }}</view>
+          <view class="largeText">个人简介: {{menuCard.ksUser.kuIntro || '无'}}</view>
+        </view>
+      </view>
+      <view class="ccBtnGroup">
+        <button class="button button-small ccreject" @tap="rejectP" data-item="{{menuCard}}" data-index="{{index}}">拒绝</button>
+        <button class="button button-primary button-small" style="margin-left: 15px;border-radius:0;font-size:14px;" @tap="agreeP"data-item="{{menuCard}}"data-index="{{index}}">
+          {{menuCard.kpStatus ? '已同意' : '同意'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class CheckCard extends wepy.component {
+    props = {
+      menuCard: {
+        type: Object,
+        default: {}
+      },
+      index: {
+        type: Number,
+        default: -1
+      }
+    }
+
+    components = {
+    }
+    methods = {
+      agreeP: function (e) {
+        let data = e.currentTarget.dataset
+        this.$emit('agree', data.item, data.index)
+      },
+      rejectP: function (e) {
+        let data = e.currentTarget.dataset
+        this.$emit('reject', data.item, data.index)
+      },
+      enterFace: function (e) {
+        this.$emit('enterFace', e.currentTarget.dataset.kuid)
+      }
+    }
+  }
+</script>
