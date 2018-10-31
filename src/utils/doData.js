@@ -144,4 +144,27 @@ export default class {
     }
     return 0
   }
+  checkDate(arr) {
+    // 闰年
+    let year = parseInt(arr[0])
+    let month = parseInt(arr[1])
+    let day = parseInt(arr[2])
+    if ((year%4 === 0 && year%100 !== 0) || year %400 === 0 ) {
+      if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+        return day <= 31
+      } else if (month === 2) {
+        return day <= 29
+      } else {
+        return day <= 30
+      }
+    } else {
+      if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+        return day <= 31
+      } else if (month === 2) {
+        return day <= 28
+      } else {
+        return day <= 30
+      }
+    }
+  }
 }

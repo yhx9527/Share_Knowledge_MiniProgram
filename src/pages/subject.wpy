@@ -270,7 +270,12 @@
         that.$parent.apis.getcomments(that.ksId, that.page)
           .then(data => {
             that.ifLc = false
-            let temp = that.$parent.doData.comments(data.list)
+            let temp
+            if (that.ifOwner) {
+              temp = data.list || []
+            } else {
+              temp = that.$parent.doData.comments(data.list)
+            }
             that.comments.push(...temp)
             that.page = data.nextPage
             // let temp = that.$parent.doData.comments(data.list)
@@ -352,6 +357,9 @@
 
     onPullDownRefresh() {
       this.fresh(this.ksId, this.ksUser.kuId)
+      this.comments = []
+      this.page = 1
+      this.$apply()
     }
     onShow() {
       try {
@@ -406,8 +414,10 @@
 
     events = {
       'tellwhich': function (type) {
-        if (type !== 'share') {
+        if (type === 'enroll' || type === 'join') {
           aop.before(this.events.tellwhich_b, this, type)
+        } else if (type === 'spread') {
+          this.events.tellwhich_b.call(this, type)
         }
       },
       'tellwhich_b': function (type) {
@@ -503,7 +513,7 @@
                 that.$apply()
               })
               .catch(data => { wepy.hideLoading() }) */
-            wx.getImageInfo({src: 'https://api.sharing-knowledge.club/subjects/' + that.subject.ksId + '/WXACode',
+            wx.getImageInfo({src: 'https://api.sharing-knowledge.club/subjects/' + that.ksId + '/WXACode',
               success: function (res) {
                 wepy.hideLoading()
                 that.qrCode = res.path
@@ -514,6 +524,7 @@
               fail: function (res) {
                 console.log('失败了', res)
                 wepy.hideLoading()
+                wepy.showToast({title: '生成失败', icon: 'none'})
               }})
             // wx.downloadFile({url: '', success(res) { console.log('下载', res) }})
             break

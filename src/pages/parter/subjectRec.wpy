@@ -136,9 +136,10 @@
                 .then(data => {
                   if (data.success) {
                     wx.showToast({title: '删除成功'})
-                    if (that.listing[index].ksId === ksId) {
+                    console.log('index', index)
+                    if (that.listing.length > 0 && that.listing[index].ksId === ksId) {
                       that.listing.splice(index, 1)
-                    } else if (that.listed[index].ksId === ksId) {
+                    } else if (that.listed.length > 0 && that.listed[index].ksId === ksId) {
                       that.listed.splice(index, 1)
                     }
                     that.$apply()
